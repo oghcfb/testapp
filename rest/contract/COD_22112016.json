@@ -1,0 +1,2330 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "v1",
+        "title": "test api from external requests",
+        "description": "This is API for HomeCredit commercial partners. API provides possibility to get offers for pos products and select 1 offer of provided.\nmore detailed information can be found at:  https://api-sandbox.homecredit.ru/docs/apidocs/cod/index.html"
+    },
+    "host": "api-sandbox.homecredit.ru",
+    "schemes": [
+        "https"
+    ],
+    "securityDefinitions": {
+        "<<login>>": {
+            "type": "basic"
+        }
+    },
+    "paths": {
+        "/oauth/token": {
+            "post": {
+                "operationId": "POST_oauth-token",
+                "summary": "Get access token",
+                "tags": [
+                    "Oauth"
+                ],
+                "description": "All API calls use OAuth2 Client Credentials Flow, see http://tools.ietf.org/html/rfc6749#section-4.4\n\nAny request must contain valid OAuth2 token, that must be obtained via Access Token Request http://tools.ietf.org/html/rfc6749#section-4.4.2 This should be implemented in Oauth2 libraries for any language/framework.\n\nBasic auth is used as credentials to obtain token. Each partner has its own login/password for that. Sample partner account was created for testing purposes. Login: test_partner, password: test_partner_secret.",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "grant_type",
+                        "in": "formData",
+                        "required": true,
+                        "type": "string",
+                        "default": "client_credentials"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": false,
+                        "type": "string",
+                        "default": "application/x-www-form-urlencoded; charset=UTF-8"
+                    },
+                    {
+                        "name": "User-Agent",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "default": "Test Partner Backend"
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": false,
+                        "type": "string",
+                        "default": "application/json"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "access_token": {
+                                    "type": "string",
+                                    "pattern": "^[A-Za-z0-9-_.]{500,525}"
+                                },
+                                "token_type": {
+                                    "type": "string",
+                                    "pattern": "bearer"
+                                },
+                                "expires_in": {
+                                    "type": "integer",
+                                    "minimum": 10000,
+                                    "maximum": 90000
+                                },
+                                "scope": {
+                                    "type": "string",
+                                    "pattern": "access"
+                                },
+                                "jti": {
+                                    "type": "string",
+                                    "pattern": "^[A-Za-z0-9-]{30,50}"
+                                }
+                            },
+                            "required": [
+                                "access_token",
+                                "token_type",
+                                "expires_in",
+                                "scope",
+                                "jti"
+                            ]
+                        },
+                        "examples": {
+                            "application/json": {
+                                "access_token": "eyJhbGciOiJSUzI1NiJ9.eyJzY29wZSI6WyJhY2Nlc3MiXSwiZXhwIjoxNDY0OTEyNTE3LCJqdGkiOiI0Y2FlZGI4MC1kOGEwLTQ5MGYtYmJiOC02YjdkNTAzZDk5NWEiLCJjbGllbnRfaWQiOiJ0ZXN0X3BhcnRuZXIifQ.BiVAjKmADS9F2Uq7tWoIYIssTB9SjmUYJYdKza6zsz-0HYYavcZJC2QaRe9tOGSiaMAZmVdfCX3_ELXGJ8H-SrHlH3ZWX52eLYpOMRL-vM_HeRfTM9VSF-9u1l1BzwaZYM_EzL_KXYZJdGnXnXERNHZS988twJHXzuv_1IRFufJZPgliyhAhQ6WlBKHZt30JzvTZXMv_0Ndcsf9rN7dffgdXyStReQstrBq33JMulI5CoXLtDGTCCn-fTzYKAOHHUFPQEskl1B1uocpEjDIBwzpimT7pLtfm3eE9qsEgk21O9i4XZEbLirEeb3ONBbsmvDxMioyUq0LhmHKO_Xn7-w",
+                                "token_type": "Bearer",
+                                "expires_in": 43055,
+                                "scope": "access",
+                                "jti": "4caedb80-d8a0-490f-bbb8-6b7d503d995a"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                },
+                                "error_description": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "error": "invalid_request",
+                                "error_description": "Missing grant type"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "timestamp": {
+                                    "type": "integer"
+                                },
+                                "status": {
+                                    "type": "integer"
+                                },
+                                "error": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "path": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "timestamp": 1476422413277,
+                                "status": 401,
+                                "error": "Unauthorized",
+                                "message": "Bad credentials",
+                                "path": "/oauth/token"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "",
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "<<login>>": []
+                    }
+                ],
+                "x-stoplight": {
+                    "id": "POST_oauth-token",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": true,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
+                    }
+                }
+            }
+        },
+        "/CashOnDelivery/v1/offers": {
+            "post": {
+                "operationId": "POST_CashOnDelivery-v1-offers",
+                "summary": "Request offer",
+                "tags": [
+                    "Cashondelivery"
+                ],
+                "description": "Offer request is first step in Create Offer flow. Offer contains order details, client information and redirection links both for success and failure.",
+                "consumes": [
+                    "application/json",
+                    "application/javascript",
+                    "text/javascript"
+                ],
+                "produces": [
+                    "application/json",
+                    "charset=UTF-8"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "shippingCompanyId": {
+                                    "type": "string"
+                                },
+                                "totalPrice": {
+                                    "type": "object",
+                                    "properties": {
+                                        "amount": {
+                                            "type": "integer"
+                                        },
+                                        "currency": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "quantity": {
+                                                "type": "integer"
+                                            },
+                                            "seller": {
+                                                "type": "string"
+                                            },
+                                            "itemPrice": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "amount": {
+                                                        "type": "integer"
+                                                    },
+                                                    "currency": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            },
+                                            "category": {
+                                                "type": "string"
+                                            },
+                                            "weight": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                },
+                                "deliveryAddress": {
+                                    "type": "object",
+                                    "properties": {
+                                        "address1": {
+                                            "type": "string"
+                                        },
+                                        "address2": {
+                                            "type": "string"
+                                        },
+                                        "city": {
+                                            "type": "string"
+                                        },
+                                        "country": {
+                                            "type": "string"
+                                        },
+                                        "region": {
+                                            "type": "string"
+                                        },
+                                        "postcode": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "email": {
+                                    "type": "string"
+                                },
+                                "firstName": {
+                                    "type": "string"
+                                },
+                                "lastName": {
+                                    "type": "string"
+                                },
+                                "phone": {
+                                    "type": "string"
+                                },
+                                "shopOrderId": {
+                                    "type": "string"
+                                },
+                                "discountAmount": {
+                                    "type": "object",
+                                    "properties": {
+                                        "amount": {
+                                            "type": "integer"
+                                        },
+                                        "currency": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "shippingCost": {
+                                    "type": "object",
+                                    "properties": {
+                                        "amount": {
+                                            "type": "integer"
+                                        },
+                                        "currency": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "successUrl": {
+                                    "type": "string"
+                                },
+                                "failUrl": {
+                                    "type": "string"
+                                }
+                            },
+                            "example": {
+                                "shippingCompanyId": "SPSR",
+                                "totalPrice": {
+                                    "amount": 10,
+                                    "currency": "USD"
+                                },
+                                "items": [
+                                    {
+                                        "name": "Iphone 6S",
+                                        "quantity": 1,
+                                        "seller": "test_seller",
+                                        "itemPrice": {
+                                            "amount": 100,
+                                            "currency": "USD"
+                                        },
+                                        "category": "TEST_CATEGORY",
+                                        "weight": "100kg"
+                                    }
+                                ],
+                                "deliveryAddress": {
+                                    "address1": "Moscow",
+                                    "address2": "Pravdy",
+                                    "city": "Moscow",
+                                    "country": "Russia",
+                                    "region": "Moscow",
+                                    "postcode": "103132"
+                                },
+                                "email": "customer@example.com",
+                                "firstName": "Ivan",
+                                "lastName": "Ivanov",
+                                "phone": "9990001122",
+                                "shopOrderId": "1464869493411",
+                                "discountAmount": {
+                                    "amount": 0,
+                                    "currency": "USD"
+                                },
+                                "shippingCost": {
+                                    "amount": 0,
+                                    "currency": "USD"
+                                },
+                                "successUrl": "http://example.com/success/1464869493411",
+                                "failUrl": "http://example.com/fail/1464869493411"
+                            }
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "default": "Bearer eyJhbGciOiJSUzI1NiJ9.eyJzY29wZSI6WyJhY2Nlc3MiXSwiZXhwIjoxNDY0OTEyNTE3LCJqdGkiOiI0Y2FlZGI4MC1kOGEwLTQ5MGYtYmJiOC02YjdkNTAzZDk5NWEiLCJjbGllbnRfaWQiOiJ0ZXN0X3BhcnRuZXIifQ.BiVAjKmADS9F2Uq7tWoIYIssTB9SjmUYJYdKza6zsz-0HYYavcZJC2QaRe9tOGSiaMAZmVdfCX3_ELXGJ8H-SrHlH3ZWX52eLYpOMRL-vM_HeRfTM9VSF-9u1l1BzwaZYM_EzL_KXYZJdGnXnXERNHZS988twJHXzuv_1IRFufJZPgliyhAhQ6WlBKHZt30JzvTZXMv_0Ndcsf9rN7dffgdXyStReQstrBq33JMulI5CoXLtDGTCCn-fTzYKAOHHUFPQEskl1B1uocpEjDIBwzpimT7pLtfm3eE9qsEgk21O9i4XZEbLirEeb3ONBbsmvDxMioyUq0LhmHKO_Xn7-w"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "default": "application/json; charset=UTF-8"
+                    },
+                    {
+                        "name": "User-Agent",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "default": "Test Partner Backend",
+                        "pattern": "Test Partner Backend"
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "default": "application/json, application/javascript, text/javascript"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "currency": {
+                                    "type": "string",
+                                    "enum": [
+                                        "RUR",
+                                        "USD"
+                                    ]
+                                },
+                                "goodsPrice": {
+                                    "type": "integer"
+                                },
+                                "id": {
+                                    "type": "string"
+                                },
+                                "links": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string",
+                                                "pattern": "(?:https|http)(?::\\/{2}[\\w-./?=]+)"
+                                            },
+                                            "method": {
+                                                "type": "string"
+                                            },
+                                            "rel": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                },
+                                "servicePrice": {
+                                    "type": "integer"
+                                },
+                                "status": {
+                                    "type": "string"
+                                },
+                                "totalPrice": {
+                                    "type": "integer"
+                                },
+                                "validTo": {
+                                    "type": "string"
+                                },
+                                "": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "currency",
+                                "goodsPrice",
+                                "id",
+                                "links",
+                                "servicePrice",
+                                "status",
+                                "totalPrice",
+                                "validTo"
+                            ]
+                        },
+                        "examples": {
+                            "application/json": {
+                                "currency": "RUR",
+                                "goodsPrice": 773,
+                                "id": "5878702d-fc82-4dfc-99c0-23242529d367",
+                                "links": [
+                                    {
+                                        "href": "https://api-sandbox.homecredit.ru/cod/index.html?offerId=5878702d-fc82-4dfc-99c0-23242529d367",
+                                        "method": "REDIRECT",
+                                        "rel": "REDIRECT_URL"
+                                    }
+                                ],
+                                "servicePrice": 300,
+                                "status": "created",
+                                "totalPrice": 1073,
+                                "validTo": "2016-09-27T23:25:06.511+0000"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                },
+                                "error_description": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "error": "invalid_token",
+                                "error_description": "Access token expired: eyJhbGciOiJSUzI1NiJ9.eyJzY29wZSI6WyJhY2Nlc3MiXSwiZXhwIjoxNDY0OTEyNTE3LCJqdGkiOiI0Y2FlZGI4MC1kOGEwLTQ5MGYtYmJiOC02YjdkNTAzZDk5NWEiLCJjbGllbnRfaWQiOiJ0ZXN0X3BhcnRuZXIifQ.BiVAjKmADS9F2Uq7tWoIYIssTB9SjmUYJYdKza6zsz-0HYYavcZJC2QaRe9tOGSiaMAZmVdfCX3_ELXGJ8H-SrHlH3ZWX52eLYpOMRL-vM_HeRfTM9VSF-9u1l1BzwaZYM_EzL_KXYZJdGnXnXERNHZS988twJHXzuv_1IRFufJZPgliyhAhQ6WlBKHZt30JzvTZXMv_0Ndcsf9rN7dffgdXyStReQstrBq33JMulI5CoXLtDGTCCn-fTzYKAOHHUFPQEskl1B1uocpEjDIBwzpimT7pLtfm3eE9qsEgk21O9i4XZEbLirEeb3ONBbsmvDxMioyUq0LhmHKO_Xn7-w"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "",
+                        "schema": {
+                            "type": "object"
+                        },
+                        "examples": {
+                            "application/json": "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n<html><head>\n<title>403 Forbidden</title>\n</head><body>\n<h1>Forbidden</h1>\n<p>You don't have permission to access /CashOnDelivery/v1/offers\non this server.</p>\n</body></html>"
+                        }
+                    }
+                },
+                "x-stoplight": {
+                    "id": "POST_CashOnDelivery-v1-offers",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": true,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
+                    }
+                }
+            }
+        },
+        "/CashOnDelivery/v1/offers/{id}": {
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "description": "example of Offer Id",
+                    "required": true,
+                    "type": "string",
+                    "default": "6482f1f1-e9c6-4a9e-8a35-87f9d9701840",
+                    "minLength": 10
+                }
+            ],
+            "get": {
+                "operationId": "GET_CashOnDelivery-v1-offers-id",
+                "summary": "Get Offer",
+                "tags": [
+                    "Cashondelivery"
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "charset=UTF-8"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "type": "null"
+                        }
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "default": "application/json; charset=UTF-8",
+                        "pattern": "application/json; charset=UTF-8"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "This is example oAuth token",
+                        "required": true,
+                        "type": "string",
+                        "default": "Bearer eyJhbGciOiJSUzI1NiJ9.eyJzY29wZSI6WyJhY2Nlc3MiXSwiZXhwIjoxNDY0OTEyNTE3LCJqdGkiOiI0Y2FlZGI4MC1kOGEwLTQ5MGYtYmJiOC02YjdkNTAzZDk5NWEiLCJjbGllbnRfaWQiOiJ0ZXN0X3BhcnRuZXIifQ.BiVAjKmADS9F2Uq7tWoIYIssTB9SjmUYJYdKza6zsz-0HYYavcZJC2QaRe9tOGSiaMAZmVdfCX3_ELXGJ8H-SrHlH3ZWX52eLYpOMRL-vM_HeRfTM9VSF-9u1l1BzwaZYM_EzL_KXYZJdGnXnXERNHZS988twJHXzuv_1IRFufJZPgliyhAhQ6WlBKHZt30JzvTZXMv_0Ndcsf9rN7dffgdXyStReQstrBq33JMulI5CoXLtDGTCCn-fTzYKAOHHUFPQEskl1B1uocpEjDIBwzpimT7pLtfm3eE9qsEgk21O9i4XZEbLirEeb3ONBbsmvDxMioyUq0LhmHKO_Xn7-w",
+                        "pattern": "^Bearer"
+                    },
+                    {
+                        "name": "User-Agent",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "default": "Test Partner Backend",
+                        "pattern": "Test Partner Backend"
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "default": "application/json, application/javascript, text/javascript",
+                        "pattern": "application/json, application/javascript, text/javascript"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "currency": {
+                                    "type": "string"
+                                },
+                                "goodsPrice": {
+                                    "type": "integer"
+                                },
+                                "id": {
+                                    "type": "string"
+                                },
+                                "links": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {}
+                                    }
+                                },
+                                "servicePrice": {
+                                    "type": "integer"
+                                },
+                                "status": {
+                                    "type": "string"
+                                },
+                                "totalPrice": {
+                                    "type": "integer"
+                                },
+                                "validTo": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "currency": "RUR",
+                                "goodsPrice": 773,
+                                "id": "6482f1f1-e9c6-4a9e-8a35-87f9d9701840",
+                                "links": [],
+                                "servicePrice": 300,
+                                "status": "created",
+                                "totalPrice": 1073,
+                                "validTo": "2016-06-02T13:11:05.719+0000"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                },
+                "x-stoplight": {
+                    "id": "GET_CashOnDelivery-v1-offers-id",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": true,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {},
+    "x-stoplight": {
+        "version": {
+            "groups": {
+                "docs": [
+                    {
+                        "divider": false,
+                        "items": [],
+                        "name": "Introduction"
+                    },
+                    {
+                        "name": "Oauth",
+                        "items": [
+                            {
+                                "_id": "POST_oauth-token",
+                                "type": "endpoints"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Cashondelivery",
+                        "items": [
+                            {
+                                "_id": "POST_CashOnDelivery-v1-offers",
+                                "type": "endpoints"
+                            },
+                            {
+                                "_id": "GET_CashOnDelivery-v1-offers-id",
+                                "type": "endpoints"
+                            }
+                        ]
+                    }
+                ],
+                "traits": [],
+                "tests": [],
+                "savedEntries": []
+            }
+        },
+        "functions": {},
+        "textSections": {
+            "int-ynXEY2b6J5W8NSuij": {
+                "id": "int-ynXEY2b6J5W8NSuij",
+                "name": "Int",
+                "content": "https://www.dropbox.com/s/f0yzqvc7wulwdk9/image1.png?dl=0",
+                "public": true
+            }
+        },
+        "mock": {
+            "enabled": false,
+            "dynamic": false
+        }
+    },
+    "x-tests": {
+        "uxJC5rMTaf4kwhwqi": {
+            "id": "uxJC5rMTaf4kwhwqi",
+            "name": "Getting offer - full path",
+            "initialVariables": {},
+            "steps": [
+                {
+                    "id": "yFjy9eYZvkt4Pb7n3",
+                    "name": "Get access token",
+                    "capture": {
+                        "body": [
+                            {
+                                "name": "accessToken",
+                                "value": "access_token"
+                            },
+                            {
+                                "name": "tokenType",
+                                "value": "token_type"
+                            }
+                        ],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "/oauth/token",
+                        "pathParams": [],
+                        "headers": [
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "Authorization",
+                                "value": "Basic dGVzdF9wYXJ0bmVyOnRlc3RfcGFydG5lcl9zZWNyZXQ="
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [
+                                {
+                                    "name": "grant_type",
+                                    "value": "client_credentials"
+                                }
+                            ],
+                            "mimeType": "application/x-www-form-urlencoded",
+                            "text": ""
+                        },
+                        "authentication": {
+                            "authType": "basic",
+                            "params": [
+                                {
+                                    "name": "test_partner",
+                                    "value": "test_partner_secret"
+                                }
+                            ]
+                        },
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "s3ohTRJfM8afyQtT7",
+                    "name": "Request offer",
+                    "capture": {
+                        "body": [
+                            {
+                                "name": "id",
+                                "value": "id"
+                            }
+                        ],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "/CashOnDelivery/v1/offers",
+                        "pathParams": [],
+                        "headers": [
+                            {
+                                "name": "Authorization",
+                                "value": "<<tokenType>> <<accessToken>>",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json; charset=UTF-8",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json, application/javascript, text/javascript"
+                            },
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend"
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [],
+                            "text": "{\n  \"shippingCompanyId\": \"SPSR\",\n  \"totalPrice\": {\n    \"amount\": 10,\n    \"currency\": \"USD\"\n  },\n  \"items\": [\n    {\n      \"name\": \"Iphone 6S\",\n      \"quantity\": 1,\n      \"seller\": \"test_seller\",\n      \"itemPrice\": {\n        \"amount\": 100,\n        \"currency\": \"USD\"\n      },\n      \"category\": \"TEST_CATEGORY\",\n      \"weight\": \"100kg\"\n    }\n  ],\n  \"deliveryAddress\": {\n    \"address1\": \"Moscow\",\n    \"address2\": \"Pravdy\",\n    \"city\": \"Moscow\",\n    \"country\": \"Russia\",\n    \"region\": \"Moscow\",\n    \"postcode\": \"103132\"\n  },\n  \"email\": \"customer@example.com\",\n  \"firstName\": \"Ivan\",\n  \"lastName\": \"Ivanov\",\n  \"phone\": \"9990001122\",\n  \"shopOrderId\": \"1464869493411\",\n  \"discountAmount\": {\n    \"amount\": 0,\n    \"currency\": \"USD\"\n  },\n  \"shippingCost\": {\n    \"amount\": 0,\n    \"currency\": \"USD\"\n  },\n  \"successUrl\": \"http://example.com/success/1464869493411\",\n  \"failUrl\": \"http://example.com/fail/1464869493411\"\n}",
+                            "mimeType": "application/json"
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "qSeuxGg6j5BX4bAHn",
+                    "name": "Get Offer",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "get",
+                        "url": "/CashOnDelivery/v1/offers/{id}",
+                        "pathParams": [
+                            {
+                                "name": "id",
+                                "value": "",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "Authorization",
+                                "value": "",
+                                "type": "string",
+                                "required": false
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [],
+                            "text": "null",
+                            "mimeType": "application/json"
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                }
+            ]
+        },
+        "Tir3hr4hJnTRaxZuM": {
+            "id": "Tir3hr4hJnTRaxZuM",
+            "name": "new new",
+            "initialVariables": {},
+            "steps": [
+                {
+                    "id": "wxMa5GWhHQf67zGwY",
+                    "name": "Get access token",
+                    "capture": {
+                        "body": [
+                            {
+                                "name": "tokenType",
+                                "value": "token_type"
+                            },
+                            {
+                                "name": "accessToken",
+                                "value": "access_token"
+                            }
+                        ],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "/oauth/token",
+                        "pathParams": [],
+                        "headers": [
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "Authorization",
+                                "value": "Basic dGVzdF9wYXJ0bmVyOnRlc3RfcGFydG5lcl9zZWNyZXQ=",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [
+                                {
+                                    "name": "grant_type",
+                                    "value": "client_credentials",
+                                    "type": "string",
+                                    "required": true
+                                }
+                            ],
+                            "mimeType": "application/x-www-form-urlencoded",
+                            "text": ""
+                        },
+                        "authentication": {
+                            "authType": "basic",
+                            "params": [
+                                {
+                                    "name": "test_partner",
+                                    "value": "test_partner_secret"
+                                }
+                            ]
+                        },
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "uYWWLppPa4imbNRZe",
+                    "name": "Request offer",
+                    "capture": {
+                        "body": [
+                            {
+                                "name": "id",
+                                "value": "id"
+                            }
+                        ],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "/CashOnDelivery/v1/offers",
+                        "pathParams": [],
+                        "headers": [
+                            {
+                                "name": "Authorization",
+                                "value": "Bearer  <<accessToken>>",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json; charset=UTF-8",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json, application/javascript, text/javascript",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [],
+                            "text": "{\n  \"shippingCompanyId\": \"SPSR\",\n  \"totalPrice\": {\n    \"amount\": 10,\n    \"currency\": \"USD\"\n  },\n  \"items\": [\n    {\n      \"name\": \"Iphone 6S\",\n      \"quantity\": 1,\n      \"seller\": \"test_seller\",\n      \"itemPrice\": {\n        \"amount\": 100,\n        \"currency\": \"USD\"\n      },\n      \"category\": \"TEST_CATEGORY\",\n      \"weight\": \"100kg\"\n    }\n  ],\n  \"deliveryAddress\": {\n    \"address1\": \"Moscow\",\n    \"address2\": \"Pravdy\",\n    \"city\": \"Moscow\",\n    \"country\": \"Russia\",\n    \"region\": \"Moscow\",\n    \"postcode\": \"103132\"\n  },\n  \"email\": \"customer@example.com\",\n  \"firstName\": \"Ivan\",\n  \"lastName\": \"Ivanov\",\n  \"phone\": \"9990001122\",\n  \"shopOrderId\": \"1464869493411\",\n  \"discountAmount\": {\n    \"amount\": 0,\n    \"currency\": \"USD\"\n  },\n  \"shippingCost\": {\n    \"amount\": 0,\n    \"currency\": \"USD\"\n  },\n  \"successUrl\": \"http://example.com/success/1464869493411\",\n  \"failUrl\": \"http://example.com/fail/1464869493411\"\n}",
+                            "mimeType": "application/json"
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "uWi2wASLiHFnT7YWa",
+                    "name": "Get Offer",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "get",
+                        "url": "/CashOnDelivery/v1/offers/{id}",
+                        "pathParams": [
+                            {
+                                "name": "id",
+                                "value": "6482f1f1-e9c6-4a9e-8a35-87f9d9701840",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json; charset=UTF-8",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Authorization",
+                                "value": "<<tokenType>> <<accessToken>>",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json, application/javascript, text/javascript",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [],
+                            "text": "null",
+                            "mimeType": "application/json"
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                }
+            ]
+        },
+        "GGiNhoYnY9uaRgve9": {
+            "id": "GGiNhoYnY9uaRgve9",
+            "name": "3new",
+            "initialVariables": {},
+            "steps": [
+                {
+                    "id": "iEbfinhq3x5Lw7qS2",
+                    "name": "Get access token",
+                    "capture": {
+                        "body": [
+                            {
+                                "name": "token_type",
+                                "value": "token_type"
+                            },
+                            {
+                                "name": "access_token",
+                                "value": "access_token"
+                            }
+                        ],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "/oauth/token",
+                        "pathParams": [],
+                        "headers": [
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "Authorization",
+                                "value": "Basic dGVzdF9wYXJ0bmVyOnRlc3RfcGFydG5lcl9zZWNyZXQ=",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [
+                                {
+                                    "name": "grant_type",
+                                    "value": "client_credentials",
+                                    "type": "string",
+                                    "required": true
+                                }
+                            ],
+                            "mimeType": "application/x-www-form-urlencoded",
+                            "text": ""
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "GLXJepaJSv54f7KoA",
+                    "name": "Request offer",
+                    "capture": {
+                        "body": [
+                            {
+                                "name": "id",
+                                "value": "id"
+                            }
+                        ],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "/CashOnDelivery/v1/offers",
+                        "pathParams": [],
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json; charset=UTF-8",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json; application/javascript; text/javascript",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Authorization",
+                                "value": "<<token_type>>  <<access_token>>"
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [],
+                            "text": "{\n    \"shippingCompanyId\": \"SPSR\",\n    \"totalPrice\": {\n        \"amount\": 10,\n        \"currency\": \"USD\"\n    },\n    \"items\": [\n        {\n            \"name\": \"Iphone 6S\",\n            \"quantity\": 1,\n            \"seller\": \"test_seller\",\n            \"itemPrice\": {\n                \"amount\": 100,\n                \"currency\": \"USD\"\n            },\n            \"category\": \"TEST_CATEGORY\",\n            \"weight\": \"100kg\"\n        }\n    ],\n    \"deliveryAddress\": {\n        \"address1\": \"Moscow\",\n        \"address2\": \"Pravdy\",\n        \"city\": \"Moscow\",\n        \"country\": \"Russia\",\n        \"region\": \"Moscow\",\n        \"postcode\": \"103132\"\n    },\n    \"email\": \"customer@example.com\",\n    \"firstName\": \"Ivan\",\n    \"lastName\": \"Ivanov\",\n    \"phone\": \"9990001122\",\n    \"shopOrderId\": \"1464869493411\",\n    \"discountAmount\": {\n        \"amount\": 0,\n        \"currency\": \"USD\"\n    },\n    \"shippingCost\": {\n        \"amount\": 0,\n        \"currency\": \"USD\"\n    },\n    \"successUrl\": \"http://example.com/success/1464869493411\",\n    \"failUrl\": \"http://example.com/fail/1464869493411\"\n}",
+                            "mimeType": "application/json"
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "NtQQv9mwCPMrstTRR",
+                    "name": "Get Offer",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "get",
+                        "url": "/CashOnDelivery/v1/offers/{id}",
+                        "pathParams": [
+                            {
+                                "name": "id",
+                                "value": "6482f1f1-e9c6-4a9e-8a35-87f9d9701840",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json; charset=UTF-8",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Authorization",
+                                "value": "<<token_type>>  <<access_token>>",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json, application/javascript, text/javascript",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [],
+                            "text": "null",
+                            "mimeType": "application/json"
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                }
+            ]
+        },
+        "P3okZxCsPcBisHJpn": {
+            "id": "P3okZxCsPcBisHJpn",
+            "name": "4new",
+            "initialVariables": {},
+            "steps": [
+                {
+                    "id": "TsGKRSJM8j6oQyiA4",
+                    "name": "Get access token",
+                    "capture": {
+                        "body": [
+                            {
+                                "name": "token_type",
+                                "value": "token_type"
+                            },
+                            {
+                                "name": "access_token",
+                                "value": "access_token"
+                            }
+                        ],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "/oauth/token",
+                        "pathParams": [],
+                        "headers": [
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "Authorization",
+                                "value": "Basic dGVzdF9wYXJ0bmVyOnRlc3RfcGFydG5lcl9zZWNyZXQ=",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [
+                                {
+                                    "name": "grant_type",
+                                    "value": "client_credentials",
+                                    "type": "string",
+                                    "required": true
+                                }
+                            ],
+                            "mimeType": "application/x-www-form-urlencoded",
+                            "text": ""
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "stLeCeA57Gzbv9cxt",
+                    "name": "Request offer",
+                    "capture": {
+                        "body": [
+                            {
+                                "name": "id",
+                                "value": "id"
+                            }
+                        ],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "/CashOnDelivery/v1/offers",
+                        "pathParams": [],
+                        "headers": [
+                            {
+                                "name": "Authorization",
+                                "value": "<<token_type>> <<access_token>>",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json, application/javascript, text/javascript",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [],
+                            "text": "{\n    \"shippingCompanyId\": \"SPSR\",\n    \"totalPrice\": {\n        \"amount\": 10,\n        \"currency\": \"USD\"\n    },\n    \"items\": [\n        {\n            \"name\": \"Iphone 6S\",\n            \"quantity\": 1,\n            \"seller\": \"test_seller\",\n            \"itemPrice\": {\n                \"amount\": 100,\n                \"currency\": \"USD\"\n            },\n            \"category\": \"TEST_CATEGORY\",\n            \"weight\": \"100kg\"\n        }\n    ],\n    \"deliveryAddress\": {\n        \"address1\": \"Moscow\",\n        \"address2\": \"Pravdy\",\n        \"city\": \"Moscow\",\n        \"country\": \"Russia\",\n        \"region\": \"Moscow\",\n        \"postcode\": \"103132\"\n    },\n    \"email\": \"customer@example.com\",\n    \"firstName\": \"Ivan\",\n    \"lastName\": \"Ivanov\",\n    \"phone\": \"9990001122\",\n    \"shopOrderId\": \"1464869493411\",\n    \"discountAmount\": {\n        \"amount\": 0,\n        \"currency\": \"USD\"\n    },\n    \"shippingCost\": {\n        \"amount\": 0,\n        \"currency\": \"USD\"\n    },\n    \"successUrl\": \"http://example.com/success/1464869493411\",\n    \"failUrl\": \"http://example.com/fail/1464869493411\"\n}",
+                            "mimeType": "application/json"
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "b8pfutGdEMqpzRX6w",
+                    "name": "Get Offer",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "get",
+                        "url": "/CashOnDelivery/v1/offers/{id}",
+                        "pathParams": [
+                            {
+                                "name": "id",
+                                "value": "6482f1f1-e9c6-4a9e-8a35-87f9d9701840",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "headers": [
+                            {
+                                "name": "Authorization",
+                                "value": "<<token_type>>  <<access_token>>",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json, application/javascript, text/javascript",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [],
+                            "text": "null",
+                            "mimeType": "application/json"
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                }
+            ]
+        },
+        "fHLHCi7oTcqSyqS2w": {
+            "id": "fHLHCi7oTcqSyqS2w",
+            "name": "5new",
+            "initialVariables": {},
+            "steps": [
+                {
+                    "id": "JHuGqM2j94ZPNwyyx",
+                    "name": "Get access token",
+                    "capture": {
+                        "body": [
+                            {
+                                "name": "token_type",
+                                "value": "token_type"
+                            },
+                            {
+                                "name": "access_token",
+                                "value": "access_token"
+                            }
+                        ],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "/oauth/token",
+                        "pathParams": [],
+                        "headers": [
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "Authorization",
+                                "value": "Basic dGVzdF9wYXJ0bmVyOnRlc3RfcGFydG5lcl9zZWNyZXQ=",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [
+                                {
+                                    "name": "grant_type",
+                                    "value": "client_credentials",
+                                    "type": "string",
+                                    "required": true
+                                }
+                            ],
+                            "mimeType": "application/x-www-form-urlencoded",
+                            "text": ""
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "j5M4GpfG2PvaWZ4CP",
+                    "name": "Request offer",
+                    "capture": {
+                        "body": [
+                            {
+                                "name": "id",
+                                "value": "id"
+                            }
+                        ],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "/CashOnDelivery/v1/offers",
+                        "pathParams": [],
+                        "headers": [
+                            {
+                                "name": "Authorization",
+                                "value": "<<token_type>> <<access_token>>",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json, application/javascript, text/javascript",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [],
+                            "text": "{\n    \"shippingCompanyId\": \"SPSR\",\n    \"totalPrice\": {\n        \"amount\": 10,\n        \"currency\": \"USD\"\n    },\n    \"items\": [\n        {\n            \"name\": \"Iphone 6S\",\n            \"quantity\": 1,\n            \"seller\": \"test_seller\",\n            \"itemPrice\": {\n                \"amount\": 100,\n                \"currency\": \"USD\"\n            },\n            \"category\": \"TEST_CATEGORY\",\n            \"weight\": \"100kg\"\n        }\n    ],\n    \"deliveryAddress\": {\n        \"address1\": \"Moscow\",\n        \"address2\": \"Pravdy\",\n        \"city\": \"Moscow\",\n        \"country\": \"Russia\",\n        \"region\": \"Moscow\",\n        \"postcode\": \"103132\"\n    },\n    \"email\": \"customer@example.com\",\n    \"firstName\": \"Ivan\",\n    \"lastName\": \"Ivanov\",\n    \"phone\": \"9990001122\",\n    \"shopOrderId\": \"1464869493411\",\n    \"discountAmount\": {\n        \"amount\": 0,\n        \"currency\": \"USD\"\n    },\n    \"shippingCost\": {\n        \"amount\": 0,\n        \"currency\": \"USD\"\n    },\n    \"successUrl\": \"http://example.com/success/1464869493411\",\n    \"failUrl\": \"http://example.com/fail/1464869493411\"\n}",
+                            "mimeType": "application/json"
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "Bd3tRvt7uLTvfffhg",
+                    "name": "Get Offer",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "get",
+                        "url": "/CashOnDelivery/v1/offers/{id}",
+                        "pathParams": [
+                            {
+                                "name": "id",
+                                "value": "6482f1f1-e9c6-4a9e-8a35-87f9d9701840",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "headers": [
+                            {
+                                "name": "Authorization",
+                                "value": "<<token_type>> <<access_token>>",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json, application/javascript, text/javascript",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [],
+                            "text": "null",
+                            "mimeType": "application/json"
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                }
+            ]
+        },
+        "ao8fmmhNaPuZzCAHg": {
+            "id": "ao8fmmhNaPuZzCAHg",
+            "name": "6new",
+            "initialVariables": {},
+            "steps": [
+                {
+                    "id": "mcaGtC8hgmdjnJAms",
+                    "name": "Get access token",
+                    "capture": {
+                        "body": [
+                            {
+                                "name": "token_type",
+                                "value": "token_type"
+                            },
+                            {
+                                "name": "access_token",
+                                "value": "access_token"
+                            }
+                        ],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "/oauth/token",
+                        "pathParams": [],
+                        "headers": [
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "Authorization",
+                                "value": "Basic dGVzdF9wYXJ0bmVyOnRlc3RfcGFydG5lcl9zZWNyZXQ=",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [
+                                {
+                                    "name": "grant_type",
+                                    "value": "client_credentials",
+                                    "type": "string",
+                                    "required": true
+                                }
+                            ],
+                            "mimeType": "application/x-www-form-urlencoded",
+                            "text": ""
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "38MWoozENTBz9xb3K",
+                    "name": "Request offer",
+                    "capture": {
+                        "body": [
+                            {
+                                "name": "id",
+                                "value": "id"
+                            }
+                        ],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "/CashOnDelivery/v1/offers",
+                        "pathParams": [],
+                        "headers": [
+                            {
+                                "name": "Authorization",
+                                "value": "<<token_type>> <<access_token>>",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json, application/javascript, text/javascript",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [],
+                            "text": "{\n    \"shippingCompanyId\": \"SPSR\",\n    \"totalPrice\": {\n        \"amount\": 10,\n        \"currency\": \"USD\"\n    },\n    \"items\": [\n        {\n            \"name\": \"Iphone 6S\",\n            \"quantity\": 1,\n            \"seller\": \"test_seller\",\n            \"itemPrice\": {\n                \"amount\": 100,\n                \"currency\": \"USD\"\n            },\n            \"category\": \"TEST_CATEGORY\",\n            \"weight\": \"100kg\"\n        }\n    ],\n    \"deliveryAddress\": {\n        \"address1\": \"Moscow\",\n        \"address2\": \"Pravdy\",\n        \"city\": \"Moscow\",\n        \"country\": \"Russia\",\n        \"region\": \"Moscow\",\n        \"postcode\": \"103132\"\n    },\n    \"email\": \"customer@example.com\",\n    \"firstName\": \"Ivan\",\n    \"lastName\": \"Ivanov\",\n    \"phone\": \"9990001122\",\n    \"shopOrderId\": \"1464869493411\",\n    \"discountAmount\": {\n        \"amount\": 0,\n        \"currency\": \"USD\"\n    },\n    \"shippingCost\": {\n        \"amount\": 0,\n        \"currency\": \"USD\"\n    },\n    \"successUrl\": \"http://example.com/success/1464869493411\",\n    \"failUrl\": \"http://example.com/fail/1464869493411\"\n}",
+                            "mimeType": "application/json"
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "t85ZeYfHobCcppzwW",
+                    "name": "Get Offer",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "get",
+                        "url": "/CashOnDelivery/v1/offers/{id}",
+                        "pathParams": [
+                            {
+                                "name": "id",
+                                "value": "6482f1f1-e9c6-4a9e-8a35-87f9d9701840",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "headers": [
+                            {
+                                "name": "Authorization",
+                                "value": "<<token_type>> <<access_token>>",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json, application/javascript, text/javascript",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [],
+                            "text": "null",
+                            "mimeType": "application/json"
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                }
+            ]
+        },
+        "gMCEF74cD4mTxwTDs": {
+            "id": "gMCEF74cD4mTxwTDs",
+            "name": "10new",
+            "initialVariables": {},
+            "steps": [
+                {
+                    "id": "6bMoXGdyCy3pM5a75",
+                    "name": "Get access token",
+                    "capture": {
+                        "body": [
+                            {
+                                "name": "token_type",
+                                "value": "token_type"
+                            },
+                            {
+                                "name": "access_token",
+                                "value": "access_token"
+                            }
+                        ],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "<<url>>/oauth/token",
+                        "pathParams": [],
+                        "headers": [
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "Authorization",
+                                "value": "Basic dGVzdF9wYXJ0bmVyOnRlc3RfcGFydG5lcl9zZWNyZXQ="
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [
+                                {
+                                    "name": "grant_type",
+                                    "value": "client_credentials",
+                                    "type": "string",
+                                    "required": true
+                                }
+                            ],
+                            "mimeType": "application/x-www-form-urlencoded",
+                            "text": ""
+                        },
+                        "authentication": {
+                            "authType": "basic",
+                            "params": [
+                                {
+                                    "name": "<<login>>",
+                                    "value": "<<password>>"
+                                }
+                            ]
+                        },
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "qWYeC2CZAa5mDt9nw",
+                    "name": "Request offer",
+                    "capture": {
+                        "body": [
+                            {
+                                "name": "id",
+                                "value": "id"
+                            }
+                        ],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "<<url>>/CashOnDelivery/v1/offers",
+                        "pathParams": [],
+                        "headers": [
+                            {
+                                "name": "Authorization",
+                                "value": "<<token_type>> <<access_token>>",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json, application/javascript, text/javascript",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [],
+                            "text": "{\n  \"shippingCompanyId\": \"SPSR\",\n  \"totalPrice\": {\n    \"amount\": 10,\n    \"currency\": \"USD\"\n  },\n  \"items\": [\n    {\n      \"name\": \"Iphone 6S\",\n      \"quantity\": 1,\n      \"seller\": \"test_seller\",\n      \"itemPrice\": {\n        \"amount\": 100,\n        \"currency\": \"USD\"\n      },\n      \"category\": \"TEST_CATEGORY\",\n      \"weight\": \"100kg\"\n    }\n  ],\n  \"deliveryAddress\": {\n    \"address1\": \"Moscow\",\n    \"address2\": \"Pravdy\",\n    \"city\": \"Moscow\",\n    \"country\": \"Russia\",\n    \"region\": \"Moscow\",\n    \"postcode\": \"103132\"\n  },\n  \"email\": \"customer@example.com\",\n  \"firstName\": \"Ivan\",\n  \"lastName\": \"Ivanov\",\n  \"phone\": \"9990001122\",\n  \"shopOrderId\": \"1464869493411\",\n  \"discountAmount\": {\n    \"amount\": 0,\n    \"currency\": \"USD\"\n  },\n  \"shippingCost\": {\n    \"amount\": 0,\n    \"currency\": \"USD\"\n  },\n  \"successUrl\": \"http://example.com/success/1464869493411\",\n  \"failUrl\": \"http://example.com/fail/1464869493411\"\n}",
+                            "mimeType": "application/json"
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "xNNRTrfYjTDpSCqKw",
+                    "name": "Get Offer",
+                    "beforeScript": "function (ctx, request) {\n  SL.sleep(1000)\n  // Your javascript code here.\n}",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "get",
+                        "url": "<<url>>/CashOnDelivery/v1/offers/{id}",
+                        "pathParams": [
+                            {
+                                "name": "id",
+                                "value": ""
+                            }
+                        ],
+                        "headers": [
+                            {
+                                "name": "Authorization",
+                                "value": "<<token_type>> <<access_token>>",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json, application/javascript, text/javascript",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [],
+                            "text": "null",
+                            "mimeType": "application/json"
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                }
+            ]
+        },
+        "c68kBgM687WhbM2LE": {
+            "id": "c68kBgM687WhbM2LE",
+            "name": "pos not ok",
+            "initialVariables": {},
+            "steps": [
+                {
+                    "id": "fjAxCKuZw5p5szS5B",
+                    "name": "Get access token",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "/oauth/token",
+                        "pathParams": [],
+                        "headers": [
+                            {
+                                "name": "Content-Type",
+                                "value": "application/x-www-form-urlencoded; charset=UTF-8",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json",
+                                "type": "string",
+                                "required": false
+                            },
+                            {
+                                "name": "Authorization",
+                                "value": "Basic dGVzdF9wYXJ0bmVyOnRlc3RfcGFydG5lcl9zZWNyZXQ=",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [
+                                {
+                                    "name": "grant_type",
+                                    "value": "client_credentials",
+                                    "type": "string",
+                                    "required": true
+                                }
+                            ],
+                            "mimeType": "application/x-www-form-urlencoded",
+                            "text": ""
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 403
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 403
+                        }
+                    ]
+                },
+                {
+                    "id": "i8WhkwpYg7Fizeo8Y",
+                    "name": "Request offer",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "/CashOnDelivery/v1/offers",
+                        "pathParams": [],
+                        "headers": [
+                            {
+                                "name": "Authorization",
+                                "value": "Bearer eyJhbGciOiJSUzI1NiJ9.eyJzY29wZSI6WyJhY2Nlc3MiXSwiZXhwIjoxNDY0OTEyNTE3LCJqdGkiOiI0Y2FlZGI4MC1kOGEwLTQ5MGYtYmJiOC02YjdkNTAzZDk5NWEiLCJjbGllbnRfaWQiOiJ0ZXN0X3BhcnRuZXIifQ.BiVAjKmADS9F2Uq7tWoIYIssTB9SjmUYJYdKza6zsz-0HYYavcZJC2QaRe9tOGSiaMAZmVdfCX3_ELXGJ8H-SrHlH3ZWX52eLYpOMRL-vM_HeRfTM9VSF-9u1l1BzwaZYM_EzL_KXYZJdGnXnXERNHZS988twJHXzuv_1IRFufJZPgliyhAhQ6WlBKHZt30JzvTZXMv_0Ndcsf9rN7dffgdXyStReQstrBq33JMulI5CoXLtDGTCCn-fTzYKAOHHUFPQEskl1B1uocpEjDIBwzpimT7pLtfm3eE9qsEgk21O9i4XZEbLirEeb3ONBbsmvDxMioyUq0LhmHKO_Xn7-w",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Content-Type",
+                                "value": "application/json; charset=UTF-8",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "User-Agent",
+                                "value": "Test Partner Backend",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Accept",
+                                "value": "application/json, application/javascript, text/javascript",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [],
+                            "text": "{\n    \"shippingCompanyId\": \"SPSR\",\n    \"totalPrice\": {\n        \"amount\": 10,\n        \"currency\": \"USD\"\n    },\n    \"items\": [\n        {\n            \"name\": \"Iphone 6S\",\n            \"quantity\": 1,\n            \"seller\": \"test_seller\",\n            \"itemPrice\": {\n                \"amount\": 100,\n                \"currency\": \"USD\"\n            },\n            \"category\": \"TEST_CATEGORY\",\n            \"weight\": \"100kg\"\n        }\n    ],\n    \"deliveryAddress\": {\n        \"address1\": \"Moscow\",\n        \"address2\": \"Pravdy\",\n        \"city\": \"Moscow\",\n        \"country\": \"Russia\",\n        \"region\": \"Moscow\",\n        \"postcode\": \"103132\"\n    },\n    \"email\": \"customer@example.com\",\n    \"firstName\": \"Ivan\",\n    \"lastName\": \"Ivanov\",\n    \"phone\": \"9990001122\",\n    \"shopOrderId\": \"1464869493411\",\n    \"discountAmount\": {\n        \"amount\": 0,\n        \"currency\": \"USD\"\n    },\n    \"shippingCost\": {\n        \"amount\": 0,\n        \"currency\": \"USD\"\n    },\n    \"successUrl\": \"http://example.com/success/1464869493411\",\n    \"failUrl\": \"http://example.com/fail/1464869493411\"\n}",
+                            "mimeType": "application/json"
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 401
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 401
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
