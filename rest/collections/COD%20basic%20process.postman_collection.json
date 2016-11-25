@@ -1,0 +1,170 @@
+{
+	"variables": [],
+	"info": {
+		"name": "COD basic process",
+		"_postman_id": "677746dd-3887-3558-85c1-410027a141f9",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CashOnDelivery",
+			"description": "Folder for CashOnDelivery",
+			"item": [
+				{
+					"name": "Get access token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\ntests[\"Content-Type is present\"] = postman.getResponseHeader(\"Content-Type\");\n\ntests[\"body contains token\"] = responseBody.has(\"access_token\");\n\nvar jsonData = JSON.parse(responseBody);\npostman.setEnvironmentVariable(\"access_token\", jsonData.access_token);\n"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": {
+								"username": "{{the_user}}",
+								"password": "{{the_password}}",
+								"saveHelperData": true,
+								"showPassword": false
+							}
+						},
+						"url": "{{url}}/oauth/token",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "{{Content-Type}}",
+								"description": ""
+							},
+							{
+								"key": "User-Agent",
+								"value": "{{User-Agent}}",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "{{Accept}}",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic dGVzdF9wYXJ0bmVyOnRlc3RfcGFydG5lcl9zZWNyZXQ=",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "All API calls use OAuth2 Client Credentials Flow, see http://tools.ietf.org/html/rfc6749#section-4.4\n\nAny request must contain valid OAuth2 token, that must be obtained via Access Token Request http://tools.ietf.org/html/rfc6749#section-4.4.2 This should be implemented in Oauth2 libraries for any language/framework.\n\nBasic auth is used as credentials to obtain token. Each partner has its own login/password for that. Sample partner account was created for testing purposes. Login: test_partner, password: test_partner_secret."
+					},
+					"response": []
+				},
+				{
+					"name": "Request offer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\ntests[\"Content-Type is present\"] = postman.getResponseHeader(\"Content-Type\");\n\ntests[\"body contains id\"] = responseBody.has(\"id\");\n\nvar jsonData = JSON.parse(responseBody);\npostman.setEnvironmentVariable(\"id\", jsonData.id);"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/CashOnDelivery/v1/offers",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "User-Agent",
+								"value": "{{User-Agent}}",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "{{Accept}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"shippingCompanyId\" : \"SPSR\",\n  \"totalPrice\" : {\n    \"amount\" : 10,\n    \"currency\" : \"USD\"\n  },\n  \"items\" : [ {\n    \"name\" : \"Iphone 6S\",\n    \"quantity\" : 1,\n    \"seller\" : \"test_seller\",\n    \"itemPrice\" : {\n      \"amount\" : 100,\n      \"currency\" : \"USD\"\n    },\n    \"category\" : \"TEST_CATEGORY\",\n    \"weight\" : \"100kg\"\n  } ],\n  \"deliveryAddress\" : {\n    \"address1\" : \"Moscow\",\n    \"address2\" : \"Pravdy\",\n    \"city\" : \"Moscow\",\n    \"country\" : \"Russia\",\n    \"region\" : \"Moscow\",\n    \"postcode\" : \"103132\"\n  },\n  \"email\" : \"customer@example.com\",\n  \"firstName\" : \"Ivan\",\n  \"lastName\" : \"Ivanov\",\n  \"phone\" : \"9990001122\",\n  \"shopOrderId\" : \"1464869493411\",\n  \"discountAmount\" : {\n    \"amount\" : 0,\n    \"currency\" : \"USD\"\n  },\n  \"shippingCost\" : {\n    \"amount\" : 0,\n    \"currency\" : \"USD\"\n  },\n  \"successUrl\" : \"http://example.com/success/1464869493411\",\n  \"failUrl\" : \"http://example.com/fail/1464869493411\"\n}"
+						},
+						"description": "Offer request is first step in Create Offer flow. Offer contains order details, client information and redirection links both for success and failure."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Offer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\ntests[\"Content-Type is present\"] = postman.getResponseHeader(\"Content-Type\");\n\ntests[\"body contains price\"] = responseBody.has(\"totalPrice\");\n\nvar jsonData = JSON.parse(responseBody);\ntests[\"Offer was created\"] = jsonData.status === \"created\";\n\n\n"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/CashOnDelivery/v1/offers/{{id}}",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "bearer {{access_token}}",
+								"description": ""
+							},
+							{
+								"key": "User-Agent",
+								"value": "{{User-Agent}}",
+								"description": ""
+							},
+							{
+								"key": "Accept",
+								"value": "{{Accept}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "oauth",
+			"description": "Folder for oauth",
+			"item": []
+		}
+	]
+}
