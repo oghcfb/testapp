@@ -22,7 +22,7 @@
 <code> prism -h </code>
 
 ### Запуск mock сервера с API COD
-<code> prism run --list --mock --spec https://raw.githubusercontent.com/oghcfb/testapp/master/rest/contractast.json -p 4020 </code>
+<code> prism run --list --mock --spec https://raw.githubusercontent.com/oghcfb/testapp/master/rest/contract/last.json -p 4020 </code>
 
 ## Запуск тестов против сервисам на mock сервере:
 Для этого необходимо иметь наинсталирован на машине откуда запускаются тесты, package NEWMAN (https://github.com/postmanlabs/newman)
