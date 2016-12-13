@@ -1,29 +1,15 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf470
-{\fonttbl\f0\fnil\fcharset0 Consolas;}
-{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red255\green255\blue255;\red0\green0\blue255;
-\red0\green0\blue255;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
-\deftab720
-\pard\pardeftab720\sl264\partightenfactor0
+[
+{
+    "id": "6482f1f1-e9c6-4a9e-8a35-87f9d9701840",
+    "totalPrice": 1073
+},
+{
+  "id": "6482f1f1-e9c6-4a9e-8a35-87f9d9701841»,
+   "totalPrice": 400
 
-\f0\fs24 \cf2 \cb3 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec2 [\
-\{\
-\'a0\'a0\'a0\'a0\cf4 \cb1 \outl0\strokewidth0 "\cf5 \cb3 \outl0\strokewidth0 \strokec5 id\cf4 \cb1 \outl0\strokewidth0 "\cf2 \cb3 \outl0\strokewidth0 \strokec2 : \cf5 \strokec5 "6482f1f1-e9c6-4a9e-8a35-87f9d9701840"\cf2 \strokec2 ,\
-\'a0\'a0\'a0\'a0\cf5 \strokec5 "totalPrice": 1073\cf2 \strokec2 \
-\},\
-\{\
-\pard\pardeftab720\sl264\partightenfactor0
-\cf0 \cb1 \outl0\strokewidth0 \'a0\'a0\cf4 "id"\cf0 : \cf4 "6482f1f1-e9c6-4a9e-8a35-87f9d9701841\'bb\cf0 ,\
-\'a0\'a0\'a0\cf4 "totalPrice": 400\cf0 \
-\pard\pardeftab720\sl264\partightenfactor0
-\cf2 \cb3 \outl0\strokewidth0 \strokec2 \
-\},\
-\{\
-\pard\pardeftab720\sl264\partightenfactor0
-\cf0 \cb1 \outl0\strokewidth0 \'a0\'a0\cf4 "id"\cf0 : \cf4 "6482f1f1-e9c6-4a9e-8a35-87f9d9701842\'bb\cf0 ,\
-\'a0\'a0\'a0\cf4 "totalPrice": 1300\cf2 \cb3 \outl0\strokewidth0 \strokec2 \
-\pard\pardeftab720\sl264\partightenfactor0
-\cf2 \}\
-]\
+},
+{
+  "id": "6482f1f1-e9c6-4a9e-8a35-87f9d9701842»,
+   "totalPrice": 1300
 }
+]
