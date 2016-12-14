@@ -647,7 +647,7 @@
                 "x-stoplight": {
                     "id": "GET_CashOnDelivery-v1-offers-id",
                     "beforeScript": null,
-                    "afterScript": "var js = document.createElement(\"script\");\n\njs.type = \"text/javascript\";\njs.src = \"./responses_script.\";\n\ndocument.body.appendChild(js);\n\nfunction (ctx, request, response) {\n  // Your javascript code here.\n  var id = request.url.path.get('id');\n  \n //var offerid = request.url.path.get('id');\n var body = response.body.get();\n\nvar parameter =  \n\n  response.body.set( {\n              \"currency\": \"RUR\",\n  \"goodsPrice\": 773,\n  \"id\": \"6482f1f1-e9c6-4a9e-8a35-87f9d9701840\",\n  \"links\": [],\n  \"servicePrice\": 300,\n  \"status\": \"created\",\n  \"totalPrice\": 1073,\n  \"validTo\": \"2016-06-02T13:11:05.719+0000\"\n      }\n      );\n  \n   switch (id) {\n    case '/CashOnDelivery/v1/offers/1':\n     response.body.set( {\n  \"currency\": \"CZK\",\n  \"goodsPrice\": 100,\n  \"id\": \"1\",\n  \"links\": [],\n  \"servicePrice\": 300,\n  \"status\": \"created\",\n  \"totalPrice\": 400,\n  \"validTo\": \"2016-06-02T13:11:05.719+0000\"\n      }\n      );\n      break;\n    case '/CashOnDelivery/v1/offers/2':\n     response.body.set( {\n          \"currency\": \"GBP\",\n  \"goodsPrice\": 1000,\n  \"id\": \"2\",\n  \"links\": [],\n  \"servicePrice\": 500,\n  \"status\": \"created\",\n  \"totalPrice\": 1300,\n  \"validTo\": \"2016-06-02T13:11:05.719+0000\"\n      }\n      );\n      break;\n    case '/CashOnDelivery/v1/offers/3':\n     response.body.set( {\n          \"currency\": \"GBP\",\n  \"goodsPrice\": 1000,\n  \"id\": \"3\",\n  \"links\": [],\n  \"servicePrice\": 600,\n  \"status\": \"created\",\n  \"totalPrice\": 1300,\n  \"validTo\": \"2016-06-02T13:11:05.719+0000\"\n      }\n      );\n      }\n  \n  // \"id\": \"6482f1f1-e9c6-4a9e-8a35-87f9d9701840\"\n\n}",
+                    "afterScript": "function (ctx, request, response) {\n  // Your javascript code here.\n  var id = request.url.path.get('id');\n  \n //var offerid = request.url.path.get('id');\n var body = response.body.get();\n\n  \n   switch (id) {\n    case '/CashOnDelivery/v1/offers/1':\n     response.body.set( {\n  \"currency\": \"CZK\",\n  \"goodsPrice\": 100,\n  \"id\": \"1\",\n  \"links\": [],\n  \"servicePrice\": 300,\n  \"status\": \"created\",\n  \"totalPrice\": 400,\n  \"validTo\": \"2016-06-02T13:11:05.719+0000\"\n      }\n      );\n      break;\n    case '/CashOnDelivery/v1/offers/2':\n     response.body.set( {\n          \"currency\": \"GBP\",\n  \"goodsPrice\": 1000,\n  \"id\": \"2\",\n  \"links\": [],\n  \"servicePrice\": 500,\n  \"status\": \"created\",\n  \"totalPrice\": 500,\n  \"validTo\": \"2016-06-02T13:11:05.719+0000\"\n      }\n      );\n      break;\n    case '/CashOnDelivery/v1/offers/3':\n     response.body.set( {\n          \"currency\": \"GBP\",\n  \"goodsPrice\": 1000,\n  \"id\": \"3\",\n  \"links\": [],\n  \"servicePrice\": 600,\n  \"status\": \"created\",\n  \"totalPrice\": 600,\n  \"validTo\": \"2016-06-02T13:11:05.719+0000\"\n      }\n      );\n      }\n  \n  // \"id\": \"6482f1f1-e9c6-4a9e-8a35-87f9d9701840\"\n\n}",
                     "public": true,
                     "mock": {
                         "enabled": false,
@@ -674,7 +674,7 @@
                         "items": [
                             {
                                 "type": "docTextSections",
-                                "_id": "--KGBFpKxGvQXM7osTr"
+                                "_id": "--GRQLBdY7amtAmt5mn"
                             }
                         ],
                         "divider": false
@@ -706,14 +706,14 @@
         },
         "functions": {},
         "textSections": {
-            "int-MpCTspvjB5wwahx5N": {
-                "id": "int-MpCTspvjB5wwahx5N",
+            "int-Py8HYhtNPXS2Ez8GC": {
+                "id": "int-Py8HYhtNPXS2Ez8GC",
                 "name": "Int",
                 "content": "https://www.dropbox.com/s/f0yzqvc7wulwdk9/image1.png?dl=0",
                 "public": true
             },
-            "--KGBFpKxGvQXM7osTr": {
-                "id": "--KGBFpKxGvQXM7osTr",
+            "--GRQLBdY7amtAmt5mn": {
+                "id": "--GRQLBdY7amtAmt5mn",
                 "name": "Тестирование",
                 "content": "<h5> запуск тестового сценария </h5>\n\n<div style='display: inline-block;'>\n  <a href='https://app.stoplight.io/scenarios/collections/c2FHr2wiLMBEqLKBX/gRPdKHR33RCBXXsPa?__v=1'>\n    <img width='150' src='https://cdn.stoplight.io/run-buttons/solid-blue.png' alt='Run in Stoplight' style='display: block;' />\n  </a>\n</div>",
                 "public": true
@@ -721,7 +721,7 @@
         },
         "mock": {
             "dynamic": false,
-            "enabled": false
+            "enabled": true
         }
     },
     "x-tests": {
