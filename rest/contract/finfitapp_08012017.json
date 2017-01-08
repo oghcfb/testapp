@@ -5,10 +5,11 @@
         "title": "finfitapp API",
         "description": "## Welcome\n\nThis is a place to put general notes and extra information, for internal use.\n\nTo get started designing/documenting this API, select a version on the left. # Title\nNo Description"
     },
-    "host": "gjxsmzympmsw8gz5x-mock.stoplight-proxy.io",
-    "basePath": "/finfit/api/v1",
+    "host": "ec2-35-165-64-62.us-west-2.compute.amazonaws.com:8088",
+    "basePath": "/api/v1",
     "schemes": [
-        "http"
+        "http",
+        "https"
     ],
     "consumes": [
         "application/javascript"
@@ -1806,11 +1807,11 @@
                         "items": [
                             {
                                 "type": "docTextSections",
-                                "_id": "basics-ux8KAox7qFvJDf8Ce"
+                                "_id": "basics-CoSuTK5vMi36ZNum2"
                             },
                             {
                                 "type": "docTextSections",
-                                "_id": "test-scenarios-MxHCCuAC8dyqRhXdQ"
+                                "_id": "test-scenarios-CkNAw4YDj9kezHZWi"
                             }
                         ]
                     },
@@ -1915,7 +1916,7 @@
                             },
                             {
                                 "type": "docTextSections",
-                                "_id": "complex-types-RQRvQW5JXsPxd6tAb"
+                                "_id": "complex-types-hqPKSTqd3xzNK57xu"
                             },
                             {
                                 "type": "schemas",
@@ -1943,20 +1944,20 @@
         },
         "functions": {},
         "textSections": {
-            "test-scenarios-MxHCCuAC8dyqRhXdQ": {
-                "id": "test-scenarios-MxHCCuAC8dyqRhXdQ",
+            "test-scenarios-CkNAw4YDj9kezHZWi": {
+                "id": "test-scenarios-CkNAw4YDj9kezHZWi",
                 "name": "Test scenarios",
                 "content": "Сценарий получения списка категорий и трансакций из одной категории:\n\n<div style='display: inline-block;'>\n  <a href='https://app.stoplight.io/scenarios/collections/Ltn9tcsAdHcq9t5Yk/hAruHcqvNxGxZZ5Kp?__a=development'>\n    <img width='150' src='https://cdn.stoplight.io/run-buttons/solid-blue.png' alt='Run in Stoplight' style='display: block;' />\n  </a>\n</div>",
                 "public": false
             },
-            "basics-ux8KAox7qFvJDf8Ce": {
-                "id": "basics-ux8KAox7qFvJDf8Ce",
+            "basics-CoSuTK5vMi36ZNum2": {
+                "id": "basics-CoSuTK5vMi36ZNum2",
                 "name": "Basics",
                 "content": "<B>Идентификатор клиента</B>\n\nидентификатор клиента передается в <code> token</code>, который передается с каждым вызовом API. \n<br>\n\n<code>token</code> APP получает в процессе регистрации и получение oAuth токена.\n\n\n<B>Авторизация запросов к API</B>\n\nВсе запросы должны быть авторизованы с помощу oAuth. см. раздель: oAuth",
                 "public": true
             },
-            "complex-types-RQRvQW5JXsPxd6tAb": {
-                "id": "complex-types-RQRvQW5JXsPxd6tAb",
+            "complex-types-hqPKSTqd3xzNK57xu": {
+                "id": "complex-types-hqPKSTqd3xzNK57xu",
                 "name": "Complex types",
                 "content": "",
                 "public": false
