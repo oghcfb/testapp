@@ -574,6 +574,12 @@
                     "Activities widget"
                 ],
                 "description": "<h4>Сохранение выбора  реакции пользователя на активность</h4>\n<br>\nДанное API сохраняет результат действий пользователя с Активностей - выбор одного из двух вариантов ответа.\n\n<br>\n<br>\n\nВ вызове передается ИД активности (activityId) и содержание атрибута <code>buttonResponse </code> кнопки, которая была нажата.\n<br>\n<br>\n<code>buttonResponse </code> содержится в объекте Activity, предедыдущего  вызова (<code>#endpoint:9WqESnPezNcDgTHcu</code> для получения деталей всех новых актвиностей.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
                 "parameters": [
                     {
                         "name": "body",
@@ -1807,11 +1813,11 @@
                         "items": [
                             {
                                 "type": "docTextSections",
-                                "_id": "basics-CoSuTK5vMi36ZNum2"
+                                "_id": "basics-HeffHbmJSxQRAjNHE"
                             },
                             {
                                 "type": "docTextSections",
-                                "_id": "test-scenarios-CkNAw4YDj9kezHZWi"
+                                "_id": "test-scenarios-qgxWvDXRJwXLgY6nG"
                             }
                         ]
                     },
@@ -1916,7 +1922,7 @@
                             },
                             {
                                 "type": "docTextSections",
-                                "_id": "complex-types-hqPKSTqd3xzNK57xu"
+                                "_id": "complex-types-dQnzebxfprx2DRjxo"
                             },
                             {
                                 "type": "schemas",
@@ -1944,20 +1950,20 @@
         },
         "functions": {},
         "textSections": {
-            "test-scenarios-CkNAw4YDj9kezHZWi": {
-                "id": "test-scenarios-CkNAw4YDj9kezHZWi",
+            "test-scenarios-qgxWvDXRJwXLgY6nG": {
+                "id": "test-scenarios-qgxWvDXRJwXLgY6nG",
                 "name": "Test scenarios",
                 "content": "Сценарий получения списка категорий и трансакций из одной категории:\n\n<div style='display: inline-block;'>\n  <a href='https://app.stoplight.io/scenarios/collections/Ltn9tcsAdHcq9t5Yk/hAruHcqvNxGxZZ5Kp?__a=development'>\n    <img width='150' src='https://cdn.stoplight.io/run-buttons/solid-blue.png' alt='Run in Stoplight' style='display: block;' />\n  </a>\n</div>",
                 "public": false
             },
-            "basics-CoSuTK5vMi36ZNum2": {
-                "id": "basics-CoSuTK5vMi36ZNum2",
+            "basics-HeffHbmJSxQRAjNHE": {
+                "id": "basics-HeffHbmJSxQRAjNHE",
                 "name": "Basics",
                 "content": "<B>Идентификатор клиента</B>\n\nидентификатор клиента передается в <code> token</code>, который передается с каждым вызовом API. \n<br>\n\n<code>token</code> APP получает в процессе регистрации и получение oAuth токена.\n\n\n<B>Авторизация запросов к API</B>\n\nВсе запросы должны быть авторизованы с помощу oAuth. см. раздель: oAuth",
                 "public": true
             },
-            "complex-types-hqPKSTqd3xzNK57xu": {
-                "id": "complex-types-hqPKSTqd3xzNK57xu",
+            "complex-types-dQnzebxfprx2DRjxo": {
+                "id": "complex-types-dQnzebxfprx2DRjxo",
                 "name": "Complex types",
                 "content": "",
                 "public": false
