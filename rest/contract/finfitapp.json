@@ -1,14 +1,15 @@
 {
     "swagger": "2.0",
     "info": {
-        "version": "v1.0",
+        "version": "v1",
         "title": "finfitapp API",
-        "description": "## Welcome\n\nThis is a place to put general notes and extra information, for internal use.\n\nTo get started designing/documenting this API, select a version on the left."
+        "description": "## Welcome\n\nThis is a place to put general notes and extra information, for internal use.\n\nTo get started designing/documenting this API, select a version on the left. # Title\nNo Description"
     },
-    "host": "api.finfitapp.com:8081",
-    "basePath": "/api/v1",
+    "host": "api.finfitapp.com",
+    "basePath": "/finfit/api/v1",
     "schemes": [
-        "http"
+        "http",
+        "https"
     ],
     "consumes": [
         "application/javascript"
@@ -25,6 +26,483 @@
         }
     },
     "paths": {
+        "/ranking": {
+            "get": {
+                "operationId": "GET_ranking",
+                "summary": "User Ranking",
+                "description": "Получение ranking клиента.\n\nПолучение текстовой инофрмации о том, как себе клиент ведет в сровнении с другимии клиентами FF.\n\nИнформация - объект ranking имеет текствый характер, и содержит элементы markup форматирования\n\nJSON объект ranking: #model:7YZxt7YiARzMPB8XE\n\n____\n<i> тест коментария </i>",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "ranking": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "ranking": "you can definitely improve your bang for a buck. Presently trailing <b> 30% </b> of your peer group"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": []
+                    }
+                ],
+                "x-stoplight": {
+                    "id": "GET_ranking",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": false,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
+                    }
+                }
+            }
+        },
+        "/ffPyramid": {
+            "get": {
+                "operationId": "GET_ffPyramid",
+                "summary": "FF Pyramid stats",
+                "description": "Предоставляет статистику из FF пырамиды клиента, в категориях FFпырамиды.\n\n\n\njson объект #model:DBG9LmP7fZBWCiHuG   имеет следующие properties:\n\n<PRE>\n<code class=language-json»>\n<span class=token punctuation»>{</span>\n<span class=\"token property\">\"VisibleName\"</span> <span class=\"token operator\">:</span> <span class=\"token string\">\"Higher Goals\"</span>\n<span class=\"token property\">\"Name\"</span> <span class=\"token operator\">:</span> <span class=\"token string\">\"#higherGoals\"</span>\n<span class=\"token property\">\"TotalSum\"</span> <span class=\"token operator\">:</span> <span class=\"token integer\">24580</span>\n<span class=\"token property\">\"Currency\"</span> <span class=\"token operator\">:</span> <span class=\"token string\">\"RUR\"</span>\n<span class=\"token property\">\"ffPoints\"</span> <span class=\"token operator\">:</span> <span class=\"token integer\">750</span>\n<span class=\"token property\">\"ffPointsRatio\"</span> <span class=\"token operator\">:</span> <span class=\"token integer\">\"21</span>\n<span class=\"token property\">\"primaryColor\"</span> <span class=\"token operator\">:</span> <span class=\"token string\">\"#419BF9\"</span>\n<span class=token punctuation»>}</span>\n</code>\n</pre>\n<br>",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "ffPyramidCategories": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "VisibleName": {
+                                                "type": "string"
+                                            },
+                                            "Name": {
+                                                "type": "string"
+                                            },
+                                            "TotalSum": {
+                                                "type": "integer"
+                                            },
+                                            "Currency": {
+                                                "type": "string"
+                                            },
+                                            "ffPoints": {
+                                                "type": "integer"
+                                            },
+                                            "ffPointsRatio": {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "ffPyramidCategories": [
+                                    {
+                                        "VisibleName": "Higher Goals",
+                                        "Name": "higherGoals",
+                                        "TotalSum": 24580,
+                                        "Currency": "RUR",
+                                        "ffPoints": 750,
+                                        "ffPointsRatio": 21
+                                    },
+                                    {
+                                        "VisibleName": "Social Desires",
+                                        "Name": "socialDesires",
+                                        "TotalSum": 61840,
+                                        "Currency": "RUR",
+                                        "ffPoints": 380,
+                                        "ffPointsRatio": 63
+                                    },
+                                    {
+                                        "VisibleName": "Bare Necessities",
+                                        "Name": "bareNecessities",
+                                        "TotalSum": 30875,
+                                        "Currency": "RUR",
+                                        "ffPoints": 175,
+                                        "ffPointsRatio": 27
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "x-stoplight": {
+                    "id": "GET_ffPyramid",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": true,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
+                    }
+                }
+            }
+        },
+        "/categories": {
+            "get": {
+                "operationId": "GET_categories",
+                "summary": "List of Categories",
+                "tags": [
+                    "Ungrouped"
+                ],
+                "description": "Получение статистики трансакций клиента, в разрезе категорий. \n\nПолучение данных o количестве трасакнций, сумме, валюте, FF очках.\n\nJSON объект категории: #model:7YZxt7YiARzMPB8XE",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "categories": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/category"
+                                    }
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "categories": [
+                                    {
+                                        "VisibleName": "Total for 30 days",
+                                        "Name": "total",
+                                        "Operations": 148,
+                                        "TotalSum": 71602,
+                                        "Currency": "RUR",
+                                        "ffPoints": 1785,
+                                        "ffPointsRatio": 0
+                                    },
+                                    {
+                                        "VisibleName": "Groceries",
+                                        "Name": "groceries",
+                                        "Operations": 22,
+                                        "TotalSum": 13550,
+                                        "Currency": "RUR",
+                                        "ffPoints": 220,
+                                        "ffPointsRatio": 89
+                                    },
+                                    {
+                                        "VisibleName": "FastFood",
+                                        "Name": "fastfood",
+                                        "Operations": 38,
+                                        "TotalSum": 8900,
+                                        "Currency": "RUR",
+                                        "ffPoints": 90,
+                                        "ffPointsRatio": 78
+                                    },
+                                    {
+                                        "VisibleName": "Gas & Fuel",
+                                        "Name": "gasFuel",
+                                        "Operations": 8,
+                                        "TotalSum": 8800,
+                                        "Currency": "RUR",
+                                        "ffPoints": 105,
+                                        "ffPointsRatio": 75
+                                    },
+                                    {
+                                        "VisibleName": "Restaurants",
+                                        "Name": "dining",
+                                        "Operations": 19,
+                                        "TotalSum": 7920,
+                                        "Currency": "RUR",
+                                        "ffPoints": 280,
+                                        "ffPointsRatio": 72
+                                    },
+                                    {
+                                        "VisibleName": "Candy, Ice Cream",
+                                        "Name": "candyIceCream",
+                                        "Operations": 14,
+                                        "TotalSum": 7103,
+                                        "Currency": "RUR",
+                                        "ffPoints": 20,
+                                        "ffPointsRatio": 67
+                                    },
+                                    {
+                                        "VisibleName": "Bakery",
+                                        "Name": "bakery",
+                                        "Operations": 26,
+                                        "TotalSum": 2940,
+                                        "Currency": "RUR",
+                                        "ffPoints": 50,
+                                        "ffPointsRatio": 59
+                                    },
+                                    {
+                                        "VisibleName": "Clothing & Accessories",
+                                        "Name": "clothingAccessories",
+                                        "Operations": 2,
+                                        "TotalSum": 6640,
+                                        "Currency": "RUR",
+                                        "ffPoints": 310,
+                                        "ffPointsRatio": 50
+                                    },
+                                    {
+                                        "VisibleName": "Entertainment",
+                                        "Name": "entertainment",
+                                        "Operations": 7,
+                                        "TotalSum": 5816,
+                                        "Currency": "RUR",
+                                        "ffPoints": 560,
+                                        "ffPointsRatio": 46
+                                    },
+                                    {
+                                        "VisibleName": "Pharmacy & Drugs",
+                                        "Name": "pharmacy",
+                                        "Operations": 9,
+                                        "TotalSum": 5443,
+                                        "Currency": "RUR",
+                                        "ffPoints": 150,
+                                        "ffPointsRatio": 42
+                                    },
+                                    {
+                                        "VisibleName": "Alcohol",
+                                        "Name": "alcohol",
+                                        "Operations": 3,
+                                        "TotalSum": 4490,
+                                        "Currency": "RUR",
+                                        "ffPoints": 0,
+                                        "ffPointsRatio": 37
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "x-stoplight": {
+                    "id": "GET_categories",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": false,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
+                    }
+                }
+            }
+        },
+        "/registration/phone/{number}": {
+            "parameters": [
+                {
+                    "name": "number",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "operationId": "GET_registration-phone-number",
+                "summary": "registration",
+                "tags": [
+                    "Ungrouped"
+                ],
+                "description": "получение регистрационного кода клиента с данным телефоном",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {}
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "error": "site.message.user.notfound",
+                                "message": "Localized error message"
+                            }
+                        }
+                    }
+                },
+                "x-stoplight": {
+                    "id": "GET_registration-phone-number",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": false,
+                    "mock": {
+                        "enabled": true,
+                        "dynamic": false,
+                        "statusCode": 200
+                    }
+                }
+            }
+        },
+        "/dashboard": {
+            "get": {
+                "operationId": "GET_dashboard",
+                "summary": "Data for main dashboard",
+                "tags": [
+                    "Main Dashboard"
+                ],
+                "description": "Предоставляет данные для отображения основных карточек, а то:\n- Activity\n  - текст для отображения на карточке Activity\n  - количество новых Активностей\n\n- Reccomendation\n  - текст для отображения на карточке Recommendation\n  - количество новых рекомендаций\n- Stats\n  - текст для отображения на карточке Stats\n  \n<br>\n\n<img src=\"https://snag.gy/lXAmCY.jpg\">",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "activityCardText": {
+                                    "type": "string",
+                                    "description": "Текст карточки Activity главного экрана"
+                                },
+                                "recommendationCardText": {
+                                    "type": "string",
+                                    "description": "Текст карточки Recommendation главного экрана"
+                                },
+                                "statsCardText": {
+                                    "type": "string",
+                                    "description": "Текст карточки Stats главного экрана"
+                                }
+                            },
+                            "required": [
+                                "activityCardText",
+                                "recommendationCardText",
+                                "statsCardText"
+                            ]
+                        },
+                        "examples": {
+                            "application/javascript": {
+                                "activityCardText": "5 questions to answer to better categorize your spending and help stay on track, including your payment in Starbucks",
+                                "recommendationCardText": "1 recommendation tracking for you so far. We will follow up when we have more.",
+                                "statsCardText": "5 out of 7 recommendations followed, including your Trip Plan. 260 points up, good for you! Overall spending for the past 7 days – 1 865 EUR"
+                            }
+                        }
+                    }
+                },
+                "x-stoplight": {
+                    "id": "GET_dashboard",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": true,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
+                    }
+                }
+            }
+        },
+        "/activities": {
+            "get": {
+                "operationId": "GET_activities",
+                "summary": "Number of available client activities",
+                "tags": [
+                    "Activities widget"
+                ],
+                "description": "<H3>Получение новых активностей клиента активности</h3>\n\nЗарос на получение новых активностей (на основе activityId).\nВозвращается:\n- поле ид Активностей\n<br>\n- текст для отображения на карточке Activity\n\n<br>\nна основе ИД Активностей, в следующем шаге запрашиваются детали каждой из автивностей для отображения. \n\n<br>\n<br>\n\n<img src=\"https://snag.gy/bOjpag.jpg\">",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "activitesCardText": {
+                                    "type": "string",
+                                    "description": "Текст, который надо изобразить на карточке Активностей"
+                                },
+                                "activities": {
+                                    "type": "object",
+                                    "required": [
+                                        "activityId"
+                                    ],
+                                    "properties": {
+                                        "activityId": {
+                                            "type": "array",
+                                            "description": "",
+                                            "items": {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "required": [
+                                "activitesCardText",
+                                "activities"
+                            ]
+                        },
+                        "examples": {
+                            "application/json": {
+                                "activitesCardText": "questions to answer to better categorizeyour spending and help stay on track, including your payment in Perekrestok.",
+                                "activities": {
+                                    "activityId": [
+                                        24506404,
+                                        61715166,
+                                        26932454,
+                                        49047992
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-stoplight": {
+                    "id": "GET_activities",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": false,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
+                    }
+                }
+            }
+        },
         "/activities/{activityId}": {
             "parameters": [
                 {
@@ -37,7 +515,10 @@
             "post": {
                 "operationId": "POST_activities-activityId",
                 "summary": "Save user action on Activity",
-                "description": "<p><h4>Сохранение выбора  реакции пользователя на активность</h4>\n<br>\nДанное API сохраняет результат действий пользователя с Активностей - выбор одного из двух вариантов ответа.</p>\n<br>\n<br>\n<p>В вызове передается ИД активности (activityId) и содержание атрибута <code>buttonResponse </code> кнопки, которая была нажата.\n<br>\n<br>\n<code>buttonResponse </code> содержится в объекте Activity, предедыдущего  вызова (<code><a href=\"/v1.0/activities-widget/get-activity-details\" class=\"undefined\">Get all new activities and their details</a></code> для получения деталей всех новых актвиностей.</p>\n",
+                "tags": [
+                    "Activities widget"
+                ],
+                "description": "<h4>Сохранение выбора  реакции пользователя на активность</h4>\n<br>\nДанное API сохраняет результат действий пользователя с Активностей - выбор одного из двух вариантов ответа.\n\n<br>\n<br>\n\nВ вызове передается ИД активности (activityId) и содержание атрибута <code>buttonResponse </code> кнопки, которая была нажата.\n<br>\n<br>\n<code>buttonResponse </code> содержится в объекте Activity, предедыдущего  вызова (<code>#endpoint:9WqESnPezNcDgTHcu</code> для получения деталей всех новых актвиностей.",
                 "consumes": [
                     "application/json"
                 ],
@@ -65,6 +546,83 @@
                     "200": {
                         "description": ""
                     }
+                },
+                "x-stoplight": {
+                    "id": "POST_activities-activityId",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": true,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
+                    }
+                }
+            }
+        },
+        "/recommendation": {
+            "get": {
+                "operationId": "GET_recommendation",
+                "summary": "Number of available client recommendations",
+                "tags": [
+                    "Recommendations widget"
+                ],
+                "description": "<H3>Получение количества рекомендаций</h3>\n\nЗарос на получение количества новых рекомандаций.\nВозвращается:\n- поле ид рекомендаций (recommendationId).\n<br>\n<br>\n\n<img src=\"https://snag.gy/g3Nhqv.jpg\">",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "recomendations": {
+                                    "type": "object",
+                                    "required": [
+                                        "recomendationId"
+                                    ],
+                                    "properties": {
+                                        "recomendationId": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "required": [
+                                "recomendations"
+                            ]
+                        },
+                        "examples": {
+                            "application/json": {
+                                "recomendations": {
+                                    "recomendationId": [
+                                        24506404,
+                                        61715166,
+                                        26932454,
+                                        49047992
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "x-stoplight": {
+                    "id": "GET_recommendation",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": false,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
+                    }
                 }
             }
         },
@@ -72,7 +630,10 @@
             "get": {
                 "operationId": "GET_recomnedations",
                 "summary": "Get recommnedation details",
-                "description": "<p><H3>Получение  рекоммендаций клиента</h3></p>\n<p>API предоставляет детали всех рекомендаций, доступных клиенту (объект <code>recomendation </code>). Данные предоставляются как массив данного объекта.\n<br></p>\n<p>Модель объекта рекомендации: <a href=\"/v1.0/models/recommnedation\" class=\"undefined\">Recommnedation</a></p>\n<br>\n<b>Статусы рекомендаций</b>\n<p>API предоставляет рекомендандации в следующих статусах:</p>\n<ul>\n<li><code>New</code> (новые рекоммендации)</li>\n<li><code>Active</code> (Активные рекомендации, которые клиент принял)</li>\n<li><code>Filled</code> (Выполненые рекоммендации)</li>\n<li><code>Expired</code> (просроченные, неактивные рекоммендации)</li>\n</ul>\n<p>Для получения рекоммендаций в определенном статусе, необходимо использовать query string - фильтр <code>recommendationStatus</code>. Пример URL для получения всех выполненых рекоммендаций:\n<br></p>\n<p><i> <code> /recommendations?recommendationStatus=filled  </code></i></p>\n<br>\n<b>Сортировка данных</b><br>\nРекоммендации в масиве отсортированы на основе атрибута recommendationId, по возрастанию.\n<br>\n<p><h4>Первое окно Рекомендауии  </h4>\n<img src=\"https://snag.gy/HyeMf3.jpg\"></p>\n<br>\n<p><h4>Второе окно детализации Рекомендации  </h4>\n<img src=\"https://snag.gy/Pa6D3U.jpg\"></p>\n",
+                "tags": [
+                    "Recommendations widget"
+                ],
+                "description": "<H3>Получение  рекоммендаций клиента</h3>\n\nAPI предоставляет детали всех рекомендаций, доступных клиенту (объект <code>recomendation </code>). Данные предоставляются как массив данного объекта.\n<br>\n\nМодель объекта рекомендации: #model:KB8PyyGhinp9iiEAS\n\n<br>\n<b>Статусы рекомендаций</b>\n\nAPI предоставляет рекомендандации в следующих статусах:\n- <code>New</code> (новые рекоммендации)\n- <code>Active</code> (Активные рекомендации, которые клиент принял)\n- <code>Filled</code> (Выполненые рекоммендации)\n- <code>Expired</code> (просроченные, неактивные рекоммендации)\n\nДля получения рекоммендаций в определенном статусе, необходимо использовать query string - фильтр <code>recommendationStatus</code>. Пример URL для получения всех выполненых рекоммендаций:\n<br>\n\n<i> <code> /recommendations?recommendationStatus=filled  </code></i>  \n\n<br>\n<b>Сортировка данных</b><br>\nРекоммендации в масиве отсортированы на основе атрибута recommendationId, по возрастанию.\n\n\n\n<br>\n\n<h4>Первое окно Рекомендауии  </h4>\n<img src=\"https://snag.gy/HyeMf3.jpg\">\n\n<br>\n\n<h4>Второе окно детализации Рекомендации  </h4>\n<img src=\"https://snag.gy/Pa6D3U.jpg\">",
                 "consumes": [
                     "application/json"
                 ],
@@ -84,7 +645,6 @@
                         "name": "recommendationStatus",
                         "in": "query",
                         "description": "статус рекоммендации, которые будут содержатся в ответе",
-                        "required": false,
                         "type": "string",
                         "enum": [
                             "new",
@@ -97,7 +657,9 @@
                 "responses": {
                     "200": {
                         "description": "",
-                        "schema": "{\"type\":\"object\",\"properties\":{\"recommendationId\":{\"type\":\"integer\"},\"recommendationStatus\":{\"type\":\"string\",\"description\":\"статус рекоммендации.\",\"enum\":[\"new\",\"active\",\"filled\",\"expired\"]},\"recommendationType\":{\"type\":\"string\",\"description\":\"тип рекомендации.  Испроьзуется для текста шапки карточки с рекомендацие\"},\"recommendationCategory\":{\"type\":\"string\",\"description\":\"тип рекомендации.  Испроьзуется для текста шапки карточки с рекомендацие\"},\"occurence\":{\"type\":\"string\",\"description\":\"Время следующего появления рекомендаций. возможные вараианты: \\\"next Monday\\\"; \\\"next Week\\\"; \\\"next Month\\\"\"},\"recommendationAmount\":{\"type\":\"number\",\"description\":\"сума на которую расчитывает реукомендация\"},\"currency_id\":{\"type\":\"string\",\"description\":\"3х значный ISO код валюты\"},\"usedCard\":{\"type\":\"string\",\"description\":\"номер - id используемой карты\"},\"cardAssociation\":{\"type\":\"string\",\"description\":\"Реестр карточных ассоциаций\",\"enum\":[\"VISA\",\"MC\",\"AE\"]},\"1stStepCardDetails\":{\"type\":\"object\",\"description\":\"детали для первого окна\",\"required\":[\"buttonText\"],\"properties\":{\"buttonText\":{\"type\":\"string\",\"description\":\"текст на кнопке перехода на 2е окно\"},\"rows\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"row\":{\"type\":\"string\",\"description\":\"id строки детализации текста\"},\"textLeft\":{\"type\":\"string\"},\"textRight\":{\"type\":\"string\"},\"textColour\":{\"type\":\"string\"}}}}}},\"2ndStepCardDetails\":{\"type\":\"object\",\"description\":\"детали для первого окна\",\"required\":[\"cardDetailText\",\"cardDetailHeading\",\"cardDetailButtons\"],\"properties\":{\"cardDetailText\":{\"type\":\"string\",\"description\":\"текст для второго окна\"},\"cardDetailHeading\":{\"type\":\"string\",\"description\":\"текст - заговолог для второго окна\"},\"cardDetailButtons\":{\"type\":\"array\",\"description\":\"поле с деталями кнопок\",\"items\":{\"type\":\"object\",\"properties\":{\"ButtonText\":{\"type\":\"string\",\"description\":\"текст на кнопке\"},\"possitiveFlag\":{\"type\":\"boolean\",\"description\":\"флаг определяющий если кнопка для позитивного ответа (\\\"1\\\" = positive)\"},\"buttonResponse\":{\"type\":\"string\"}},\"required\":[\"ButtonText\",\"possitiveFlag\",\"buttonResponse\"]}}}}},\"required\":[\"recommendationId\",\"recommendationStatus\",\"recommendationType\",\"recommendationCategory\",\"occurence\",\"recommendationAmount\",\"currency_id\",\"usedCard\",\"cardAssociation\",\"1stStepCardDetails\",\"2ndStepCardDetails\"],",
+                        "schema": {
+                            "$ref": "#/definitions/recommnedations"
+                        },
                         "examples": {
                             "application/json": {
                                 "recommendationId": 16983,
@@ -139,46 +701,67 @@
                             }
                         }
                     }
+                },
+                "x-stoplight": {
+                    "id": "GET_recomnedations",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": true,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
+                    }
                 }
             }
         },
-        "/dashboard": {
-            "get": {
-                "operationId": "GET_dashboard",
-                "summary": "Data for main dashboard",
-                "description": "<p>Предоставляет данные для отображения основных карточек, а то:</p>\n<ul>\n<li>\n<p>Activity</p>\n<ul>\n<li>текст для отображения на карточке Activity</li>\n<li>количество новых Активностей</li>\n</ul>\n</li>\n<li>\n<p>Reccomendation</p>\n<ul>\n<li>текст для отображения на карточке Recommendation</li>\n<li>количество новых рекомендаций</li>\n</ul>\n</li>\n<li>\n<p>Stats</p>\n<ul>\n<li>текст для отображения на карточке Stats</li>\n</ul>\n</li>\n</ul>\n<br>\n<img src=\"https://snag.gy/lXAmCY.jpg\">",
-                "responses": {
-                    "200": {
-                        "description": "",
+        "/recommendations/{recommendationId}": {
+            "parameters": [
+                {
+                    "name": "recommendationId",
+                    "in": "path",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "post": {
+                "operationId": "POST_recommendations-recommendationId",
+                "summary": "Save user action on Recommendation",
+                "tags": [
+                    "Recommendations widget"
+                ],
+                "description": "<h4>Сохранение выбора  реакции пользователя на рекоммендацию</h4>\n<br>\nДанное API сохраняет результат действий пользователя с Рекоммендацией - выбор одного из двух вариантов ответа.\n\n<br>\n<br>\n\nВ вызове передается ИД рекоммендации (recommendationId) и содержание атрибута <code>buttonResponse </code> кнопки, которая была нажата.\n<br>\n<br>\n<code>buttonResponse </code> содержится в объекте Recommendation, предедыдущего  вызова (<code>#model:KB8PyyGhinp9iiEAS</code> для получения деталей рекоммендаций.",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
                         "schema": {
                             "type": "object",
                             "properties": {
-                                "activityCardText": {
-                                    "type": "string",
-                                    "description": "Текст карточки Activity главного экрана"
-                                },
-                                "recommendationCardText": {
-                                    "type": "string",
-                                    "description": "Текст карточки Recommendation главного экрана"
-                                },
-                                "statsCardText": {
-                                    "type": "string",
-                                    "description": "Текст карточки Stats главного экрана"
+                                "buttonResponse": {
+                                    "type": "string"
                                 }
                             },
-                            "required": [
-                                "activityCardText",
-                                "recommendationCardText",
-                                "statsCardText"
-                            ]
-                        },
-                        "examples": {
-                            "application/javascript": {
-                                "activityCardText": "5 questions to answer to better categorize your spending and help stay on track, including your payment in Starbucks",
-                                "recommendationCardText": "1 recommendation tracking for you so far. We will follow up when we have more.",
-                                "statsCardText": "5 out of 7 recommendations followed, including your Trip Plan. 260 points up, good for you! Overall spending for the past 7 days – 1 865 EUR"
+                            "example": {
+                                "buttonResponse": "take"
                             }
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                },
+                "x-stoplight": {
+                    "id": "POST_recommendations-recommendationId",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": true,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
                     }
                 }
             }
@@ -187,7 +770,10 @@
             "get": {
                 "operationId": "GET_stats",
                 "summary": "Client Statistics",
-                "description": "<p><H3>Получение статистики клиента</h3></p>\n<p>API предоставляет статистику клиента, по  по всем 3 карточкам, на экране статисики:</p>\n<ol>\n<li>FinFit  пирамида </br></li>\n<li>Список категорий </br></li>\n</ol>\n<p><b>Период статистики </b>\n<br>По умолчанию статистика предоставляется за период <code>month</code> - календарный месяц. параметр передается как &quot;query string&quot; <code>period</code>.\n<br>Доступные периоды:</p>\n<ul>\n<li><code>day</code></li>\n<li><code>week</code></li>\n<li><code>2weeks</code></li>\n<li><code>month</code></li>\n<li><code>all</code></li>\n</ul>",
+                "tags": [
+                    "Stats widget"
+                ],
+                "description": "<H3>Получение статистики клиента</h3>\n\nAPI предоставляет статистику клиента, по  по всем 3 карточкам, на экране статисики:\n\n1. FinFit  пирамида </br>\n2. Список категорий </br>\n \n\n<b>Период статистики </b>\n<br>По умолчанию статистика предоставляется за период <code>month</code> - календарный месяц. параметр передается как \"query string\" <code>period</code>.\n<br>Доступные периоды:\n<ul>\n<li><code>day</code></li>\n<li><code>week</code></li>\n<li><code>2weeks</code></li>\n<li><code>month</code></li>\n<li><code>all</code></li>\n</ul>",
                 "consumes": [
                     "application/json"
                 ],
@@ -199,7 +785,6 @@
                         "name": "period",
                         "in": "query",
                         "description": "Период, за который предоставляется статистика",
-                        "required": false,
                         "type": "string",
                         "default": "month",
                         "enum": [
@@ -214,7 +799,27 @@
                 "responses": {
                     "200": {
                         "description": "",
-                        "schema": "{\"type\":\"object\",\"properties\":{\"ffPyramidCategories\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"pyramidCategoryVisibleName\":{\"type\":\"string\"},\"pyramidCategory\":{\"type\":\"string\"},\"TotalSum\":{\"type\":\"integer\"},\"Currency\":{\"type\":\"string\",\"description\":\"3х значный ISO код валюты трансакции\"},\"ffPoints\":{\"type\":\"integer\"}},",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "ffPyramidCategories": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/ffpyramidcategory"
+                                    }
+                                },
+                                "ffCategories": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/ffcategory"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "ffPyramidCategories",
+                                "ffCategories"
+                            ]
+                        },
                         "examples": {
                             "application/json": {
                                 "ranking": {
@@ -329,214 +934,16 @@
                             }
                         }
                     }
-                }
-            }
-        },
-        "/activities": {
-            "get": {
-                "operationId": "GET_activities",
-                "summary": "Get all new activities and their details",
-                "description": "<p><H3>Получение деталей Активностей клиента</h3></p>\n<p>API предоставляет детали новых активностей, доступных клиенту (объект <code>activity </code>).\n<br></p>\n<p>Модель объекта активности: <a href=\"/v1.0/models/activity\" class=\"undefined\">Activity</a></p>\n<br>\n<p><b>Сортировка данных</b><br>\nАктивности в масиве отсортированы на основе атрибута activityId, по возрастанию.</p>\n<p><h4>Первое окно детализации Активности  </h4>\n<img src=\"https://snag.gy/pWbenq.jpg\"></p>\n<br>\n<h4>Второе окно детализации Активности  </h4>\n<br>\n<img src=\"https://snag.gy/WJ60ml.jpg\">",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": "{\"type\":\"object\",\"properties\":{\"activities\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"activityId\":{\"type\":\"integer\",\"description\":\"уникальный идентификатор активности в системе\"},\"datetime\":{\"type\":\"string\",\"description\":\"время и дата трансакции в UTC формате\"},\"trans_amt\":{\"type\":\"number\",\"description\":\"сума трансакции\"},\"trans_details\":{\"type\":\"string\",\"description\":\"Название места - merchant\"},\"trans_type\":{\"type\":\"string\",\"description\":\"Тип трансакции - online/offline. \"},\"currency_id\":{\"type\":\"string\",\"description\":\"3х значный ISO код валюты\"},\"categoryVisibleName\":{\"type\":\"string\",\"description\":\"название FF категории трансакции\"},\"usedCard\":{\"type\":\"string\",\"description\":\"номер - id используемой карты\"},\"cardAssociation\":{\"type\":\"string\",\"description\":\"Реестр карточных ассоциаций\",\"enum\":[\"VISA\",\"MC\",\"AE\"]},\"1stStepCardDetails\":{\"type\":\"object\",\"description\":\"детали для первого окна\",\"required\":[\"buttonText\"],\"properties\":{\"buttonText\":{\"type\":\"string\",\"description\":\"текст на кнопке перехода на 2е окно\"},\"rows\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"row\":{\"type\":\"string\",\"description\":\"id строки детализации текста\"},\"textLeft\":{\"type\":\"string\"},\"textRight\":{\"type\":\"string\"},\"textColour\":{\"type\":\"string\"}}}},\"\":{\"type\":\"string\"}}},\"2ndStepCardDetails\":{\"type\":\"object\",\"description\":\"детали для первого окна\",\"properties\":{\"cardDetailText\":{\"type\":\"string\",\"description\":\"текст для второго окна\"},\"cardDetailHeading\":{\"type\":\"string\",\"description\":\"текст - заговолог для второго окна\"},\"cardDetailButtons\":{\"type\":\"array\",\"description\":\"поле с деталями кнопок\",\"items\":{\"type\":\"object\",\"properties\":{\"ButtonText\":{\"type\":\"string\",\"description\":\"текст на кнопке\"},\"PosstiveFlag\":{\"type\":\"boolean\",\"description\":\"флаг определяющий если кнопка для позитивного ответа (\\\"true\\\" = positive)\"},\"buttonResponse\":{\"type\":\"string\",\"description\":\"код нажатой кнопки. передается в рамках отдельного POST запроса\"}}}}}}},\"required\":[\"activityId\",\"datetime\",\"trans_amt\",\"trans_details\",\"currency_id\",\"categoryVisibleName\",\"1stStepCardDetails\",\"2ndStepCardDetails\"],",
-                        "examples": {
-                            "application/json": {
-                                "activities": [
-                                    {
-                                        "activityId": 5210930,
-                                        "datetime": "26.02.2016 12:53:43",
-                                        "trans_amt": 23600,
-                                        "trans_details": "British Airways",
-                                        "trans_type": "online",
-                                        "currency_id": "RUR",
-                                        "categoryVisibleName": "Travel",
-                                        "usedCard": "8465",
-                                        "cardAssociation": "VISA",
-                                        "1stStepCardDetails": {
-                                            "buttonText": "Take recommendation",
-                                            "rows": [
-                                                {
-                                                    "row": "1",
-                                                    "textLeft": "Higher goals",
-                                                    "textRight": "+140 FF",
-                                                    "textColour": "green"
-                                                }
-                                            ]
-                                        },
-                                        "2ndStepCardDetails": {
-                                            "cardDetailText": "All insured travel risk and personal items theft coverage that would cost 7 EUR per day of your vacation",
-                                            "cardDetailHeading": "Would take out a travel insurance provided by Aviva?",
-                                            "cardDetailButtons": [
-                                                {
-                                                    "ButtonText": "No, thanks",
-                                                    "possitiveFlag": false,
-                                                    "buttonResponse": "leave"
-                                                },
-                                                {
-                                                    "ButtonText": "Yes, please",
-                                                    "possitiveFlag": true,
-                                                    "buttonResponse": "take"
-                                                }
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        "activityId": 5210940,
-                                        "datetime": "01.03.2016 18:40:00",
-                                        "trans_amt": 780,
-                                        "trans_details": "Uber",
-                                        "trans_type": "offline",
-                                        "currency_id": "RUR",
-                                        "categoryVisibleName": "`Travel",
-                                        "usedCard": "0039",
-                                        "cardAssociation": "VISA",
-                                        "1stStepCardDetails": {
-                                            "buttonText": "Provide Context"
-                                        },
-                                        "2ndStepCardDetails": {
-                                            "cardDetailText": "",
-                                            "cardDetailHeading": "Should we book this as your business travel expense you’d claim later?",
-                                            "cardDetailButtons": [
-                                                {
-                                                    "ButtonText": "No, thanks",
-                                                    "possitiveFlag": false,
-                                                    "buttonResponse": "take"
-                                                },
-                                                {
-                                                    "ButtonText": "Yes, please",
-                                                    "possitiveFlag": true,
-                                                    "buttonResponse": "take"
-                                                }
-                                            ]
-                                        }
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/ffPyramid": {
-            "get": {
-                "operationId": "GET_ffPyramid",
-                "summary": "FF Pyramid stats",
-                "description": "<p>Предоставляет статистику из FF пырамиды клиента, в категориях FFпырамиды.</p>\n<p>json объект <a href=\"/v1.0/models/ffpyramidcategory\" class=\"undefined\">ffPyramidCategory</a>   имеет следующие properties:</p>\n<PRE>\n<code class=language-json»>\n<span class=token punctuation»>{</span>\n<span class=\"token property\">\"VisibleName\"</span> <span class=\"token operator\">:</span> <span class=\"token string\">\"Higher Goals\"</span>\n<span class=\"token property\">\"Name\"</span> <span class=\"token operator\">:</span> <span class=\"token string\">\"#higherGoals\"</span>\n<span class=\"token property\">\"TotalSum\"</span> <span class=\"token operator\">:</span> <span class=\"token integer\">24580</span>\n<span class=\"token property\">\"Currency\"</span> <span class=\"token operator\">:</span> <span class=\"token string\">\"RUR\"</span>\n<span class=\"token property\">\"ffPoints\"</span> <span class=\"token operator\">:</span> <span class=\"token integer\">750</span>\n<span class=\"token property\">\"ffPointsRatio\"</span> <span class=\"token operator\">:</span> <span class=\"token integer\">\"21</span>\n<span class=\"token property\">\"primaryColor\"</span> <span class=\"token operator\">:</span> <span class=\"token string\">\"#419BF9\"</span>\n<span class=token punctuation»>}</span>\n</code>\n</pre>\n<br>",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "ffPyramidCategories": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "object",
-                                        "properties": {
-                                            "VisibleName": {
-                                                "type": "string"
-                                            },
-                                            "Name": {
-                                                "type": "string"
-                                            },
-                                            "TotalSum": {
-                                                "type": "integer"
-                                            },
-                                            "Currency": {
-                                                "type": "string"
-                                            },
-                                            "ffPoints": {
-                                                "type": "integer"
-                                            },
-                                            "ffPointsRatio": {
-                                                "type": "integer"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "examples": {
-                            "application/json": {
-                                "ffPyramidCategories": [
-                                    {
-                                        "VisibleName": "Higher Goals",
-                                        "Name": "higherGoals",
-                                        "TotalSum": 24580,
-                                        "Currency": "RUR",
-                                        "ffPoints": 750,
-                                        "ffPointsRatio": 21
-                                    },
-                                    {
-                                        "VisibleName": "Social Desires",
-                                        "Name": "socialDesires",
-                                        "TotalSum": 61840,
-                                        "Currency": "RUR",
-                                        "ffPoints": 380,
-                                        "ffPointsRatio": 63
-                                    },
-                                    {
-                                        "VisibleName": "Bare Necessities",
-                                        "Name": "bareNecessities",
-                                        "TotalSum": 30875,
-                                        "Currency": "RUR",
-                                        "ffPoints": 175,
-                                        "ffPointsRatio": 27
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/recommendations/{recommendationId}": {
-            "parameters": [
-                {
-                    "name": "recommendationId",
-                    "in": "path",
-                    "required": true,
-                    "type": "string"
-                }
-            ],
-            "post": {
-                "operationId": "POST_recommendations-recommendationId",
-                "summary": "Save user action on Recommendation",
-                "description": "<p><h4>Сохранение выбора  реакции пользователя на рекоммендацию</h4>\n<br>\nДанное API сохраняет результат действий пользователя с Рекоммендацией - выбор одного из двух вариантов ответа.</p>\n<br>\n<br>\n<p>В вызове передается ИД рекоммендации (recommendationId) и содержание атрибута <code>buttonResponse </code> кнопки, которая была нажата.\n<br>\n<br>\n<code>buttonResponse </code> содержится в объекте Recommendation, предедыдущего  вызова (<code><a href=\"/v1.0/models/recommnedation\" class=\"undefined\">Recommnedation</a></code> для получения деталей рекоммендаций.</p>\n",
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "buttonResponse": {
-                                    "type": "string"
-                                }
-                            },
-                            "example": {
-                                "buttonResponse": "take"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": ""
+                },
+                "x-stoplight": {
+                    "id": "GET_stats",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": true,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
                     }
                 }
             }
@@ -555,7 +962,10 @@
             "get": {
                 "operationId": "GET_Transactions-category",
                 "summary": "Transactions in Category",
-                "description": "<p>Возвращает список трансакций в данной категории, за определенный период.</p>\n<p>ID категории для которой требуется получить данные, передается в URL как параметр, и берется из property <code> ffCategory.Name </code> объекта <code> <a href=\"/v1.0/models/ffcategory\" class=\"undefined\">ffCategory</a> </code>.</p>\n<p>Период, для которого требуются трансакции, передвется как  &quot;query string&quot; <code>period</code>.</p>\n",
+                "tags": [
+                    "Transactions widget"
+                ],
+                "description": "Возвращает список трансакций в данной категории, за определенный период.\n\nID категории для которой требуется получить данные, передается в URL как параметр, и берется из property <code> ffCategory.Name </code> объекта <code> #model:7YZxt7YiARzMPB8XE </code>.\n\nПериод, для которого требуются трансакции, передвется как  \"query string\" <code>period</code>.",
                 "consumes": [
                     "application/json"
                 ],
@@ -567,7 +977,6 @@
                         "name": "period",
                         "in": "query",
                         "description": "Период, за который предоставляется статистика",
-                        "required": false,
                         "type": "string",
                         "default": "month",
                         "enum": [
@@ -582,7 +991,17 @@
                 "responses": {
                     "200": {
                         "description": "",
-                        "schema": "{\"type\":\"object\",\"properties\":{\"transactions\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"ffcategory\":{\"type\":\"string\"},\"TRANS_DATE\":{\"type\":\"string\"},\"TRANS_DETAILS\":{\"type\":\"string\"},\"TRANS_AMT\":{\"type\":\"string\"},\"TRANS_COUNTRY\":{\"type\":\"string\"},\"CURRENCY_ID\":{\"type\":\"string\",\"description\":\"3х значный ISO код валюты трансакции\"}},",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "transactions": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/transaction-input"
+                                    }
+                                }
+                            }
+                        },
                         "examples": {
                             "application/json": {
                                 "transactions": [
@@ -631,6 +1050,17 @@
                                 ]
                             }
                         }
+                    }
+                },
+                "x-stoplight": {
+                    "id": "GET_Transactions-category",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": true,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
                     }
                 }
             }
@@ -796,6 +1226,11 @@
                         }
                     ]
                 }
+            },
+            "x-stoplight": {
+                "id": "activity",
+                "name": "Activity",
+                "public": true
             }
         },
         "category": {
@@ -829,6 +1264,11 @@
                 "TotalSum": 71602,
                 "Currency": "RUR",
                 "ffPoints": 1785
+            },
+            "x-stoplight": {
+                "id": "category",
+                "name": "Category",
+                "public": true
             }
         },
         "clientid": {
@@ -846,6 +1286,11 @@
             ],
             "example": {
                 "clientID": 12
+            },
+            "x-stoplight": {
+                "id": "clientid",
+                "name": "clientID",
+                "public": true
             }
         },
         "pyramidcategory": {
@@ -875,6 +1320,11 @@
                 "TotalSum": 24580,
                 "Currency": "RUR",
                 "ffPoints": 750
+            },
+            "x-stoplight": {
+                "id": "pyramidcategory",
+                "name": "PyramidCategory",
+                "public": true
             }
         },
         "recommendation": {
@@ -1050,6 +1500,11 @@
                         }
                     ]
                 }
+            },
+            "x-stoplight": {
+                "id": "recommendation",
+                "name": "Recommendation",
+                "public": true
             }
         },
         "transaction": {
@@ -1083,6 +1538,11 @@
                 "TRANS_AMT": "1360,00000",
                 "TRANS_COUNTRY": "RUSSIA",
                 "CURRENCY_ID": "RUR"
+            },
+            "x-stoplight": {
+                "id": "transaction",
+                "name": "Transaction",
+                "public": true
             }
         },
         "used-card-enumeration": {
@@ -1093,6 +1553,583 @@
                 "VISA",
                 "MC",
                 "AE"
+            ],
+            "x-stoplight": {
+                "id": "used-card-enumeration",
+                "name": "used card enumeration",
+                "public": true
+            }
+        },
+        "transaction-input": {
+            "title": "cardTransaction",
+            "$ref": "#/definitions/transaction",
+            "example": {
+                "ffcategory": "fastfood",
+                "TRANS_DATE": "26.02.2016 12:53:43",
+                "TRANS_DETAILS": "KAFE LIGA PAP",
+                "TRANS_AMT": "1360,00000",
+                "TRANS_COUNTRY": "RUSSIA",
+                "CURRENCY_ID": "RUR"
+            },
+            "x-stoplight": {
+                "id": "transaction-input",
+                "name": "cardTransaction",
+                "public": true
+            }
+        },
+        "ffpyramidcategory": {
+            "title": "ffPyramidCategory",
+            "$ref": "#/definitions/pyramidcategory",
+            "example": {
+                "pyramidCategoryVisibleName": "Higher Goals",
+                "pyramidCategory": "higherGoals",
+                "TotalSum": 24580,
+                "Currency": "RUR",
+                "ffPoints": 750
+            },
+            "x-stoplight": {
+                "id": "ffpyramidcategory",
+                "name": "ffPyramidCategory",
+                "public": true
+            }
+        },
+        "ffcategory": {
+            "title": "ffCategory",
+            "$ref": "#/definitions/category",
+            "example": {
+                "ffCategoryVisibleName": "Total for 30 days",
+                "ffCategory": "total",
+                "Operations": 148,
+                "TotalSum": 71602,
+                "Currency": "RUR",
+                "ffPoints": 1785
+            },
+            "x-stoplight": {
+                "id": "ffcategory",
+                "name": "ffCategory",
+                "public": true
+            }
+        },
+        "stats": {
+            "title": "stats",
+            "type": "object",
+            "properties": {
+                "ranking": {
+                    "type": "object",
+                    "properties": {
+                        "ranking": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "ffpyramidCategory": {
+                    "$ref": "#/definitions/ffpyramidcategory"
+                },
+                "categories": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ffcategory"
+                    }
+                }
+            },
+            "required": [
+                "ranking",
+                "ffpyramidCategory",
+                "categories"
+            ],
+            "example": {
+                "ranking": {
+                    "ranking": "you can definitely improve your bang for a buck. Presently trailing <b> 30% </b> of your peer group"
+                },
+                "ffpyramidCategory": {
+                    "TRANS_DATE": "26.02.2016 12:53:43",
+                    "TRANS_DETAILS": "KAFE LIGA PAP",
+                    "TRANS_AMT": "1360,00000",
+                    "TRANS_COUNTRY": "RUSSIA",
+                    "CURRENCY_ID": "RUR",
+                    "ffPointsRatio": 85
+                },
+                "categories": [
+                    {
+                        "VisibleName": "Groceries",
+                        "Name": "groceries",
+                        "Operations": 22,
+                        "TotalSum": 13550,
+                        "Currency": "RUR",
+                        "ffPoints": 220
+                    },
+                    {
+                        "VisibleName": "FastFood",
+                        "Name": "fastfood",
+                        "Operations": 38,
+                        "TotalSum": 8900,
+                        "Currency": "RUR",
+                        "ffPoints": 90
+                    },
+                    {
+                        "VisibleName": "Gas & Fuel",
+                        "Name": "gasFuel",
+                        "Operations": 8,
+                        "TotalSum": 8800,
+                        "Currency": "RUR",
+                        "ffPoints": 105
+                    },
+                    {
+                        "VisibleName": "Restaurants",
+                        "Name": "dining",
+                        "Operations": 19,
+                        "TotalSum": 7920,
+                        "Currency": "RUR",
+                        "ffPoints": 280
+                    },
+                    {
+                        "VisibleName": "Candy, Ice Cream",
+                        "Name": "candyIceCream",
+                        "Operations": 14,
+                        "TotalSum": 7103,
+                        "Currency": "RUR",
+                        "ffPoints": 20
+                    },
+                    {
+                        "VisibleName": "Bakery",
+                        "Name": "bakery",
+                        "Operations": 26,
+                        "TotalSum": 2940,
+                        "Currency": "RUR",
+                        "ffPoints": 50
+                    },
+                    {
+                        "VisibleName": "Clothing & Accessories",
+                        "Name": "clothingAccessories",
+                        "Operations": 2,
+                        "TotalSum": 6640,
+                        "Currency": "RUR",
+                        "ffPoints": 310,
+                        "ffPointsRatio": 50
+                    },
+                    {
+                        "VisibleName": "Entertainment",
+                        "Name": "entertainment",
+                        "Operations": 7,
+                        "TotalSum": 5816,
+                        "Currency": "RUR",
+                        "ffPoints": 560
+                    },
+                    {
+                        "VisibleName": "Pharmacy & Drugs",
+                        "Name": "pharmacy",
+                        "Operations": 9,
+                        "TotalSum": 5443,
+                        "Currency": "RUR",
+                        "ffPoints": 150
+                    },
+                    {
+                        "VisibleName": "Alcohol",
+                        "Name": "alcohol",
+                        "Operations": 3,
+                        "TotalSum": 4490,
+                        "Currency": "RUR",
+                        "ffPoints": 0
+                    }
+                ]
+            },
+            "x-stoplight": {
+                "id": "stats",
+                "name": "stats",
+                "public": true
+            }
+        },
+        "activity-output": {
+            "title": "Activity",
+            "$ref": "#/definitions/activity",
+            "example": {
+                "activityId": 5210930,
+                "datetime": "26.02.2016 12:53:43",
+                "trans_amt": 23600,
+                "trans_details": "British Airways",
+                "trans_type": "online",
+                "currency_id": "RUR",
+                "categoryVisibleName": "Travel",
+                "usedCard": "8465",
+                "cardAssociation": "VISA",
+                "1stStepCardDetails": {
+                    "buttonText": "Take recommendation",
+                    "rows": [
+                        {
+                            "row": "1",
+                            "textLeft": "Higher goals",
+                            "textRight": "+140 FF",
+                            "textColour": "green"
+                        }
+                    ]
+                },
+                "2ndStepCardDetails": {
+                    "cardDetailText": "All insured travel risk and personal items theft coverage that would cost 7 EUR per day of your vacation",
+                    "cardDetailHeading": "Would take out a travel insurance provided by Aviva?",
+                    "cardDetailButtons": [
+                        {
+                            "ButtonText": "No, thanks",
+                            "possitiveFlag": false,
+                            "buttonResponse": "leave"
+                        },
+                        {
+                            "ButtonText": "Yes, please",
+                            "possitiveFlag": true,
+                            "buttonResponse": "take"
+                        }
+                    ]
+                }
+            },
+            "x-stoplight": {
+                "id": "activity-output",
+                "name": "Activity",
+                "public": true
+            }
+        },
+        "recommnedations": {
+            "title": "Recommnedation",
+            "$ref": "#/definitions/recommendation",
+            "example": {
+                "recommendationId": 16983,
+                "recommendationStatus": "new",
+                "recommendationType": "Auchan",
+                "recommendationCategory": "Groceries",
+                "occurence": "every Tuesday",
+                "recommendationAmount": 260,
+                "currency_id": "EUR",
+                "usedCard": "0039",
+                "cardAssociation": "MC",
+                "2ndStepCardDetails": {
+                    "cardDetailText": "This recomendation is based on most of your Groceries shopping done around Tuesday every other week. \n Milk \n Yogurt \n Grapefruit \n Banana",
+                    "cardDetailHeading": "We have calculated your typical shopping list and have thrown in a special from our partner, Auchan",
+                    "cardDetailButtons": [
+                        {
+                            "ButtonText": "Leave it",
+                            "possitiveFlag": "0"
+                        },
+                        {
+                            "ButtonText": "Take it",
+                            "possitiveFlag": "1"
+                        }
+                    ]
+                }
+            },
+            "x-stoplight": {
+                "id": "recommnedations",
+                "name": "Recommnedation",
+                "public": true
+            }
+        }
+    },
+    "x-stoplight": {
+        "beforeScript": "function(ctx, request) {\n  // This runs your endpoint middleware before script, if applicable.\n  // Removing this means your endpoint before scripts will not be run!\n  SL.runEndpoint();\n}",
+        "afterScript": "function(ctx, request, response) {\n  // This runs your endpoint middleware after script, if applicable.\n  // Removing this means your endpoint after scripts will not be run!\n  SL.runEndpoint();\n}",
+        "version": {
+            "groups": {
+                "traits": [],
+                "utilFuncs": [],
+                "docs": [
+                    {
+                        "description": "<h4>Взаимодействие MOBAPP и API Back End  в части </h4>\n\nhttps://snag.gy/2xlqMS.jpg\n",
+                        "name": "Workflow",
+                        "items": [],
+                        "divider": false
+                    },
+                    {
+                        "description": "",
+                        "divider": false,
+                        "name": "Intro",
+                        "items": [
+                            {
+                                "type": "docTextSections",
+                                "_id": "basics-cLBRxWJGLCRXngTko"
+                            },
+                            {
+                                "type": "docTextSections",
+                                "_id": "test-scenarios-TqhrvLbjifKkN9pNX"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Oauth",
+                        "items": [],
+                        "divider": false
+                    },
+                    {
+                        "name": "Ungrouped",
+                        "items": [
+                            {
+                                "type": "endpoints",
+                                "_id": "GET_categories"
+                            },
+                            {
+                                "type": "endpoints",
+                                "_id": "GET_registration-phone-number"
+                            }
+                        ],
+                        "divider": false
+                    },
+                    {
+                        "description": "Раздель главного экрана приложения, с основными карточками:\n- Activity\n- Recommendation\n- Stats\n\n<br>\n<h3>Взаимодействие MOBAPP и API Back End  на примере получение Активностей </h3>\n\nНиже указан пример для получения данных для главного экрана (main dashboard) и дальше подучения данных о активностях, и в конце передача инормации о действии пользователя с актвиностей.\n\nТакая же схема будет работать и для рекомендаций.\n\n<b>Шаги сценария:</b>\n1. запрос данных для главного экрана\n<br>\n1.1 отображение экрана - отображения выше указанных карточек\n<br>\n2. получкение данных для карточки Actvities\n<br>\n2.1 отображение первого шага - списка Активностей\n<br>\n2.2 отображенине 2го шага - деталей конкретной Активности\n3. передача информации на BackEnd о том, какая кнопка была нажата ( содержане параметра <code>buttonResponse</code>, полученного на 2-м шаге\n<br>\n\n<img src=\"https://snag.gy/jS3n5O.jpg\">",
+                        "name": "Main Dashboard",
+                        "items": [
+                            {
+                                "type": "endpoints",
+                                "_id": "GET_dashboard"
+                            }
+                        ],
+                        "divider": false
+                    },
+                    {
+                        "name": "Activities widget",
+                        "items": [
+                            {
+                                "type": "endpoints",
+                                "_id": "GET_activities"
+                            },
+                            {
+                                "type": "endpoints",
+                                "_id": "POST_activities-activityId"
+                            },
+                            {
+                                "type": "endpoints",
+                                "_id": "GET_activities"
+                            }
+                        ],
+                        "divider": false
+                    },
+                    {
+                        "name": "Recommendations widget",
+                        "items": [
+                            {
+                                "type": "endpoints",
+                                "_id": "GET_recommendation"
+                            },
+                            {
+                                "type": "endpoints",
+                                "_id": "GET_recomnedations"
+                            },
+                            {
+                                "type": "endpoints",
+                                "_id": "POST_recommendations-recommendationId"
+                            }
+                        ],
+                        "divider": false
+                    },
+                    {
+                        "description": "<b>Экран статистики </b>\n\nЭкран содержит статистику клиента по следующим карточкам:\n\n 1. FinFit пирамида</br>\n 2. Список категорий</br>\n \nСтатистика содержится за определенный период\nТакже из экрана доступен экран с трансакциями клиента в каждой из категорий:\n\n  3. Список трансакций в категории #endpoint:yqFFNhSPP9FEPL5PZ\n \n<br>\n<h4>Статистика FF очков - FF Пирамида </h4>\n\n<img src=\"https://snag.gy/Usm84G.jpg\">\n\n<br>\n<h4>Статистикав FF категориях </h4>\n\n<img src=\"https://snag.gy/CIWnTh.jpg\">",
+                        "name": "Stats widget",
+                        "items": [
+                            {
+                                "type": "endpoints",
+                                "_id": "GET_stats"
+                            }
+                        ],
+                        "divider": false
+                    },
+                    {
+                        "description": "Экран с трансакциями для отдельной категории, или для всех категорий.\n",
+                        "name": "Transactions widget",
+                        "items": [
+                            {
+                                "type": "endpoints",
+                                "_id": "GET_Transactions-category"
+                            }
+                        ],
+                        "divider": false
+                    },
+                    {
+                        "description": "<b> Модели объектов </b>\n\n#model:FPKdB3ZJs3Kwhcq7Y\n<br>\n#model:JNMjArZBh3HhBhZtR\n<br>\n",
+                        "items": [
+                            {
+                                "type": "schemas",
+                                "_id": "stats"
+                            },
+                            {
+                                "type": "schemas",
+                                "_id": "transaction-input"
+                            },
+                            {
+                                "type": "docTextSections",
+                                "_id": "complex-types-9oNMyikpiKv9huQRY"
+                            },
+                            {
+                                "type": "schemas",
+                                "_id": "ffcategory"
+                            },
+                            {
+                                "type": "schemas",
+                                "_id": "ffpyramidcategory"
+                            },
+                            {
+                                "type": "schemas",
+                                "_id": "activity-output"
+                            },
+                            {
+                                "type": "schemas",
+                                "_id": "recommnedations"
+                            }
+                        ],
+                        "divider": false,
+                        "name": "Models"
+                    }
+                ],
+                "tests": []
+            }
+        },
+        "functions": {},
+        "textSections": {
+            "test-scenarios-TqhrvLbjifKkN9pNX": {
+                "id": "test-scenarios-TqhrvLbjifKkN9pNX",
+                "name": "Test scenarios",
+                "content": "Сценарий получения списка категорий и трансакций из одной категории:\n\n<div style='display: inline-block;'>\n  <a href='https://app.stoplight.io/scenarios/collections/Ltn9tcsAdHcq9t5Yk/hAruHcqvNxGxZZ5Kp?__a=development'>\n    <img width='150' src='https://cdn.stoplight.io/run-buttons/solid-blue.png' alt='Run in Stoplight' style='display: block;' />\n  </a>\n</div>",
+                "public": false
+            },
+            "basics-cLBRxWJGLCRXngTko": {
+                "id": "basics-cLBRxWJGLCRXngTko",
+                "name": "Basics",
+                "content": "<B>Идентификатор клиента</B>\n\nидентификатор клиента передается в <code> token</code>, который передается с каждым вызовом API. \n<br>\n\n<code>token</code> APP получает в процессе регистрации и получение oAuth токена.\n\n\n<B>Авторизация запросов к API</B>\n\nВсе запросы должны быть авторизованы с помощу oAuth. см. раздель: oAuth",
+                "public": true
+            },
+            "complex-types-9oNMyikpiKv9huQRY": {
+                "id": "complex-types-9oNMyikpiKv9huQRY",
+                "name": "Complex types",
+                "content": "",
+                "public": false
+            }
+        },
+        "mock": {
+            "enabled": false,
+            "dynamic": false
+        }
+    },
+    "x-tests": {
+        "ooeqX8TvyYfSNEStg": {
+            "id": "ooeqX8TvyYfSNEStg",
+            "name": "test trans widget",
+            "initialVariables": {},
+            "steps": [
+                {
+                    "id": "oEntRrPNDuHoJTshM",
+                    "name": "FF Pyramid stats",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "/ffPyramid",
+                        "pathParams": [],
+                        "headers": [],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [],
+                            "text": "{\n    \"clientID\": 12\n}",
+                            "mimeType": "application/json"
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "hhjx7HrSTtj4LcweD",
+                    "name": "List of Categories",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "/categories",
+                        "pathParams": [],
+                        "headers": [],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [],
+                            "text": "{\n    \"clientID\": 12\n}",
+                            "mimeType": "application/json"
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "h55NDWgSHf8ghqqvq",
+                    "name": "Transactions in Category",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "/Transactions/{category}",
+                        "pathParams": [
+                            {
+                                "name": "category",
+                                "value": "groceries",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "headers": [],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [],
+                            "text": "{\n    \"clientID\": 12\n}",
+                            "mimeType": "application/json"
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                }
             ]
         }
     }
