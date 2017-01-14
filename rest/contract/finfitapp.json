@@ -822,9 +822,6 @@
                         },
                         "examples": {
                             "application/json": {
-                                "ranking": {
-                                    "ranking": "you can definitely improve your bang for a buck. Presently trailing <b> 30% </b> of your peer group"
-                                },
                                 "ffPyramidCategories": [
                                     {
                                         "pyramidCategoryVisibleName": "Higher Goals",
@@ -948,7 +945,7 @@
                 }
             }
         },
-        "/Transactions/{category}": {
+        "/transactions/{category}": {
             "parameters": [
                 {
                     "name": "category",
@@ -960,7 +957,7 @@
                 }
             ],
             "get": {
-                "operationId": "GET_Transactions-category",
+                "operationId": "GET_transactions-category",
                 "summary": "Transactions in Category",
                 "tags": [
                     "Transactions widget"
@@ -1053,7 +1050,7 @@
                     }
                 },
                 "x-stoplight": {
-                    "id": "GET_Transactions-category",
+                    "id": "GET_transactions-category",
                     "beforeScript": null,
                     "afterScript": null,
                     "public": true,
@@ -1842,11 +1839,11 @@
                         "items": [
                             {
                                 "type": "docTextSections",
-                                "_id": "basics-cLBRxWJGLCRXngTko"
+                                "_id": "basics-wFiswMwZ6o3KT7vGY"
                             },
                             {
                                 "type": "docTextSections",
-                                "_id": "test-scenarios-TqhrvLbjifKkN9pNX"
+                                "_id": "test-scenarios-mL4KidvJZSzw2rhbn"
                             }
                         ]
                     },
@@ -1933,7 +1930,7 @@
                         "items": [
                             {
                                 "type": "endpoints",
-                                "_id": "GET_Transactions-category"
+                                "_id": "GET_transactions-category"
                             }
                         ],
                         "divider": false
@@ -1951,7 +1948,7 @@
                             },
                             {
                                 "type": "docTextSections",
-                                "_id": "complex-types-9oNMyikpiKv9huQRY"
+                                "_id": "complex-types-nGfbzKAnTPxRXR2vS"
                             },
                             {
                                 "type": "schemas",
@@ -1979,20 +1976,20 @@
         },
         "functions": {},
         "textSections": {
-            "test-scenarios-TqhrvLbjifKkN9pNX": {
-                "id": "test-scenarios-TqhrvLbjifKkN9pNX",
+            "test-scenarios-mL4KidvJZSzw2rhbn": {
+                "id": "test-scenarios-mL4KidvJZSzw2rhbn",
                 "name": "Test scenarios",
                 "content": "Сценарий получения списка категорий и трансакций из одной категории:\n\n<div style='display: inline-block;'>\n  <a href='https://app.stoplight.io/scenarios/collections/Ltn9tcsAdHcq9t5Yk/hAruHcqvNxGxZZ5Kp?__a=development'>\n    <img width='150' src='https://cdn.stoplight.io/run-buttons/solid-blue.png' alt='Run in Stoplight' style='display: block;' />\n  </a>\n</div>",
                 "public": false
             },
-            "basics-cLBRxWJGLCRXngTko": {
-                "id": "basics-cLBRxWJGLCRXngTko",
+            "basics-wFiswMwZ6o3KT7vGY": {
+                "id": "basics-wFiswMwZ6o3KT7vGY",
                 "name": "Basics",
                 "content": "<B>Идентификатор клиента</B>\n\nидентификатор клиента передается в <code> token</code>, который передается с каждым вызовом API. \n<br>\n\n<code>token</code> APP получает в процессе регистрации и получение oAuth токена.\n\n\n<B>Авторизация запросов к API</B>\n\nВсе запросы должны быть авторизованы с помощу oAuth. см. раздель: oAuth",
                 "public": true
             },
-            "complex-types-9oNMyikpiKv9huQRY": {
-                "id": "complex-types-9oNMyikpiKv9huQRY",
+            "complex-types-nGfbzKAnTPxRXR2vS": {
+                "id": "complex-types-nGfbzKAnTPxRXR2vS",
                 "name": "Complex types",
                 "content": "",
                 "public": false
@@ -2113,6 +2110,305 @@
                             "text": "{\n    \"clientID\": 12\n}",
                             "mimeType": "application/json"
                         },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                }
+            ]
+        },
+        "2eXF6dTKBoKdcfhuw": {
+            "id": "2eXF6dTKBoKdcfhuw",
+            "name": "test",
+            "initialVariables": {
+                "host": "http://192.168.1.103:4030",
+                "basePath": ""
+            },
+            "steps": [
+                {
+                    "id": "bR2M5ZbvreYAGqAFF",
+                    "name": "Client Statistics",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "get",
+                        "url": "<<host>>/stats?period=month",
+                        "pathParams": [],
+                        "headers": [],
+                        "queryString": [
+                            {
+                                "name": "period",
+                                "value": "month"
+                            }
+                        ],
+                        "cookies": [],
+                        "postData": {},
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "EYjmehkzpdQ2CbGKA",
+                    "name": "Data for main dashboard",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "get",
+                        "url": "<<host>>/dashboard",
+                        "pathParams": [],
+                        "headers": [],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {},
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "$ref": "#/x-tests/xxx"
+                }
+            ]
+        },
+        "JqhMRHWNuXrivqXQ4": {
+            "id": "JqhMRHWNuXrivqXQ4",
+            "name": "test 2 ff",
+            "initialVariables": {
+                "host": "http://192.168.1.103:4030",
+                "basePath": ""
+            },
+            "steps": [
+                {
+                    "id": "nrJNnN5bhZrugo6Py",
+                    "name": "Get recommnedation details",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "get",
+                        "url": "<<host>>/recomnedations?recommendationStatus=new",
+                        "pathParams": [],
+                        "headers": [],
+                        "queryString": [
+                            {
+                                "name": "recommendationStatus",
+                                "value": "new"
+                            }
+                        ],
+                        "cookies": [],
+                        "postData": {},
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "f46ySxDdeoBAhiAau",
+                    "name": "Save user action on Activity",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "<<host>>/activities/{activityId}",
+                        "pathParams": [
+                            {
+                                "name": "activityId",
+                                "value": ""
+                            }
+                        ],
+                        "headers": [],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [],
+                            "text": "{\n    \"buttonResponse\": \"take\"\n}",
+                            "mimeType": "application/json"
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "xE6hvMjqaQjzERCeR",
+                    "name": "Save user action on Recommendation",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "post",
+                        "url": "<<host>>/recommendations/{recommendationId}",
+                        "pathParams": [
+                            {
+                                "name": "recommendationId",
+                                "value": ""
+                            }
+                        ],
+                        "headers": [],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {
+                            "params": [],
+                            "text": "{\n    \"buttonResponse\": \"take\"\n}",
+                            "mimeType": "application/javascript"
+                        },
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "wHy6dE9fRySddXDyw",
+                    "name": "Get all new activities and their details",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "get",
+                        "url": "<<host>>/activities",
+                        "pathParams": [],
+                        "headers": [],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {},
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "W5jtARDSdH8Dj6h4y",
+                    "name": "Transactions in Category",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "get",
+                        "url": "<<host>>/Transactions/{category}?period=month",
+                        "pathParams": [
+                            {
+                                "name": "category",
+                                "value": ""
+                            }
+                        ],
+                        "headers": [],
+                        "queryString": [
+                            {
+                                "name": "period",
+                                "value": "month"
+                            }
+                        ],
+                        "cookies": [],
+                        "postData": {},
                         "authentication": {},
                         "headersSize": -1,
                         "bodySize": -1
