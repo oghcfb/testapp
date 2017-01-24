@@ -1,0 +1,444 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "",
+        "title": "Интеграция с MarketPlace",
+        "description": ""
+    },
+    "host": "os-2152.omni.dev.itc.homecredit.ru",
+    "basePath": "/customer/v1",
+    "schemes": [
+        "https"
+    ],
+    "securityDefinitions": {
+        "oauth2": {
+            "type": "oauth2",
+            "flow": "password",
+            "scopes": {},
+            "tokenUrl": ""
+        }
+    },
+    "paths": {
+        "/customer": {
+            "post": {
+                "operationId": "POST_customer",
+                "summary": "Поиск клиента в CIF",
+                "tags": [
+                    "Customer"
+                ],
+                "description": "<H3>Поиск клиента в системе CIF </H3>\nПоиск выполняется по 2-м обязятельным параметрам:\n<li><code>Birthday</code> - дата рождения клиента,</li>\n<li><code>Mobile Phone Number</code> - номер мобильного телефона.</li>\n<br>\nТребуется полное совпадение по обоим параметрам.\n<br>\nЕсли найдено несколько клиентов с такими же параметрами, передается все найденные объекты в массиве.\n\n<br>\n<br>\nПараметры передаются как json объект в body, для обеспечения безопасности данных.\n\n<h4>Категории resultcode</h4>\nОтвет на запрос содержит статус выполнения в атрибуте<code>resultCode</code>. Варианты:\n\n<li><b>found</b> - клиент найден</li> \n<li><b>not found</b> - клиент не найден</li>  \n<li><b>partly found</b> - совпадение по одному из 2-х входящих параметров</li>",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "birthdayDate": {
+                                    "type": "string",
+                                    "description": "Дата рождения клиента",
+                                    "format": "date"
+                                },
+                                "mobilePhone": {
+                                    "type": "string",
+                                    "description": "Номер мобильного телефона клиента, в 10-ти значной форме"
+                                }
+                            },
+                            "example": {
+                                "birthdayDate": "1989-04-08",
+                                "mobilePhone": "9044420466"
+                            }
+                        }
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "default": "application/json"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "default": "Bearer eyJhbGciOiJSUzI1NiJ9.eyJzY29wZSI6WyJhY2Nlc3MiXSwiZXhwIjoxNDY0OTEyNTE3LCJqdGkiOiI0Y2FlZGI4MC1kOGEwLTQ5MGYtYmJiOC02YjdkNTAzZDk5NWEiLCJjbGllbnRfaWQiOiJ0ZXN0X3BhcnRuZXIifQ.BiVAjKmADS9F2Uq7tWoIYIssTB9SjmUYJYdKza6zsz-0HYYavcZJC2QaRe9tOGSiaMAZmVdfCX3_ELXGJ8H-SrHlH3ZWX52eLYpOMRL-vM_HeRfTM9VSF-9u1l1BzwaZYM_EzL_KXYZJdGnXnXERNHZS988twJHXzuv_1IRFufJZPgliyhAhQ6WlBKHZt30JzvTZXMv_0Ndcsf9rN7dffgdXyStReQstrBq33JMulI5CoXLtDGTCCn-fTzYKAOHHUFPQEskl1B1uocpEjDIBwzpimT7pLtfm3eE9qsEgk21O9i4XZEbLirEeb3ONBbsmvDxMioyUq0LhmHKO_Xn7-w"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "resultCode": {
+                                    "type": "string",
+                                    "enum": [
+                                        "found",
+                                        "not found",
+                                        "partly found",
+                                        "error"
+                                    ]
+                                },
+                                "customers": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/klient"
+                                    }
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "resultCode": "found",
+                                "customers": [
+                                    {
+                                        "firstName": "ВАЛЕРИЙ",
+                                        "middleName": "АНАТОЛЬЕВИЧ",
+                                        "lastName": "КОВАЛЕНКО",
+                                        "mobilePhone": "9044420466",
+                                        "birthday": "1989-04-08",
+                                        "email": "kovalenko.ros@yandex.ru",
+                                        "cuid": "31769442"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "resultCode": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "resultCode": "error в коммуникации с backend"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": []
+                    }
+                ],
+                "x-stoplight": {
+                    "id": "POST_customer",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": true,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
+                    }
+                }
+            }
+        },
+        "/customer/{cuid}": {
+            "parameters": [
+                {
+                    "name": "cuid",
+                    "in": "path",
+                    "description": "CUID клиента",
+                    "required": true,
+                    "type": "string",
+                    "default": "31769442"
+                }
+            ],
+            "get": {
+                "operationId": "GET_customer-cuid",
+                "summary": "Получкчение данных клиента",
+                "tags": [
+                    "Customer"
+                ],
+                "description": "<H3>Получение данных клиента из системы CIF </H3>\nЗапрос выполняется по 1-му обязятельному параметру:\n<li><code>CUID</code> - СUID клиента, для которого нужно получть данные.</li>",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "default": "application/json"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "default": "Bearer eyJhbGciOiJSUzI1NiJ9.eyJzY29wZSI6WyJhY2Nlc3MiXSwiZXhwIjoxNDY0OTEyNTE3LCJqdGkiOiI0Y2FlZGI4MC1kOGEwLTQ5MGYtYmJiOC02YjdkNTAzZDk5NWEiLCJjbGllbnRfaWQiOiJ0ZXN0X3BhcnRuZXIifQ.BiVAjKmADS9F2Uq7tWoIYIssTB9SjmUYJYdKza6zsz-0HYYavcZJC2QaRe9tOGSiaMAZmVdfCX3_ELXGJ8H-SrHlH3ZWX52eLYpOMRL-vM_HeRfTM9VSF-9u1l1BzwaZYM_EzL_KXYZJdGnXnXERNHZS988twJHXzuv_1IRFufJZPgliyhAhQ6WlBKHZt30JzvTZXMv_0Ndcsf9rN7dffgdXyStReQstrBq33JMulI5CoXLtDGTCCn-fTzYKAOHHUFPQEskl1B1uocpEjDIBwzpimT7pLtfm3eE9qsEgk21O9i4XZEbLirEeb3ONBbsmvDxMioyUq0LhmHKO_Xn7-w"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/klient"
+                        },
+                        "examples": {
+                            "application/json": {
+                                "firstName": "ВАЛЕРИЙ",
+                                "middleName": "АНАТОЛЬЕВИЧ",
+                                "lastName": "КОВАЛЕНКО",
+                                "mobilePhone": "9044420466",
+                                "birthday": "1989-04-08",
+                                "email": "kovalenko.ros@yandex.ru",
+                                "cuid": "31769442"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": []
+                    }
+                ],
+                "x-stoplight": {
+                    "id": "GET_customer-cuid",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": true,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "klient": {
+            "title": "Клиент",
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "middleName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "mobilePhone": {
+                    "type": "string"
+                },
+                "birthday": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "cuid": {
+                    "type": "string"
+                }
+            },
+            "example": {
+                "firstName": "ВАЛЕРИЙ",
+                "middleName": "АНАТОЛЬЕВИЧ",
+                "lastName": "КОВАЛЕНКО",
+                "mobilePhone": "9044420466",
+                "birthday": "1989-04-08",
+                "email": "kovalenko.ros@yandex.ru",
+                "cuid": "31769442"
+            },
+            "x-stoplight": {
+                "id": "klient",
+                "name": "Клиент",
+                "public": true
+            }
+        }
+    },
+    "x-stoplight": {
+        "beforeScript": "",
+        "afterScript": "",
+        "version": {
+            "groups": {
+                "savedEntries": [],
+                "tests": [],
+                "traits": [],
+                "docs": [
+                    {
+                        "name": "Customer",
+                        "items": [
+                            {
+                                "type": "endpoints",
+                                "_id": "POST_customer"
+                            },
+                            {
+                                "type": "endpoints",
+                                "_id": "GET_customer-cuid"
+                            },
+                            {
+                                "type": "schemas",
+                                "_id": "klient"
+                            }
+                        ],
+                        "divider": false
+                    },
+                    {
+                        "name": "   ",
+                        "items": [],
+                        "divider": false
+                    },
+                    {
+                        "name": "   ",
+                        "items": [],
+                        "divider": false
+                    }
+                ]
+            }
+        },
+        "functions": {},
+        "textSections": {},
+        "mock": {
+            "dynamic": false,
+            "enabled": false
+        }
+    },
+    "x-tests": {
+        "icKEYsEMxhuDrgJA8": {
+            "id": "icKEYsEMxhuDrgJA8",
+            "name": "MarketPlace customers",
+            "initialVariables": {
+                "host": "http://10.7.44.83",
+                "baseurl": "/customer/v1"
+            },
+            "steps": [
+                {
+                    "id": "dWX5YyQXbTDLGanh9",
+                    "name": "Поиск клиента в CIF",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "get",
+                        "url": "/customer?birthdayDate=1989-04-08&mobilePhone=8904442046",
+                        "pathParams": [],
+                        "headers": [
+                            {
+                                "name": "Authorization",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "Content-Type",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "queryString": [
+                            {
+                                "name": "birthdayDate",
+                                "value": "1989-04-08",
+                                "type": "string",
+                                "required": true
+                            },
+                            {
+                                "name": "mobilePhone",
+                                "value": "8904442046",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "cookies": [],
+                        "postData": {},
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                },
+                {
+                    "id": "3BifeMC6ctRuhbMx9",
+                    "name": "Получкчение данных клиента",
+                    "capture": {
+                        "body": [],
+                        "headers": []
+                    },
+                    "request": {
+                        "valid": 2,
+                        "transformed": false,
+                        "method": "get",
+                        "url": "/customer{cuid}",
+                        "pathParams": [
+                            {
+                                "name": "cuid",
+                                "type": "string",
+                                "required": true
+                            }
+                        ],
+                        "headers": [
+                            {
+                                "name": "Authorization",
+                                "type": "string",
+                                "required": false
+                            }
+                        ],
+                        "queryString": [],
+                        "cookies": [],
+                        "postData": {},
+                        "authentication": {},
+                        "headersSize": -1,
+                        "bodySize": -1
+                    },
+                    "assertions": [
+                        {
+                            "location": "response.code",
+                            "op": "eq",
+                            "expected": 200
+                        },
+                        {
+                            "location": "response.body",
+                            "op": "validate.pass",
+                            "match": 200
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
