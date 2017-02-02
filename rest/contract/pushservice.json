@@ -198,17 +198,6 @@
                             }
                         }
                     }
-                },
-                "x-stoplight": {
-                    "id": "POST_push",
-                    "beforeScript": null,
-                    "afterScript": null,
-                    "public": true,
-                    "mock": {
-                        "enabled": false,
-                        "dynamic": false,
-                        "statusCode": 200
-                    }
                 }
             },
             "get": {
@@ -366,17 +355,6 @@
                             }
                         }
                     }
-                },
-                "x-stoplight": {
-                    "id": "GET_push",
-                    "beforeScript": null,
-                    "afterScript": null,
-                    "public": true,
-                    "mock": {
-                        "enabled": false,
-                        "dynamic": false,
-                        "statusCode": 200
-                    }
                 }
             }
         },
@@ -499,17 +477,6 @@
                             }
                         }
                     }
-                },
-                "x-stoplight": {
-                    "id": "PUT_deviceToken",
-                    "beforeScript": null,
-                    "afterScript": null,
-                    "public": true,
-                    "mock": {
-                        "enabled": false,
-                        "dynamic": false,
-                        "statusCode": 200
-                    }
                 }
             }
         }
@@ -547,11 +514,6 @@
                         "additionalParamsCount": 0
                     }
                 ]
-            },
-            "x-stoplight": {
-                "id": "push",
-                "name": "Push request model",
-                "public": true
             }
         },
         "devicetoken": {
@@ -585,97 +547,7 @@
                 "DeviceStatus": "BAD",
                 "OldDeviceToken": "012345678",
                 "NewDeviceToken": "112923833"
-            },
-            "x-stoplight": {
-                "id": "devicetoken",
-                "name": "deviceToken",
-                "public": true
             }
         }
-    },
-    "x-stoplight": {
-        "beforeScript": "",
-        "afterScript": "",
-        "version": {
-            "groups": {
-                "savedEntries": [],
-                "tests": [],
-                "traits": [],
-                "docs": [
-                    {
-                        "name": "Спецификация API отправки PUSH через TC",
-                        "items": [
-                            {
-                                "type": "docTextSections",
-                                "_id": "-hc--tHdotqDSDiqnvhCKE"
-                            },
-                            {
-                                "type": "docTextSections",
-                                "_id": "--gJYpZe5Ruht8Qsuat"
-                            }
-                        ],
-                        "divider": false
-                    },
-                    {
-                        "name": "Push Service",
-                        "items": [
-                            {
-                                "type": "endpoints",
-                                "_id": "POST_push"
-                            },
-                            {
-                                "type": "endpoints",
-                                "_id": "GET_push"
-                            }
-                        ],
-                        "divider": false
-                    },
-                    {
-                        "name": "Device Token Service",
-                        "items": [
-                            {
-                                "type": "endpoints",
-                                "_id": "PUT_deviceToken"
-                            }
-                        ],
-                        "divider": false
-                    },
-                    {
-                        "name": "Model",
-                        "items": [
-                            {
-                                "type": "schemas",
-                                "_id": "push"
-                            },
-                            {
-                                "type": "schemas",
-                                "_id": "devicetoken"
-                            }
-                        ],
-                        "divider": false
-                    }
-                ]
-            }
-        },
-        "functions": {},
-        "textSections": {
-            "-hc--tHdotqDSDiqnvhCKE": {
-                "id": "-hc--tHdotqDSDiqnvhCKE",
-                "name": "Схема взаимоействия HC и ТС",
-                "content": "<br>\n<br>\n<img src=\"http://image.prntscr.com/image/e4b239b7648c499888b1249c8184a5dd.png\">\n<br>\n<br>\n\n<h4>Основные шаги - сервисы API</h4>\n<br>\n\n1. #endpoint:5XhdkpZt5aRXBiEgS  - Отправка push сообщений\n\n2. #endpoint:beQaAiWGdHnzpqdjz - Получение статусов доставки push сообщений\n\n3. #endpoint:GDqiFQLktpSFQQDB7 - актуализация идентификатора устройствв (deviceToken)",
-                "public": true
-            },
-            "--gJYpZe5Ruht8Qsuat": {
-                "id": "--gJYpZe5Ruht8Qsuat",
-                "name": "Безопасность",
-                "content": "<h5> Принципы безопасноти</h5>\n<br>\nОбласть применения:  <b> Все эндпойнты</b>\n<br>\n\n1. Все вызовы всех эндпойнтов авторизуются на основе HTTP <code>Basic Authentication</code> ((HTTP Authorization header https://tools.ietf.org/html/rfc2617)\n<br>\n2. Протокол доступа - исключительно <b> HTTPS</b>\n<br>",
-                "public": true
-            }
-        },
-        "mock": {
-            "dynamic": false,
-            "enabled": false
-        }
-    },
-    "x-tests": {}
+    }
 }
