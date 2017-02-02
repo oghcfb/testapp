@@ -1,0 +1,681 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0",
+        "title": "Push Service",
+        "description": ""
+    },
+    "host": "localhost8080",
+    "basePath": "/api",
+    "schemes": [
+        "https"
+    ],
+    "paths": {
+        "/push": {
+            "post": {
+                "operationId": "POST_push",
+                "summary": "Send Push message",
+                "tags": [
+                    "Push Service"
+                ],
+                "description": "<h3> Запрос отправки push уведомлений</h3>\n<br>\n\n<table style=\"width:95%\">\n   <tr>\n    <th>Короткое описание:</th>\n    <td>Запрос отправки push уведомлений</td>\n  </tr>\n  \n   <tr>\n    <th>Поставщик:</th>\n    <td>Tim Connect</td>\n  </tr>\n  <tr>\n    <th>Тип потока:</th>\n    <td>синхронный</td>\n  </tr>\n  <tr>\n    <th>Тип интерфейса:</th>\n    <td>API</td>\n  </tr>\n  <tr>\n    <th>Протокол интерфейса:</th>\n    <td>HTTP REST</td>\n  </tr>\n     <tr>\n    <th>Endpoint:</th>\n    <td>/push (<code>http POST)</code></td>\n  </tr>\n</table>\n<br>\n<b> Объем данных </b>\n<br>\nДопускается передавать до 1000 push-уведомлений в одном вызове сервиса, при этом общий объем данных не должен превышать 1 Мб.\n<br>\n<br>\n<b>Сообщение, блок сообщений</b>\n<br>\nБлок сообщений — это несколько сообщений которые передаются в одном http-пакете. детали:<br>\n\n#model:i8nWAb48n4sZxNM3B\n<br>\n<br>\n<b>Возможные коды ошибок</b>\n<br>\n\n<code><b>http 202</b></code> - авторизация выполнена успешно и все сообщения были приняты платформой ТИМ\n<br>\n\n<code><b>http 401</b></code>  – неверная авторизация; ни одно из сообщений не было принято платформой TIM\n<br>\n\n<code><b>http 406</b></code> – слишком длинный пакет или пакет в котором нет ни одного сообщения или неверная подпись пакета (если будем ее использовать);",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/pushes",
+                            "example": {
+                                "pushCount": 2,
+                                "data": [
+                                    {
+                                        "pushID": 1048372,
+                                        "shortBody": "welcome push 1!",
+                                        "deviceUID": "askdf4398sdk94834skd43",
+                                        "deviceToken": "09309430f034f0",
+                                        "badgeValue": 12345678,
+                                        "cloudLifetimeSec": 88824,
+                                        "additionalParamsCount": 3,
+                                        "additionalParams": [
+                                            {
+                                                "param1": "1",
+                                                "param2": "2",
+                                                "param3": "3"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "pushID": 1048373,
+                                        "shortBody": "welcome push 2!",
+                                        "deviceUID": "askdf4398sdk94834skd99",
+                                        "deviceToken": "09309430f034334",
+                                        "badgeValue": 987654321,
+                                        "cloudLifetimeSec": 88824,
+                                        "additionalParamsCount": 0
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": false,
+                        "type": "string",
+                        "default": "application/json"
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": false,
+                        "type": "string",
+                        "default": "application/json"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "header": {
+                                    "type": "object",
+                                    "description": "Статус выполнения операции включая ошибки",
+                                    "properties": {
+                                        "StatusCode": {
+                                            "type": "integer",
+                                            "description": "Общиц статус код выполнения операции"
+                                        },
+                                        "Errors": {
+                                            "type": "string",
+                                            "description": "Текстовое описание ошибки"
+                                        }
+                                    },
+                                    "required": [
+                                        "StatusCode"
+                                    ]
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "PushID": {
+                                                "type": "integer",
+                                                "description": "ID пуш собщения"
+                                            },
+                                            "PushStatusCode": {
+                                                "type": "integer",
+                                                "description": "Код состояния каждого  конкретного пуш сообщения"
+                                            },
+                                            "PushError": {
+                                                "type": "string",
+                                                "description": "Текст ошибки, если сообщение не принято"
+                                            }
+                                        },
+                                        "required": [
+                                            "PushID",
+                                            "PushStatusCode"
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "header": {
+                                    "StatusCode": 202,
+                                    "Errors": "several pushes not delivered"
+                                },
+                                "data": [
+                                    {
+                                        "PushID": 39203209,
+                                        "PushStatusCode": 1
+                                    },
+                                    {
+                                        "PushID": 54451371,
+                                        "PushStatusCode": 1
+                                    },
+                                    {
+                                        "PushID": 19957464,
+                                        "PushStatusCode": 1
+                                    },
+                                    {
+                                        "PushID": 12436483,
+                                        "PushStatusCode": 2,
+                                        "PushError": "not delivered - not accessible"
+                                    },
+                                    {
+                                        "PushID": 51914367,
+                                        "PushStatusCode": 3,
+                                        "PushError": "device not exists"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "timestamp": {
+                                    "type": "integer"
+                                },
+                                "status": {
+                                    "type": "integer"
+                                },
+                                "error": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "path": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "timestamp": 1480948536111,
+                                "status": 401,
+                                "error": "Unauthorized",
+                                "message": "Bad credentials",
+                                "path": "/api/v1/push"
+                            }
+                        }
+                    }
+                },
+                "x-stoplight": {
+                    "id": "POST_push",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": true,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
+                    }
+                }
+            },
+            "get": {
+                "operationId": "GET_push",
+                "summary": "Get push delivery status",
+                "tags": [
+                    "Push Service"
+                ],
+                "description": "<h3> Запрос статуса доставки push уведомлений</h3>\n<br>\n\n<table style=\"width:95%\">\n   <tr>\n    <th>Короткое описание:</th>\n    <td>Запрос статусов доставки push-уведомлений</td>\n  </tr>\n  </tr>\n   <tr>\n    <th>Поставщик:</th>\n    <td>HC</td>\n  </tr>\n  </tr>\n  <tr>\n    <th>Тип потока:</th>\n    <td>синхронный</td>\n  </tr>\n  <tr>\n    <th>Тип интерфейса:</th>\n    <td>API</td>\n  </tr>\n  <tr>\n    <th>Протокол интерфейса:</th>\n    <td>HTTP REST</td>\n  </tr>\n    <tr>\n    <th>Endpoint:</th>\n    <td>/push (<code>http GET</code>)</td>\n  </tr>\n</table>\n<br>\n<b> Объем данных </b>\n<br>\nНе ограничено.\n<br>\n<br>",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "ReceivedCount": {
+                                    "type": "integer"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "PushID": {
+                                                "type": "integer"
+                                            },
+                                            "DeviceUID": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "required": [
+                                            "PushID",
+                                            "DeviceUID"
+                                        ]
+                                    }
+                                }
+                            },
+                            "example": {
+                                "data": [
+                                    {
+                                        "PushID": 42583085,
+                                        "DeviceUID": 40178713
+                                    },
+                                    {
+                                        "PushID": 72840982,
+                                        "DeviceUID": 46142389
+                                    },
+                                    {
+                                        "PushID": 46921994,
+                                        "DeviceUID": 32861897
+                                    },
+                                    {
+                                        "PushID": 32968180,
+                                        "DeviceUID": 72907353
+                                    },
+                                    {
+                                        "PushID": 44835122,
+                                        "DeviceUID": 73913104
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": false,
+                        "type": "string",
+                        "default": "application/json"
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": false,
+                        "type": "string",
+                        "default": "application/json"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "header": {
+                                    "type": "object",
+                                    "required": [
+                                        "StatusCode"
+                                    ],
+                                    "properties": {
+                                        "StatusCode": {
+                                            "type": "integer"
+                                        },
+                                        "Errors": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "required": [
+                                "header"
+                            ]
+                        },
+                        "examples": {
+                            "application/json": {
+                                "header": {
+                                    "StatusCode": 1,
+                                    "Errors": "text if there were errors"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "timestamp": {
+                                    "type": "integer"
+                                },
+                                "status": {
+                                    "type": "integer"
+                                },
+                                "error": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "path": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "timestamp": 1480948536111,
+                                "status": 401,
+                                "error": "Unauthorized",
+                                "message": "Bad credentials",
+                                "path": "/api/v1/push"
+                            }
+                        }
+                    }
+                },
+                "x-stoplight": {
+                    "id": "GET_push",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": true,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
+                    }
+                }
+            }
+        },
+        "/deviceToken": {
+            "put": {
+                "operationId": "PUT_deviceToken",
+                "summary": "Update DeviceToken",
+                "tags": [
+                    "Device Token Service"
+                ],
+                "description": "<h3>Информирование об обновлении токенов\n</h3>\n<br>\n\n<table style=\"width:95%\">\n   <tr>\n    <th>Короткое описание:</th>\n    <td>Оповещение об обновлении/удалении токенов</td>\n  </tr>\n  \n   <tr>\n    <th>Поставщик:</th>\n    <td>Tim Connect</td>\n  </tr>\n  <tr>\n    <th>Тип потока:</th>\n    <td>синхронный</td>\n  </tr>\n  <tr>\n    <th>Тип интерфейса:</th>\n    <td>API</td>\n  </tr>\n  <tr>\n    <th>Протокол интерфейса:</th>\n    <td>HTTP REST</td>\n  </tr>\n     <tr>\n    <th>Endpoint:</th>\n    <td>/deviceToken (<code>http PUT)</code></td>\n  </tr>\n</table>\n<br>\n<b> Объем данных </b>\n<br>\nНе ограничен.\n<br>\n<br>\n<b>Оработка ошибок</b>\n<br>\nВ случае получения какой-либо ошибки запрос вызывается повторно с интервалом в 10 секунд, максимум в течение 1 минуты.\n<br>\n<br>\n<b>Необохдимо предусмотреть</b>\n<br>\n<code>OldDeviceToken</code> можно напрямую возвращать из ответе облака, а не брать старый токен из базы.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "command": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/devicetoken"
+                                }
+                            },
+                            "example": {
+                                "data": {
+                                    "DeviceUID": 70497839,
+                                    "DeviceStatus": "BAD",
+                                    "OldDeviceToken": "012345678",
+                                    "NewDeviceToken": "112923833"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "type": "string"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "type": "string",
+                        "default": "application/json"
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "type": "string",
+                        "default": "application/json"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "header": {
+                                    "type": "object",
+                                    "properties": {
+                                        "StatusCode": {
+                                            "type": "integer"
+                                        },
+                                        "Errors": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "StatusCode"
+                                    ]
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "header": {
+                                    "StatusCode": 1,
+                                    "Errors": "text if there were errors"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "timestamp": {
+                                    "type": "integer"
+                                },
+                                "status": {
+                                    "type": "integer"
+                                },
+                                "error": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "path": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "application/json": {
+                                "timestamp": 1480948536111,
+                                "status": 401,
+                                "error": "Unauthorized",
+                                "message": "Bad credentials",
+                                "path": "/api/v1/push"
+                            }
+                        }
+                    }
+                },
+                "x-stoplight": {
+                    "id": "PUT_deviceToken",
+                    "beforeScript": null,
+                    "afterScript": null,
+                    "public": true,
+                    "mock": {
+                        "enabled": false,
+                        "dynamic": false,
+                        "statusCode": 200
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "push": {
+            "title": "Push request model",
+            "$ref": "#/definitions/pushes",
+            "example": {
+                "pushCount": 2,
+                "data": [
+                    {
+                        "pushID": 1048372,
+                        "shortBody": "welcome push 1!",
+                        "deviceUID": "askdf4398sdk94834skd43",
+                        "deviceToken": "09309430f034f0",
+                        "badgeValue": 12345678,
+                        "cloudLifetimeSec": 88824,
+                        "additionalParamsCount": 3,
+                        "additionalParams": [
+                            {
+                                "param1": "1",
+                                "param2": "2",
+                                "param3": "3"
+                            }
+                        ]
+                    },
+                    {
+                        "pushID": 1048373,
+                        "shortBody": "welcome push 2!",
+                        "deviceUID": "askdf4398sdk94834skd99",
+                        "deviceToken": "09309430f034334",
+                        "badgeValue": 987654321,
+                        "cloudLifetimeSec": 88824,
+                        "additionalParamsCount": 0
+                    }
+                ]
+            },
+            "x-stoplight": {
+                "id": "push",
+                "name": "Push request model",
+                "public": true
+            }
+        },
+        "devicetoken": {
+            "title": "deviceToken",
+            "type": "object",
+            "properties": {
+                "DeviceUID": {
+                    "type": "number",
+                    "description": "Уникальный ID устройства. Платформа HC не работает с этим пар-ром в этом запросе."
+                },
+                "DeviceStatus": {
+                    "type": "string",
+                    "description": "Текущий статус девайса. Если в статусе приходит «OK», то значит девайс активный и это означает, что пришло обновление токена. Если «BAD», то значит приложение было удалено с девайса и в параметрах приходит старый токен."
+                },
+                "OldDeviceToken": {
+                    "type": "string",
+                    "description": "Старый токен, полученный от HC"
+                },
+                "NewDeviceToken": {
+                    "type": "string",
+                    "description": "Новый токен для девайса"
+                }
+            },
+            "required": [
+                "DeviceUID",
+                "DeviceStatus",
+                "OldDeviceToken"
+            ],
+            "example": {
+                "DeviceUID": 70497839,
+                "DeviceStatus": "BAD",
+                "OldDeviceToken": "012345678",
+                "NewDeviceToken": "112923833"
+            },
+            "x-stoplight": {
+                "id": "devicetoken",
+                "name": "deviceToken",
+                "public": true
+            }
+        }
+    },
+    "x-stoplight": {
+        "beforeScript": "",
+        "afterScript": "",
+        "version": {
+            "groups": {
+                "savedEntries": [],
+                "tests": [],
+                "traits": [],
+                "docs": [
+                    {
+                        "name": "Спецификация API отправки PUSH через TC",
+                        "items": [
+                            {
+                                "type": "docTextSections",
+                                "_id": "-hc--tHdotqDSDiqnvhCKE"
+                            },
+                            {
+                                "type": "docTextSections",
+                                "_id": "--gJYpZe5Ruht8Qsuat"
+                            }
+                        ],
+                        "divider": false
+                    },
+                    {
+                        "name": "Push Service",
+                        "items": [
+                            {
+                                "type": "endpoints",
+                                "_id": "POST_push"
+                            },
+                            {
+                                "type": "endpoints",
+                                "_id": "GET_push"
+                            }
+                        ],
+                        "divider": false
+                    },
+                    {
+                        "name": "Device Token Service",
+                        "items": [
+                            {
+                                "type": "endpoints",
+                                "_id": "PUT_deviceToken"
+                            }
+                        ],
+                        "divider": false
+                    },
+                    {
+                        "name": "Model",
+                        "items": [
+                            {
+                                "type": "schemas",
+                                "_id": "push"
+                            },
+                            {
+                                "type": "schemas",
+                                "_id": "devicetoken"
+                            }
+                        ],
+                        "divider": false
+                    }
+                ]
+            }
+        },
+        "functions": {},
+        "textSections": {
+            "-hc--tHdotqDSDiqnvhCKE": {
+                "id": "-hc--tHdotqDSDiqnvhCKE",
+                "name": "Схема взаимоействия HC и ТС",
+                "content": "<br>\n<br>\n<img src=\"http://image.prntscr.com/image/e4b239b7648c499888b1249c8184a5dd.png\">\n<br>\n<br>\n\n<h4>Основные шаги - сервисы API</h4>\n<br>\n\n1. #endpoint:5XhdkpZt5aRXBiEgS  - Отправка push сообщений\n\n2. #endpoint:beQaAiWGdHnzpqdjz - Получение статусов доставки push сообщений\n\n3. #endpoint:GDqiFQLktpSFQQDB7 - актуализация идентификатора устройствв (deviceToken)",
+                "public": true
+            },
+            "--gJYpZe5Ruht8Qsuat": {
+                "id": "--gJYpZe5Ruht8Qsuat",
+                "name": "Безопасность",
+                "content": "<h5> Принципы безопасноти</h5>\n<br>\nОбласть применения:  <b> Все эндпойнты</b>\n<br>\n\n1. Все вызовы всех эндпойнтов авторизуются на основе HTTP <code>Basic Authentication</code> ((HTTP Authorization header https://tools.ietf.org/html/rfc2617)\n<br>\n2. Протокол доступа - исключительно <b> HTTPS</b>\n<br>",
+                "public": true
+            }
+        },
+        "mock": {
+            "dynamic": false,
+            "enabled": false
+        }
+    },
+    "x-tests": {}
+}
