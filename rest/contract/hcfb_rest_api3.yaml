@@ -1,0 +1,4015 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: REST
+
+basePath: /
+
+################################################################################
+# Path - CatalogService                                                        #
+################################################################################
+paths:
+
+##########################
+  /rest/catalogs/{name}:
+    get:
+      description: |
+        Получение списка каталогов
+
+        **Пример запроса:** /rest/catalogs/feetype
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: name
+          in: path
+          description: код каталога
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Список значений CatalogRo
+          schema:
+            type: object
+            properties:
+              values:
+                type: array
+                items:
+                  $ref: '#/definitions/CatalogRo'
+          examples:
+            {
+              "values": [
+                {
+                  "code": "LOAN_PROVIDING",
+                  "translations": [
+                    {
+                      "lang": "en",
+                      "value": "Loan providing fee"
+                    },
+                    {
+                      "lang": "ru",
+                      "value": "Комиссия за предоставление кредита"
+                    }
+                  ]
+                },
+                {
+                  "code": "STATEMENT_PROVIDING",
+                  "translations": [
+                    {
+                      "lang": "en",
+                      "value": "Statement providing fee"
+                    },
+                    {
+                      "lang": "ru",
+                      "value": "Комиссия за предоставление извещений"
+                    }
+                  ]
+                },
+                {
+                  "code": "PAYMENT_POSTPONED",
+                  "translations": [
+                    {
+                      "lang": "en",
+                      "value": "Payment postponed fee"
+                    },
+                    {
+                      "lang": "ru",
+                      "value": "Комиссия за услугу переноса даты платежа"
+                    }
+                  ]
+                }
+              ]
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+################################################################################
+# Path - GatewayPaymentService                                                 #
+################################################################################
+
+  /rest/gateway/categories:
+    get:
+      description: |
+        Получение полного списка категорий платежей
+
+        **Пример запроса:** /rest/gateway/categories
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+      responses:
+        '200':
+          description: ListGatewayPaymentCategoriesRo
+          schema:
+            items:
+              $ref: '#/definitions/ListGatewayPaymentCategoriesRo'
+          examples:
+            {
+              "categories": [
+                {
+                  "code": "14",
+                  "name": "ЖКХ",
+                  "formOrder": 4,
+                  "beneficiaries": [
+                    {
+                      "code": "601",
+                      "name": "Коммунальные платежи(Москва)Киберплат",
+                      "status": 0,
+                      "categoryCode": "14",
+                      "fromDate": null,
+                      "toDate": null,
+                      "rapidaCode": "601",
+                      "beneficiaryAccountId": "rapida_728",
+                      "minAmount": null,
+                      "maxAmount": null,
+                      "disclaimer": "",
+                      "fields": []
+                    }
+                  ]
+                },
+                {
+                  "code": "7",
+                  "name": "Rapida Online",
+                  "formOrder": 2,
+                  "beneficiaries": []
+                },
+                {
+                  "code": "13",
+                  "name": "PH Перевод в другой банк по номеру карты",
+                  "formOrder": 3,
+                  "beneficiaries": [
+                    {
+                      "code": "203",
+                      "name": "Перевод в другой банк по номеру карты",
+                      "status": 0,
+                      "categoryCode": "13",
+                      "fromDate": null,
+                      "toDate": null,
+                      "rapidaCode": "203",
+                      "beneficiaryAccountId": "alias",
+                      "minAmount": null,
+                      "maxAmount": null,
+                      "disclaimer": "",
+                      "fields": []
+                    }
+                  ]
+                }
+              ],
+              "lastDate": 1491129840646
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+  /rest/gateway/beneficiary/{code}:
+    get:
+      description: |
+        Получение деталей бенефициара
+
+        **Пример запроса:** /rest/gateway/beneficiary/202
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: code
+          in: path
+          description: Код бенефициара
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Детали бенефициара
+          schema:
+            $ref: '#/definitions/GatewayBeneficiaryRo'
+          examples:
+            {
+              "code": "202",
+              "name": "Мегафон",
+              "status": 0,
+              "categoryCode": "1",
+              "fromDate": null,
+              "toDate": null,
+              "rapidaCode": "foedere certo",
+              "beneficiaryAccountId": "nimborum in",
+              "minAmount": 10,
+              "maxAmount": 9999.99,
+              "disclaimer": "Допустимая сумма платежа: 10 9 999,99. Providers Commission",
+              "fields": [
+                {
+                  "name": "Дата выдачи документа (ДД.ММ.ГГГГ)",
+                  "tooltip": "Введите дату (2 цифры), точка, месяц (2 цифры), точка, год (4 цифры)",
+                  "mapping": "a5",
+                  "enumValues": {}
+                },
+                {
+                  "name": "Номер телефона",
+                  "regexp": "",
+                  "tooltip": "Введите номер.",
+                  "fieldType": 1,
+                  "mapping": "account",
+                  "enumValues": {}
+                },
+                {
+                  "name": "Фио плательщика",
+                  "regexp": "",
+                  "tooltip": "Введите ФИО",
+                  "fieldType": 1,
+                  "mapping": "username",
+                  "enumValues": {}
+                },
+                {
+                  "name": "Сумма платежа",
+                  "tooltip": "",
+                  "mapping": "amount",
+                  "enumValues": {}
+                }
+              ]
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+  /rest/gateway/createPayment:
+    post:
+      description: Создание платежа
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: gatewayPaymentRo
+          in: body
+          description: Параметры платежа
+          schema:
+            $ref: '#/definitions/GatewayPaymentRo'
+          required: true
+      responses:
+        '200':
+          description: GatewayPaymentRo
+          schema:
+            $ref: '#/definitions/GatewayPaymentRo'
+          examples:
+            {
+              "beneficiaryCode": "202",
+              "account": "40817810911118101016",
+              "amount": 11.11,
+              "currencyCode": "RUR",
+              "transactionID": 14223227,
+              "paymentDate": 1490964739700,
+              "status": 40,
+              "fieldValues": {
+                "username": "Иванов",
+                "account": "9209030947"
+              }
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+          examples:
+            {
+              "errorMessage": "amount required",
+              "fieldCode": "amount"
+            }
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+          examples:
+            {
+              "errorMessage": "Authorization failed"
+            }
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+          examples:
+            {
+              "errorMessage": "Service unavailable"
+            }
+
+  /rest/gateway/confirmPayment:
+    post:
+      description: Подтверждение перевода (если подтверждается перевод с сохранением шаблона, то в запросе передается и "templateName")
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: сonfirmGatewayPaymentRequestRo
+          in: body
+          description: Запрос на подтверждение транзакции
+          schema:
+            $ref: '#/definitions/ConfirmGatewayPaymentRequestRo'
+          required: true
+      responses:
+        '200':
+          description: Платеж подтвержден
+          schema:
+            $ref: '#/definitions/GatewayPaymentRo'
+          examples:
+            {
+              "beneficiaryCode": "203",
+              "account": "40817810911118101016",
+              "amount": 11.11,
+              "currencyCode": "RUR",
+              "transactionID": 14223230,
+              "paymentDate": 1490966042401,
+              "status": 90,
+              "fieldValues": {
+                "cardNumber": "4704515446716803"
+              }
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+          examples:
+            {
+              "errorMessage": "transactionId required",
+              "fieldCode": "transactionId"
+            }
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+          examples:
+            {
+              "errorMessage": "Authorization failed"
+            }
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+          examples:
+            {
+              "errorMessage": "Service unavailable"
+            }
+
+  /rest/gateway/paymentDetails/{transactionID}:
+    get:
+      description: |
+        Получение деталей платежа
+
+        **Пример запроса:** /rest/gateway/paymentDetails/14211244
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: transactionID
+          in: path
+          description: Идентификатор транзакции
+          type: integer
+          format: long
+          required: true
+      responses:
+        '200':
+          description: Детали получены
+          schema:
+            $ref: '#/definitions/GatewayPaymentDetailsResponseRo'
+          examples:
+            {
+              "payment": {
+                "beneficiaryCode": "202",
+                "account": "40817810911118101016",
+                "amount": 11.11,
+                "currencyCode": "RUR",
+                "transactionID": 14211244,
+                "paymentDate": 1490276295511,
+                "status": 90,
+                "fieldValues": {
+                  "username": "Иванов",
+                  "account": "9209030947"
+                }
+              },
+              "beneficiary": {
+                "code": "202",
+                "name": "Мегафон",
+                "status": 0,
+                "categoryCode": "1",
+                "rapidaCode": "foedere certo",
+                "beneficiaryAccountId": "nimborum in",
+                "minAmount": 10,
+                "maxAmount": 9999.99,
+                "disclaimer": "Допустимая сумма платежа: 10 999,99. Providers Commission",
+                "fields": [
+                  {
+                    "name": "Дата выдачи документа (ДД.ММ.ГГГГ)",
+                    "tooltip": "Введите дату (2 цифры), точка, месяц (2 цифры), точка, год (4 цифры)",
+                    "mapping": "a5",
+                    "enumValues": {}
+                  },
+                  {
+                    "name": "Номер телефона",
+                    "regexp": "",
+                    "tooltip": "Введите номер.",
+                    "fieldType": 1,
+                    "mapping": "account",
+                    "enumValues": {}
+                  },
+                  {
+                    "name": "Фио плательщика",
+                    "regexp": "",
+                    "tooltip": "Введите ФИО",
+                    "fieldType": 1,
+                    "mapping": "username",
+                    "enumValues": {}
+                  },
+                  {
+                    "name": "Сумма платежа",
+                    "tooltip": "",
+                    "mapping": "amount",
+                    "enumValues": {}
+                  }
+                ]
+              }
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+          examples:
+            {
+              "errorMessage": "transactionID required",
+              "fieldCode": "transactionID"
+            }
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+          examples:
+            {
+              "errorMessage": "Authorization failed"
+            }
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+          examples:
+            {
+              "errorMessage": "Service unavailable"
+            }
+
+  /rest/gateway/paymentHistory:
+    get:
+      description: |
+        **Получение истории платежей**
+
+        **Пример запроса**: /rest/gateway/paymentHistory?startPosition=0&count=20&bot=4.33.02.01
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: categoryCode
+          in: query
+          description: categoryCode
+          type: string
+          required: false
+        - name: startPosition
+          in: query
+          description: startPosition
+          type: integer
+          required: false
+        - name: count
+          in: query
+          description: count
+          type: string
+          required: false
+        - name: referenceid
+          in: query
+          description: referenceid
+          type: string
+          required: false
+      responses:
+        '200':
+          description: История получена
+          schema:
+            type: object
+            properties:
+              payments:
+                type: array
+                items:
+                  $ref: '#/definitions/GatewayPaymentRo'
+          examples:
+            {
+              "payments": [
+                {
+                  "account": "40817810911118101016",
+                  "amount": 11.11,
+                  "currencyCode": "RUR",
+                  "transactionID": 14223230,
+                  "paymentDate": 1490966042401,
+                  "status": 90,
+                  "fieldValues": {}
+                },
+                {
+                  "beneficiaryCode": "203",
+                  "account": "40817810911118101016",
+                  "amount": 11.11,
+                  "currencyCode": "RUR",
+                  "transactionID": 14221374,
+                  "paymentDate": 1490870030266,
+                  "status": 90,
+                  "fieldValues": {}
+                }
+              ]
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+################################################################################
+# Path - CoreAccountService                                                    #
+################################################################################
+
+  /rest/filteredAccounts:
+    get:
+      description: |
+        Получение списка рублевых счетов активных ДК, рублевых счетов активных КК, рублевых счетов активных ШК + ипотечных счетов, если они привязаны к ДК
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Список значений AccountRo
+          schema:
+            type: object
+            properties:
+              values:
+                type: array
+                items:
+                  $ref: '#/definitions/AccountRo'
+          examples:
+            {
+              "values": [
+                {
+                  "accountNumber": "40817810311118101001",
+                  "currencyCode": "RUR",
+                  "name": "Счет дебетовой карты"
+                },
+                {
+                  "accountNumber": "40817810511118102004",
+                  "currencyCode": "RUR",
+                  "name": "Счет дебетовой карты"
+                }
+              ]
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+################################################################################
+# Path - PaymentService                                                        #
+################################################################################
+
+  /rest/payment/ownAccounts/create:
+    post:
+      description: |
+        **Создание перевода между своими счетами** (возможно, с сохранением шаблона)
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: createOwnAccountsPayment
+          in: body
+          description: Параметры перевода
+          schema:
+            $ref: '#/definitions/OwnAccountsCreatePaymentRequestRo'
+          required: true
+      responses:
+        '200':
+          description: OwnAccountsCreatePaymentResponseRo
+          schema:
+            $ref: '#/definitions/OwnAccountsCreatePaymentResponseRo'
+          examples:
+            {
+              "transactionId": 14223231
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+          examples:
+            {
+              "errorMessage": "accountFrom required",
+              "fieldCode": "accountFrom"
+            }
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+  /rest/payment/paymentTemplates:
+    get:
+      description: |
+        **Получение списка шаблонов платежей** (сюда входит платежи PH, рапида, перевод по номеру карты через PH, СЭ, рапиду)
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Список шаблонов получен
+          schema:
+            type: object
+            properties:
+              values:
+                type: array
+                items:
+                  $ref: '#/definitions/PaymentTemplateRo'
+          examples:
+            {
+              "values": [
+                {
+                  "templateId": "22113",
+                  "templateName": "46436",
+                  "categoryId": "13",
+                  "categoryName": "PH Перевод в другой банк по номеру карты"
+                },
+                {
+                  "templateId": "22114",
+                  "templateName": "46436547",
+                  "categoryId": "13",
+                  "categoryName": "PH Перевод в другой банк по номеру карты"
+                }
+              ]
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+  /rest/payment/templates:
+    get:
+      description: |
+        **Получение списка шаблонов переводов с деталями** (если заполнен атрибут "id", то возвращается один шаблон с заданным id, если атрибут withDetails не пришел в запросе или заполнен значение false - то детали шаблонов не возвращаются)
+        * **4.31.01.16** - Переводы между своими счетами
+        * **4.29.01.01** - Перевод внутри банка
+        * **4.31.01.06** - Перевод в другой банк по реквизитам счета
+        * **4.32.01.04** - Перевод по номеру карты через СЭ
+
+        **Пример запроса:** /rest/payment/templates?bot=4.31.01.16&id=23105&withDetails=true
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: id
+          in: query
+          description: id шаблона
+          type: integer
+          format: long
+        - name: bot
+          in: query
+          description: business object type перевода
+          type: integer
+          format: long
+          required: true
+        - name: withDetails
+          in: query
+          description: если true, то возвращаются и детали шаблона
+          type: boolean
+      responses:
+        '200':
+          description: Список шаблонов получен успешно
+          schema:
+            type: object
+            properties:
+              values:
+                type: array
+                items:
+                  $ref: '#/definitions/TemplateRo'
+          examples:
+            {
+              "values": [
+                {
+                  "templateId": "22025",
+                  "templateName": "ЖКХ ЕЛС",
+                  "amount": 280,
+                  "fromAccount": "40817810311118101001",
+                  "beneficiaryBank": {
+                    "bic": "044525593",
+                    "name": "MINEBANK",
+                    "city": "ЧЕЛЯБИНСК",
+                    "correspondAccount": "30101810200000000843"
+                  },
+                  "beneficiaryName": "Базанова Мария Константиновна",
+                  "beneficiaryInn": "000000000000",
+                  "toAccount": "40817810000000000000",
+                  "description": "Назначение",
+                  "taxAmount": 0,
+                  "params": {
+                    "ZHKH_PROPS_KIND": "ЕЛС",
+                    "ZHKH_PROPS_VALUE": "12аб123456",
+                    "ZHKH_PAYMENT_MONTH": "",
+                    "ZHKH_PAYMENT_YEAR": ""
+                  }
+                },
+                {
+                  "templateId": "22033",
+                  "templateName": "По реквизитам счета",
+                  "amount": 100,
+                  "fromAccount": "40817810311118101001",
+                  "beneficiaryBank": {
+                    "bic": "044525593",
+                    "name": "MINEBANK",
+                    "city": "ЧЕЛЯБИНСК",
+                    "correspondAccount": "30101810200000000843"
+                  },
+                  "beneficiaryName": "Базанова Мария Константиновна",
+                  "beneficiaryInn": "381298314785",
+                  "toAccount": "40817810000000000000",
+                  "description": "Пользовательское назначение",
+                  "taxAmount": 0,
+                  "params": {}
+                }
+              ]
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+          examples:
+            {
+              "errorMessage": "Bot not found",
+              "fieldCode": "bot"
+            }
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+    delete:
+      description: |
+        **Удаление шаблона**
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: deleteTemplateRequestRo
+          in: body
+          description: Параметры удаления шаблона
+          schema:
+            $ref: '#/definitions/DeleteTemplateRequestRo'
+          required: true
+      responses:
+        '200':
+          description: Шаблон удален успешно
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+          examples:
+            {
+              "errorMessage": "templateId required",
+              "fieldCode": "templateId"
+            }
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+  /rest/payment/paymentTemplateDetail:
+    get:
+      description: |
+        **Получение деталей шаблона перевода**
+
+        **Пример запроса**: /rest/payment/paymentTemplateDetail?templateId=21992
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: templateId
+          in: query
+          description: Идентификатор шаблона
+          type: integer
+          format: int64
+          required: true
+      responses:
+        '200':
+          description: PaymentTemplateDetailResponseRo
+          schema:
+            $ref: '#/definitions/PaymentTemplateDetailResponseRo'
+          examples:
+            {
+              "paymentTemplate": {
+                "templateId": "21771",
+                "templateName": "По номеру карты",
+                "categoryId": "13",
+                "categoryName": "PH Перевод в другой банк по номеру карты"
+              },
+              "gatewayPayment": {
+                "beneficiaryCode": "203",
+                "account": "40817810311118101001",
+                "amount": 100,
+                "currencyCode": "RUR",
+                "transactionID": "14183105",
+                "paymentDate": 1488191261153,
+                "fieldValues": {
+                  "account": "9209030955",
+                  "cardNumber": "4627916369702784"
+                }
+              }
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+          examples:
+            {
+              "errorMessage": "Field transactionId has wrong format. ",
+              "fieldCode": "transactionId"
+            }
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+  /rest/payment/templateName:
+    post:
+      description: |
+        **Переименование шаблона**
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: templateSetNameRequestRo
+          in: body
+          description: Параметры переименования шаблона
+          schema:
+            $ref: '#/definitions/TemplateSetNameRequestRo'
+          required: true
+      responses:
+        '200':
+          description: Шаблон переименован успешно
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+  /rest/payment/cardDpo/create:
+    post:
+      description: |
+        **Создание перевода по номеру карты через СЭ** (возможно с созданием шаблона). Если СЭ выключен (SELF_ACQUIRING_ON=false), то возвращается ошибка 500.
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: createCardDpoPayment
+          in: body
+          description: Тело запроса
+          schema:
+            $ref: '#/definitions/CardDpoCreatePaymentRequestRo'
+          required: true
+      responses:
+        '200':
+          description: CardDpoCreatePaymentResponseRo
+          schema:
+            $ref: '#/definitions/CardDpoCreatePaymentResponseRo'
+          examples:
+            {
+              "transactionId": 14223234,
+              "commission": 100
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+  /rest/payment/fromTemplate/create:
+    post:
+      description: |
+        **Повтор из шаблона перевода между своими счетами**
+        * **4.31.01.16** - внутрибанковского
+        * **4.29.01.01** - перевода, перевода по номеру карты СЭ
+        * **4.32.01.04** - (templateId - id из таблицы GFO_PAYMENTTEMPLATE)
+      parameters:
+      - name: Authorization
+        in: header
+        description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+        required: true
+        type: string
+      - name: createPaymentFromTemplate
+        in: body
+        description: Параметры шаблона
+        schema:
+          $ref: '#/definitions/FromTemplatePaymentRequestRo'
+        required: true
+      responses:
+        '200':
+          description: Перевод проведен успешно
+          schema:
+            $ref: '#/definitions/FromTemplatePaymentResponseRo'
+          examples:
+            {
+              "transactionId": 14189224,
+              "comission": 0
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+  /rest/payment/fromTemplateDPO/create:
+    post:
+      description: |
+        Выполнение из шаблона межбанковского перевода: в другой банк по реквизитам счета
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: createPaymentFromTemplateDpo
+          in: body
+          description: Параметры платежа из шаблона
+          schema:
+            $ref: '#/definitions/FromTemplatePaymentDpoRequestRo'
+          required: true
+      responses:
+        '200':
+          description: Перевод проведен успешно
+          schema:
+            $ref: '#/definitions/FromTemplatePaymentResponseRo'
+          examples:
+            {
+              "transactionId": 14215326
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+  /rest/payment/confirm:
+    post:
+      description: Подтверждение перевода
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: confirmPayment
+          in: body
+          description: Идентификатор транзации
+          schema:
+            $ref: '#/definitions/ConfirmPaymentRequestRo'
+          required: true
+      responses:
+        '200':
+          description: ConfirmPaymentResponseRo
+          schema:
+            $ref: '#/definitions/ConfirmPaymentResponseRo'
+          examples:
+            {
+              "transactionId": 14177116
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+          examples:
+            {
+              "errorMessage": "OTP_VERIFICATION_ERROR"
+            }
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+  /rest/payment/paymentFields:
+    get:
+      description: |
+        **Получение списка счетов для списания и пополнения в переводе между своими счетами**
+
+        **Пример запроса:** /rest/payment/paymentFields?operationCode=4.31.01.16
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: operationCode
+          in: query
+          description: Код операции
+          type: string
+          required: true
+      responses:
+        '200':
+          description: TransferBetweenOwnAccounctsFieldsResponseRo
+          schema:
+            $ref: '#/definitions/TransferBetweenOwnAccounctsFieldsResponseRo'
+          examples:
+            {
+              "fromAccounts": [
+                {
+                  "coreAccount": {
+                    "accountNumber": "40817810311118101001",
+                  },
+                  "currentBalance": 15000000
+                }
+              ],
+              "toAccounts": [
+                {
+                  "coreAccount": {
+                    "accountNumber": "40817810311118101001",
+                  },
+                  "currentBalance": 15000000
+                }
+              ]
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+  /rest/payment/paymentHistory:
+    get:
+      description: |
+        **Получение истории переводов** (Если в запросе все атрибуты отсутствуют, то возвращается список переводов между своими счетами. При указании referenceid вернутся детали конкретно этого перевода. startPosition и count нужны для постраничного вывода транзакций: берутся транзакции из GFO_TRANSACTION с позиции startPosition (счет начинается с 0) в количестве count).
+
+         Возможные значения **businessObjectType**:
+
+        * **4.31.01.16** - Переводы между своими счетами
+        * **4.29.01.01** - Перевод внутри банка
+        * **4.31.01.06** - Перевод в другой банк по реквизитам счета
+        * **4.32.01.04** - Перевод по номеру карты через СЭ
+
+        **Пример запроса:** /rest/payment/paymentHistory?startPosition=0&count=10&businessObjectType=4.31.01.16&referenceid=4.31.01.16_14189209
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: startPosition
+          in: query
+          description: startPosition
+          type: integer
+          format: long
+          required: false
+        - name: count
+          in: query
+          description: count
+          type: integer
+          format: long
+          required: false
+        - name: businessObjectType
+          in: query
+          description: businessObjectType (например, 4.29.01.01)
+          type: string
+          required: false
+        - name: referenceid
+          in: query
+          description: referenceid (например, 4.29.01.01_14159105)
+          type: string
+          required: false
+      responses:
+        '200':
+          description: GetPaymentHistoryResponseRo
+          schema:
+            $ref: '#/definitions/GetPaymentHistoryResponseRo'
+          examples:
+            {
+              "payments": [
+                {
+                  "businessObjectType": "4.31.01.16",
+                  "data": {
+                    "accountFrom": "40817810911118101016",
+                    "accountTo": "40817810311118101001",
+                    "currencyCode": "RUR",
+                    "paymentDate": 1488534659159,
+                    "amount": 50
+                  },
+                  "transaction": {
+                    "id": "14189209",
+                    "status": "F",
+                    "date": 1488534659159
+                  },
+                  "fee": {
+                    "chargeAmount": 555.25,
+                    "totalAmount": 345
+                  }
+                }
+              ]
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+  /rest/payment/sms:
+    post:
+      description: |
+        Запрос на повторную отправку ОТП
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: sendOtpRo
+          in: body
+          description: Параметры запроса
+          schema:
+            $ref: '#/definitions/SendOtpRo'
+          required: true
+      responses:
+        '200':
+          description: Запрос отправлен успешно
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+################################################################################
+# Path - CardService                                                           #
+################################################################################
+
+  /rest/card/block:
+    post:
+      description: Блокировка/Разблокировка дебетовой карты
+      parameters:
+      - name: Authorization
+        in: header
+        description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+        required: true
+        type: string
+      - name: blockCard
+        in: body
+        description: Параметры блокировки
+        schema:
+          $ref: '#/definitions/BlockCardRequestRo'
+        required: true
+      responses:
+        '200':
+          description: BlockCardResponseRo
+          schema:
+            $ref: '#/definitions/BlockCardResponseRo'
+          examples:
+            {
+              "transactionId": 14165211
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+  /rest/card/setStatus:
+    post:
+      description: |
+        Блокировка/Разблокировка кредитной карты
+      parameters:
+      - name: Authorization
+        in: header
+        description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+        required: true
+        type: string
+      - name: ChangeCreditCardStatus
+        in: body
+        description: Статус карты
+        schema:
+          $ref: '#/definitions/ChangeCreditCardStatusRequestRo'
+        required: true
+      responses:
+        '200':
+          description: Карта заблокирована/разблокирована успешно
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+################################################################################
+# Path - ProductService                                                        #
+################################################################################
+
+  /rest/debitCards/transactions:
+    get:
+      description: |
+        Получение списка красивых транзакций по дебетовой карте
+        **Пример запроса:** /rest/debitCards/transactions?accountNumber=40817810911118101016&cardNumber=5549604369478934&fromDate=2017-02-02&toDate=2017-02-02&startPosition=0&count=100&isSort=true
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: accountNumber
+          in: query
+          description: Номер счета
+          type: string
+          pattern: \d{20}
+          required: true
+        - name: fromDate
+          in: query
+          description: Начальная дата
+          pattern: \d{4}-\d{2}-\d{2}
+          type: string
+          format: date
+          required: true
+        - name: toDate
+          in: query
+          description: Конечная дата
+          pattern: \d{4}-\d{2}-\d{2}
+          type: string
+          format: date
+          required: true
+        - name: startPosition
+          in: query
+          description: Позиция, с которой выводить транзакции. Для постраничного списка.
+          type: integer
+          format: int64
+          required: true
+        - name: count
+          in: query
+          description: Количество элементов для вывода
+          type: integer
+          format: int64
+          required: true
+        - name: isSort
+          in: query
+          description: isSort
+          type: boolean
+          required: true
+        - name: cardNumber
+          in: query
+          description: Номер карты
+          type: string
+          pattern: \d{13,19}
+          required: true
+      responses:
+        '200':
+          description: Список ProductAccountMovementRo
+          schema:
+            type: object
+            properties:
+              values:
+                type: array
+                items:
+                  $ref: '#/definitions/ProductAccountMovementRo'
+          examples:
+           {
+            "values": [
+              {
+                  "postingDate": 1465490520000,
+                  "valueDate": 1465345117000,
+                  "amount": 1000,
+                  "payCurrency": "RUR",
+                  "description": "Одежда",
+                  "creditDebitIndicator": false,
+                  "mcc": "CLOTHERS",
+                  "merchant": "Банк Хоум Кредит",
+                  "shortDescription": "Одежда",
+                  "hashtagList": [],
+                  "movementNumber": "1000",
+                  "transactionTypeIBS": 1,
+                  "operationName": "Одежда",
+                  "address": "пр.Строителей 134",
+                  "country": "РОССИЯ",
+                  "city": "Москва",
+                  "merchantName": "Qiwi",
+                  "partnercardnumber": "100",
+                  "partnerAccountNumber": "42301810754448104001",
+                  "partnerAccountName": "et carcere",
+                  "sendername": "Петров Иван Александрович",
+                  "senderaccount": "circum claustra fremunt",
+                  "senderbic": "certo et premere",
+                  "referenceid": "coniunx una",
+                  "toacct": "100",
+                  "toacct2": "100",
+                  "picUrl": "http://localhost:8181/hcfbib.server.portal.app/pictures/plus_40.png"
+              }
+            ]
+          }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+  /rest/debitCards/detail:
+    get:
+      description: |
+        Получение деталей дебетовой карты
+
+        **Пример запроса:** /rest/debitCards/detail?cardNumber=5549604369478934&contractNumber=11118101016
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: cardNumber
+          in: query
+          description: Номер карты
+          type: string
+          pattern: \d{13,19}
+          required: true
+        - name: contractNumber
+          in: query
+          description: Номер контракта
+          type: string
+          required: true
+      responses:
+        '200':
+          description: DebitCardDetailRo
+          schema:
+            $ref: '#/definitions/DebitCardDetailRo'
+          examples:
+            {
+              "productName": "Debit Card 16 Active RUR",
+              "cardNumber": "5549604369478934",
+              "availableBalance": 99,
+              "currency": "RUR",
+              "cardStatus": "1",
+              "overdraftLimit": 0,
+              "accountNumber": "40817810911118101016",
+              "contractStatus": "Active",
+              "percentValue": 3,
+              "additional": 0
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+  /rest/deposits/detail:
+    get:
+      description: |
+        Получение деталей депозита
+
+        **Пример запроса:** /rest/deposits/detail?contractNumber=810754448104001&systemCode=TW&branchCode=1
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: contractNumber
+          in: query
+          description: Номер контракта
+          type: string
+          required: true
+        - name: systemCode
+          in: query
+          description: systemCode
+          type: string
+          required: true
+        - name: branchCode
+          in: query
+          description: branchCode
+          type: string
+          required: true
+      responses:
+        '200':
+          description: DepositDetailRo
+          schema:
+            $ref: '#/definitions/DepositDetailRo'
+          examples:
+            {
+              "startDate": 1425859200000,
+              "maturityDate": 1430092800000,
+              "depositType": "Срочный вклад",
+              "contractStatus": 1,
+              "currency": "RUR",
+              "accountNumber": "42301810754448104001",
+              "depositName": "Dep1 TW RUR снятие и пополнение",
+              "interestRate": 10.29,
+              "runningBalance": 10000.19,
+              "accruedInterest": 1.18,
+              "contractUniqueId": {
+                "contractNumber": "810754448104001",
+                "systemCode": "TW",
+                "branchCode": "1"
+              }
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+  /rest/deposits/transactions:
+    get:
+      description: |
+        Получение списка красивых транзакций по депозиту
+
+        **Пример запроса:** /rest/deposits/transactions?accountNumber=42301810754448104001&cardNumber=1234567890017666&count=100&fromDate=2016-05-09&toDate=2016-05-09&isSort=true&startPosition=0
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: accountNumber
+          in: query
+          description: Номер счета
+          type: string
+          pattern: \d{20}
+          required: true
+        - name: fromDate
+          in: query
+          description: Начальная дата
+          pattern: \d{4}-\d{2}-\d{2}
+          type: string
+          format: date
+          required: true
+        - name: toDate
+          in: query
+          description: Конечная дата
+          pattern: \d{4}-\d{2}-\d{2}
+          type: string
+          format: date
+          required: true
+        - name: startPosition
+          in: query
+          description: Позиция, с которой выводить транзакции. Для постраничного списка.
+          type: integer
+          format: int64
+          required: true
+        - name: count
+          in: query
+          description: Количество элементов для вывода
+          type: integer
+          format: int64
+          required: true
+        - name: isSort
+          in: query
+          description: isSort
+          type: boolean
+          required: true
+      responses:
+        '200':
+          description: Список ProductAccountMovementRo
+          schema:
+            type: object
+            properties:
+              values:
+                type: array
+                items:
+                  $ref: '#/definitions/ProductAccountMovementRo'
+          examples:
+            {
+              "values": [
+                {
+                  "postingDate": 1465490520000,
+                  "valueDate": 1465345117000,
+                  "amount": 1000.0,
+                  "payCurrency": "RUR",
+                  "description": "Одежда",
+                  "creditDebitIndicator": false,
+                  "mcc": "CLOTHERS",
+                  "merchant": "Банк Хоум Кредит",
+                  "shortDescription": "Одежда",
+                  "hashtagList": [],
+                  "movementNumber": "1000",
+                  "transactionTypeIBS": 1,
+                  "operationName": "Одежда",
+                  "address": "пр.Строителей 134",
+                  "country": "РОССИЯ",
+                  "city": "Москва",
+                  "merchantName": "Qiwi",
+                  "partnercardnumber": "100",
+                  "partnerAccountNumber": "42301810754448104001",
+                  "partnerAccountName": "et carcere",
+                  "sendername": "Петров Иван Александрович",
+                  "senderaccount": "circum claustra fremunt",
+                  "senderbic": "certo et premere",
+                  "referenceid": "coniunx una",
+                  "toacct": "100",
+                  "toacct2": "100",
+                  "picUrl": "http://localhost:8181/hcfbib.server.portal.app/pictures/plus_40.png"
+                }
+              ]
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+  /rest/creditCards/transactions:
+    get:
+      description: |
+        Получение списка красивых транзакций по кредитной карте
+
+        **Пример запроса:** /rest/creditCards/transactions?contractNumber=22228103001&fromDate=2017-03-03&toDate=2017-03-03&isSort=true&startPosition=1&cardNumber=7810322228103001&count=5&accountNumber=40817810311118101001
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: contractNumber
+          in: query
+          type: string
+          description: Номер договора
+          required: true
+        - name: toDate
+          in: query
+          type: string
+          format: date
+          pattern: \d{4}-\d{2}-\d{2}
+          required: true
+          description: Дата, по которую отбираются транзакции
+        - name: isSort
+          in: query
+          type: boolean
+          required: true
+          description: Сортировка
+        - name: fromDate
+          in: query
+          type: string
+          format: date
+          pattern: \d{4}-\d{2}-\d{2}
+          required: true
+          description:  Дата, с которой отбираются тран-закции
+        - name: startPosition
+          in: query
+          type: integer
+          required: true
+          description: Номер позиции транзакции
+        - name: cardNumber
+          in: query
+          type: string
+          pattern: \d{13,19}
+          required: true
+          description: Номер карты
+        - name: count
+          in: query
+          type: integer
+          required: true
+          description: Количество транзакций
+        - name: accountNumber
+          in: query
+          type: string
+          pattern: \d{20}
+          required: true
+          description: Номер счета
+      responses:
+        '200':
+          description: ProductAccountMovementRo
+          schema:
+            type: object
+            properties:
+              values:
+                type: array
+                items:
+                  $ref: '#/definitions/ProductAccountMovementRo'
+          examples:
+            {
+              "values": [
+                {
+                  "postingDate": 1466527320000,
+                  "valueDate": 1466468317000,
+                  "amount": 5000.0,
+                  "payCurrency": "RUR",
+                  "description": "Одежда",
+                  "creditDebitIndicator": false,
+                  "mcc": "CLOTHERS",
+                  "merchant": "Банк Хоум Кредит",
+                  "shortDescription": "Одежда",
+                  "hashtagList": [],
+                  "movementNumber": "5000",
+                  "transactionTypeIBS": 6,
+                  "paymentType": 2,
+                  "operationName": "Перевод внутри банка",
+                  "address": "пр.Строителей 134",
+                  "country": "РОССИЯ",
+                  "city": "Москва",
+                  "merchantName": "et carcere",
+                  "partnercardnumber": "100",
+                  "partnerAccountNumber": "40817810311118101001",
+                  "partnerAccountName": "et carcere",
+                  "sendername": "Перевод между своими счетами",
+                  "senderaccount": "40817810811118101006",
+                  "senderbic": "044585245",
+                  "referenceid": "4.29.01.01_14159105",
+                  "toacct": "100",
+                  "toacct2": "100",
+                  "picUrl": "http://localhost:8181/hcfbib.server.portal.app-theme-main/pictures/products/beautiful-transactions/inbank.png"
+                }
+              ]
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+  /rest/hashtag:
+    put:
+      description: |
+        Добавление хэштегов к транзакции
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: addHashtagRequestRo
+          in: body
+          description: AddHashtagRequestRo
+          schema:
+            $ref: '#/definitions/AddHashtagRequestRo'
+          required: true
+      responses:
+        '200':
+          description: Хэштеги добавлены успешно
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+    delete:
+      description: |
+        Удаление хэштегов у транзакции
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: deleteHashtagRequestRo
+          in: body
+          description: DeleteHashtagRequestRo
+          schema:
+            $ref: '#/definitions/DeleteHashtagRequestRo'
+          required: true
+      responses:
+        '200':
+          description: Хэштеги удалены
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+    get:
+      description: |
+        Получение хэштегов
+
+        **Пример запроса:** /rest/hashtag?cuid=12345
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: cuid
+          in: query
+          type: integer
+          format: int64
+          description: cuid
+          required: true
+      responses:
+        '200':
+          description: Список HashtagRo
+          schema:
+            type: object
+            properties:
+              values:
+                type: array
+                items:
+                  $ref: '#/definitions/HashtagRo'
+          examples:
+            {
+              "values": [
+                {
+                  "hashtag": "tag1"
+                },
+                {
+                  "hashtag": "tag2"
+                },
+                {
+                  "hashtag": "tag3"
+                }
+              ]
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+
+  /rest/limit:
+    put:
+      description: |
+        Добавление лимитов
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+        - name: addLimitsRequestRo
+          in: body
+          description: AddLimitsRequestRo
+          schema:
+            $ref: '#/definitions/AddLimitsRequestRo'
+          required: true
+      responses:
+        '200':
+          description: Лимиты добавлены успешно
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+    get:
+      description: |
+        Получение лимитов
+
+        **Пример запроса:** /rest/limit
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ...
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Список лимитов
+          schema:
+            type: object
+            properties:
+              values:
+                type: array
+                items:
+                  $ref: '#/definitions/LimitRo'
+          examples:
+            {
+              "values": [
+                {
+                  "bot": "4.31.01.16",
+                  "value": 5000,
+                  "maxValue": 500000
+                },
+                {
+                  "bot": "4.31.01.06",
+                  "value": 400000,
+                  "maxValue": 500000
+                },
+                {
+                  "bot": "4.29.01.01",
+                  "value": 450000,
+                  "maxValue": 500000
+                },
+                {
+                  "bot": "4.31.03.02",
+                  "value": 993,
+                  "maxValue": 500000
+                }
+              ]
+            }
+        '400':
+          description: Неверный запрос
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '401':
+          description: Запрос требует аутентификации пользователя
+          schema:
+            $ref: '#/definitions/ErrorRo'
+        '500':
+          description: Разработчики API не должны использовать эту ошибку напрямую. В случае, если ошибка произошла внутри программного стека, стектрейс должен быть записан в лог, но не возвращаться в теле ответа
+          schema:
+            $ref: '#/definitions/ErrorRo'
+################################################################################
+#                                     Definitions                              #
+################################################################################
+
+definitions:
+
+  AbstractRo:
+    type: object
+    description: AbstractRo
+
+  CatalogRo:
+    type: object
+    properties:
+      translations:
+        description: Локализованное значение элемента каталога
+        type: array
+        items:
+          $ref: '#/definitions/TranslationRo'
+      code:
+        type: string
+        description: Уникальный иденитификатор в рамках одного каталога
+    required:
+    - translations
+    - code
+    example: |
+      {
+        "code": "LOAN_PROVIDING",
+        "translations": [
+          {
+            "lang": "en",
+            "value": "Loan providing fee"
+          },
+          {
+            "lang": "ru",
+            "value": "Комиссия за предоставление кредита"
+          }
+        ]
+      }
+
+  TranslationRo:
+    type: object
+    properties:
+      value:
+        type: string
+        description: Локализованное значение.
+      lang:
+        type: string
+        description: Идентификатор языка.
+    required:
+    - value
+    - lang
+    example:
+      {
+        "lang": "ru",
+        "value": "Комиссия за предоставление извещений"
+      }
+
+  ListGatewayPaymentCategoriesRo:
+    type: object
+    properties:
+      categories:
+        type: array
+        items:
+          $ref: '#/definitions/GatewayPaymentCategoryRo'
+      lastDate:
+        type: integer
+        format: date
+        description: Дата в формате long 1320926854001
+    required:
+    - categories
+    - lastDate
+    example:
+      {
+        "categories": [
+          {
+            "code": "14",
+            "name": "ЖКХ",
+            "formOrder": 4,
+            "beneficiaries": [
+              {
+                "code": "601",
+                "name": "Коммунальные платежи(Москва)Киберплат",
+                "status": 0,
+                "categoryCode": "14",
+                "fromDate": null,
+                "toDate": null,
+                "rapidaCode": "601",
+                "beneficiaryAccountId": "rapida_728",
+                "minAmount": null,
+                "maxAmount": null,
+                "disclaimer": "",
+                "fields": []
+              }
+            ]
+          },
+          {
+            "code": "7",
+            "name": "Rapida Online",
+            "formOrder": 2,
+            "beneficiaries": []
+          },
+          {
+            "code": "13",
+            "name": "PH Перевод в другой банк по номеру карты",
+            "formOrder": 3,
+            "beneficiaries": [
+              {
+                "code": "203",
+                "name": "Перевод в другой банк по номеру карты",
+                "status": 0,
+                "categoryCode": "13",
+                "fromDate": null,
+                "toDate": null,
+                "rapidaCode": "203",
+                "beneficiaryAccountId": "alias",
+                "minAmount": null,
+                "maxAmount": null,
+                "disclaimer": "",
+                "fields": []
+              }
+            ]
+          }
+        ],
+        "lastDate": 1491129840646
+      }
+
+  GatewayPaymentCategoryRo:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Код
+      name:
+        type: string
+        description: Наименование
+      formOrder:
+        type: integer
+        description: Порядок отображения
+      beneficiaries:
+        type: array
+        items:
+          $ref: '#/definitions/GatewayBeneficiaryRo'
+    required:
+    - code
+    - name
+    - formOrder
+    - beneficiaries
+
+  GatewayBeneficiaryRo:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Код
+      name:
+        type: string
+        description: Название
+      status:
+        type: integer
+        description: Статус
+      categoryCode:
+        type: string
+        description: Код категории
+      fromDate:
+        type: integer
+        format: date
+        description: Дата и время, после которого бенефициар появится в интерфейсе
+      toDate:
+        type: integer
+        format: date
+        description: Дата и время, после которого бенефициар не отображается в интерфейсе
+      rapidaCode:
+        type: string
+        description: Rapida Код
+      beneficiaryAccountId:
+        type: string
+        description: ID партнерского счета
+      minAmount:
+        type: number
+        format: double
+        description: Минимальная сумма платежа (BigDecimal)
+      maxAmount:
+        type: number
+        format: double
+        description: Максимальная сумма платежа (BigDecimal)
+      disclaimer:
+        type: string
+        description: Текст дисклеймера
+      fields:
+        type: array
+        items:
+          $ref: '#/definitions/GatewayPaymentFieldRo'
+    required:
+    - code
+    - name
+    - status
+    - categoryCode
+    - rapidaCode
+    - beneficiaryAccountId
+    - minAmount
+    - maxAmount
+    - fields
+    example:
+      {
+        "code": "202",
+        "name": "Мегафон",
+        "status": 0,
+        "categoryCode": "1",
+        "rapidaCode": "foedere certo",
+        "beneficiaryAccountId": "nimborum in",
+        "minAmount": 10,
+        "maxAmount": 9999.99,
+        "disclaimer": "Допустимая сумма платежа: 10 999,99. Providers Commission",
+        "fields": [
+          {
+            "name": "Дата выдачи документа (ДД.ММ.ГГГГ)",
+            "tooltip": "Введите дату (2 цифры), точка, месяц (2 цифры), точка, год (4 цифры)",
+            "mapping": "a5",
+            "enumValues": {}
+          },
+          {
+            "name": "Номер телефона",
+            "regexp": "",
+            "tooltip": "Введите номер.",
+            "fieldType": 1,
+            "mapping": "account",
+            "enumValues": {}
+          },
+          {
+            "name": "Фио плательщика",
+            "regexp": "",
+            "tooltip": "Введите ФИО",
+            "fieldType": 1,
+            "mapping": "username",
+            "enumValues": {}
+          }
+        ]
+      }
+
+  GatewayPaymentFieldRo:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Название поля
+      regexp:
+        type: string
+        description: Маска поля
+      tooltip:
+        type: string
+        description: Подсказка
+      fieldType:
+        type: integer
+        description: Тип поля
+      mapping:
+        type: string
+        description: Маппинг
+      enumValues:
+        type: object
+        additionalProperties:
+          type: string
+    required:
+    - name
+    - mapping
+
+  GatewayPaymentRo:
+    type: object
+    properties:
+      amount:
+        type: number
+        format: double
+        description: Сумма платежа (BigDecimal)
+      paymentDate:
+        type: integer
+        format: date
+        description: Дата платежа
+      currencyCode:
+        type: string
+        description: Код валюты платежа
+      status:
+        type: integer
+        description: Статус транзакции
+      account:
+        type: string
+        description: Номер счета
+      beneficiaryCode:
+        type: string
+        description: Код бенефициара
+      transactionID:
+        type: integer
+        format: int64
+        description: Идентификатор транзакции обзятелен для заполнения в ответе createPayment и confirmPayment
+      fieldValues:
+        type: object
+        additionalProperties:
+          type: string
+        description: Для каждого бенефициара указываются свои уникальные параметры платежа
+      templateName:
+        type: string
+        description: Имя шаблона
+    required:
+    - amount
+    - currencyCode
+    - account
+    - beneficiaryCode
+    example: |
+      {
+        "amount":11.11,
+        "paymentDate":1486328400000,
+        "currencyCode":"RUR",
+        "status":0,
+        "account":"40817810911118101016",
+        "beneficiaryCode":"202",
+        "transactionID":null,
+        "fieldValues":{
+        "username":"Иванов",
+        "account":"9209030947"
+        }
+      }
+
+  ConfirmGatewayPaymentRequestRo:
+    type: object
+    properties:
+      transactionId:
+        type: integer
+        format: long
+        description: Идентификатор транзакции
+      templateName:
+        type: string
+        description: Имя шаблона
+      otp:
+        type: string
+        description: Одноразовый пароль для подтверждения транзакции
+    required:
+    - transactionId
+    example:
+      {
+        "transactionId" : 14217227,
+        "templateName":"По номеру карты PH",
+        "otp": "11111111"
+      }
+
+  GatewayPaymentDetailsResponseRo:
+    type: object
+    properties:
+      gatewayPayment:
+        type: object
+        items:
+          $ref: '#/definitions/GatewayPaymentRo'
+      gatewayBeneficiary:
+        type: object
+        items:
+          $ref: '#/definitions/GatewayBeneficiaryRo'
+    required:
+    - gatewayPayment
+    - gatewayBeneficiary
+    example:
+      {
+        "payment": {
+          "beneficiaryCode": "202",
+          "account": "40817810911118101016",
+          "amount": 11.11,
+          "currencyCode": "RUR",
+          "transactionID": 14211244,
+          "paymentDate": 1490276295511,
+          "status": 90,
+          "fieldValues": {
+            "username": "Иванов",
+            "account": "9209030947"
+          }
+        },
+        "beneficiary": {
+          "code": "202",
+          "name": "Мегафон",
+          "status": 0,
+          "categoryCode": "1",
+          "rapidaCode": "foedere certo",
+          "beneficiaryAccountId": "nimborum in",
+          "minAmount": 10,
+          "maxAmount": 9999.99,
+          "disclaimer": "Допустимая сумма платежа: 10 999,99. Providers Commission",
+          "fields": [
+            {
+              "name": "Дата выдачи документа (ДД.ММ.ГГГГ)",
+              "tooltip": "Введите дату (2 цифры), точка, месяц (2 цифры), точка, год (4 цифры)",
+              "mapping": "a5",
+              "enumValues": {}
+            },
+            {
+              "name": "Номер телефона",
+              "regexp": "",
+              "tooltip": "Введите номер.",
+              "fieldType": 1,
+              "mapping": "account",
+              "enumValues": {}
+            },
+            {
+              "name": "Фио плательщика",
+              "regexp": "",
+              "tooltip": "Введите ФИО",
+              "fieldType": 1,
+              "mapping": "username",
+              "enumValues": {}
+            },
+            {
+              "name": "Сумма платежа",
+              "tooltip": "",
+              "mapping": "amount",
+              "enumValues": {}
+            }
+          ]
+        }
+      }
+
+  ProductAccountMovementRo:
+    type: object
+    properties:
+      postingDate:
+        type: integer
+        format: Date
+        description: дата списания
+      valueDate:
+        type: integer
+        format: Date
+        description: дата транзакции
+      amount:
+        type: number
+        format: double
+        description: сумма операции (BigDecimal)
+      payCurrency:
+        type: string
+        description: валюта операции
+      description:
+        type: string
+        description: Описание
+      creditDebitIndicator:
+        type: boolean
+        description: знак суммы платежа
+      mcc:
+        type: string
+        description:  код категории транзакции
+      picUrl:
+        type: string
+        description: URL файла логотипа мерчанта
+      merchant:
+        type: string
+        description: Наименование мерчанта
+      shortDescription:
+        type: string
+        description: Краткое описание транзакции
+      movementNumber:
+        type: string
+        description: Номер проводки АБС
+      hashtagList:
+        type: array
+        items:
+          $ref: '#/definitions/HashtagRo'
+      transactionTypeIBS:
+        type: integer
+        description: Код типа транзакции
+      paymentType:
+        type: integer
+        description:  Тип перевода для отправленных из ИБ и поступивших в ИБ переводов
+      destinationProductType:
+        type: integer
+        description:  Тип продукта, на который осуществлялся перевод
+      productName:
+        type: string
+        description:  Наименование продукта, на который осуществлялся перевод
+      operationName:
+        type: string
+        description: Наименование операции для отображения в IBS
+      address:
+        type: string
+        description: Месторасположение терминала/банкомата
+      country:
+        type: string
+        description: Код страны места совершения операции
+      city:
+        type: string
+        description: Город места совершения операции
+      merchantName:
+        type: string
+        description: Наименование магазина/ банкомата
+      partnercardnumber:
+        type: string
+        description: Номер карты, на который осуществлялся перевод (для исходящих p2p-платежей, выполняемых через НКО Рапида)
+      partnerAccountName:
+        type: string
+        description: Наименование получателя платежа (для исходящего платежа)
+      partnerAccountNumber:
+        type: string
+        description: Номер счёта получателя (для исходящего платежа)
+      sendername:
+        type: string
+        description: Отправитель перевода (для входящего платежа)
+      senderaccount:
+        type: string
+        description: Номер счета отправителя
+      senderbic:
+        type: string
+        description: БИК банка-отправителя перевода
+      referenceid:
+        type: string
+        description: ID транзакции (референс транзак-ции), присвоенный транзакции в IBS
+      toacct:
+        type: string
+        description: Код бенефициара Рапида (IBS)
+      toacct2:
+        type: string
+        description: Код бенефициара PH
+      templateId:
+        type: integer
+        format: int64
+        description: Идентификатор шаблона
+      payAmount:
+        type: number
+        format: double
+        description: Сумма платежа в валюте операции (BigDecimal)
+    required:
+    - valueDate
+    - amount
+    - creditDebitIndicator
+    - hashtagList
+    - paymentType
+    - transactionTypeIBS
+    - movementNumber
+    example:
+      {
+        "values": [
+          {
+            "postingDate": 1465490520000,
+            "valueDate": 1465345117000,
+            "amount": 1000,
+            "payCurrency": "RUR",
+            "description": "Одежда",
+            "creditDebitIndicator": false,
+            "mcc": "CLOTHERS",
+            "merchant": "Банк Хоум Кредит",
+            "shortDescription": "Одежда",
+            "hashtagList": [],
+            "movementNumber": "1000",
+            "transactionTypeIBS": 1,
+            "operationName": "Одежда",
+            "address": "пр.Строителей 134",
+            "country": "РОССИЯ",
+            "city": "Москва",
+            "merchantName": "Qiwi",
+            "partnercardnumber": "100",
+            "partnerAccountNumber": "42301810754448104001",
+            "partnerAccountName": "et carcere",
+            "sendername": "Петров Иван Александрович",
+            "senderaccount": "circum claustra fremunt",
+            "senderbic": "certo et premere",
+            "referenceid": "coniunx una",
+            "toacct": "100",
+            "toacct2": "100",
+            "picUrl": "http://localhost:8181/hcfbib.server.portal.app/pictures/plus_40.png"
+          }
+        ]
+      }
+
+  HashtagRo:
+    type: object
+    properties:
+      hashtag:
+        type: string
+        description: Хэштег транзакции
+    required:
+    - hashtag
+    example:
+      {
+        "hashtag": "tag1"
+      }
+
+  AccountRo:
+    type: object
+    properties:
+      accountNumber:
+        type: string
+        description: Номер счета
+      currencyCode:
+        type: string
+        description: Код валюты платежа
+      name:
+        type: string
+        description: Наименование
+    required:
+    - accountNumber
+    - currencyCode
+    - name
+    example:
+      {
+        "accountNumber": "40817810311118101001",
+        "currencyCode": "RUR",
+        "name": "Счет дебетовой карты"
+      }
+
+  OwnAccountsCreatePaymentRequestRo:
+    type: object
+    properties:
+      templateName:
+        type: string
+        description: Название шаблона
+      accountFrom:
+        type: string
+        description: Со счета
+      accountTo:
+        type: string
+        description: На счет
+      amount:
+        type: number
+        format: double
+        description: сумма операции (BigDecimal)
+      currency:
+        type: string
+        description: Код валюты платежа
+    required:
+    - accountFrom
+    - accountTo
+    - amount
+    - currency
+    example:
+      {
+        "accountFrom":"40817810911118101016",
+        "accountTo":"40817810311118101001",
+        "amount":50.00,
+        "currency":"RUR"
+      }
+
+  OwnAccountsCreatePaymentResponseRo:
+    type: object
+    properties:
+      transactionId:
+        type: integer
+        format: long
+        description: Идентификатор транзакции
+    required:
+    - transactionId
+    example:
+      {
+        "transactionId": 14223231
+      }
+
+  PaymentTemplateRo:
+    type: object
+    properties:
+      templateId:
+        type: integer
+        format: long
+        description: Идентификатор транзакции
+      templateName:
+        type: string
+        description: Наименование шаблона
+      categoryId:
+        type: string
+        description: Идентификатор категории платежей
+      categoryName:
+        type: string
+        description: Наименование категории
+    required:
+    - templateId
+    - templateName
+    - categoryId
+    - categoryName
+    example:
+      {
+        "templateId": "22113",
+        "templateName": "46436",
+        "categoryId": "13",
+        "categoryName": "PH Перевод в другой банк по номеру карты"
+      }
+
+  PaymentTemplateDetailResponseRo:
+    type: object
+    properties:
+      gatewayPayment:
+        type: object
+        items:
+          $ref: '#/definitions/GatewayPaymentRo'
+      paymentTemplate:
+        type: object
+        items:
+          $ref: '#/definitions/PaymentTemplateRo'
+    example:
+      {
+        "paymentTemplate": {
+          "templateId": "21771",
+          "templateName": "По номеру карты",
+          "categoryId": "13",
+          "categoryName": "PH Перевод в другой банк по номеру карты"
+        },
+        "gatewayPayment": {
+          "beneficiaryCode": "203",
+          "account": "40817810311118101001",
+          "amount": 100,
+          "currencyCode": "RUR",
+          "transactionID": "14183105",
+          "paymentDate": 1488191261153,
+          "fieldValues": {
+            "account": "9209030955",
+            "cardNumber": "4627916369702784"
+          }
+        }
+      }
+
+  CardDpoCreatePaymentRequestRo:
+    type: object
+    properties:
+      templateName:
+        type: string
+        description: Название шаблона
+      accountFrom:
+        type: string
+        description: Со счета
+      targetCardNumber:
+        type: string
+        description: Целевой Номер карты
+      amount:
+        type: number
+        format: double
+        description: сумма операции (BigDecimal)
+      currency:
+        type: string
+        description: Код валюты платежа
+    required:
+    - accountFrom
+    - targetCardNumber
+    - amount
+    - currency
+    example:
+      {
+        "accountFrom":"40817810911118101016",
+        "targetCardNumber":"4166229450914210",
+        "amount":22,
+        "currency":"RUR"
+      }
+
+  CardDpoCreatePaymentResponseRo:
+    type: object
+    properties:
+      transactionId:
+        type: integer
+        format: int64
+        description: Идентификатор транзакции
+      commission:
+        type: number
+        format: double
+        description: Комиссия (BigDecimal)
+    required:
+    - transactionId
+    example:
+      {
+        "transactionId": 14223234,
+        "commission": 100
+      }
+
+  FromTemplatePaymentRequestRo:
+    type: object
+    properties:
+      templateId:
+        type: integer
+        format: int64
+        description: Идентификатор шаблона
+      accountFrom:
+        type: string
+        description: Со счета
+      amount:
+        type: number
+        format: double (BigDecimal)
+        description: сумма операции
+    required:
+    - templateId
+    - accountFrom
+    - amount
+    example:
+      {
+        "templateId":21976,
+        "accountFrom":"40817810911118101016",
+        "amount":100
+      }
+
+  FromTemplatePaymentResponseRo:
+    type: object
+    properties:
+      transactionId:
+        type: integer
+        format: int64
+        description: Идентификатор транзакции
+      commission:
+        type: number
+        format: double
+        description: Комиссия (BigDecimal)
+    required:
+    - transactionId
+    example:
+      {
+        "transactionId": 14215326,
+        "commission": 100
+      }
+
+  FromTemplatePaymentDpoRequestRo:
+    type: object
+    properties:
+      templateId:
+        type: integer
+        format: int64
+        description: Идентификатор шаблона
+      accountFrom:
+        type: string
+        description: Со счета
+      amount:
+        type: number
+        format: double
+        description: сумма операции (BigDecimal)
+      description:
+        type: string
+        description: Назначение платежа
+      taxAmount:
+        type: number
+        format: double
+        description: Сумма налога (BigDecimal)
+      params:
+        type: object
+        additionalProperties:
+          type: string
+    required:
+    - templateId
+    - accountFrom
+    - amount
+    example:
+      {
+      "templateId":21983,
+      "amount":100,
+      "accountFrom":"40817810311118101001",
+      "description":"Назначение",
+      "taxAmount":null,
+      "params":{
+        "ZHKH_PROPS_KIND":"ЕЛС",
+        "ZHKH_PROPS_VALUE":"12аб123456",
+        "ZHKH_PAYMENT_MONTH":"12",
+        "ZHKH_PAYMENT_YEAR":"2018"
+        }
+      }
+
+  ConfirmPaymentRequestRo:
+    type: object
+    properties:
+      templateName:
+        type: string
+        description: Название шаблона
+      transactionId:
+        type: integer
+        format: int64
+        description: Идентификатор транзакции
+      otp:
+        type: string
+        description: Одноразовый пароль
+    required:
+    - transactionId
+    example:
+      {
+        "transactionId": 15424203,
+        "otp": "1111111",
+        "templateName": "template"
+      }
+
+  ConfirmPaymentResponseRo:
+    type: object
+    properties:
+      transactionId:
+        type: integer
+        format: int64
+        description: Идентификатор транзакции
+    required:
+    - transactionId
+    example:
+      {
+        "transactionId": 14177116
+      }
+
+  TransferBetweenOwnAccounctsFieldsResponseRo:
+    type: object
+    properties:
+      fromAccounts:
+        type: array
+        items:
+          $ref: '#/definitions/AccountWithCurrentBalanceRo'
+      toAccounts:
+        type: array
+        items:
+          $ref: '#/definitions/AccountWithCurrentBalanceRo'
+    required:
+    - fromAccounts
+    - toAccounts
+    example:
+      {
+        "fromAccounts": [
+          {
+            "coreAccount": {
+              "accountNumber": "40817810311118101001"
+            },
+            "currentBalance": 15000000
+          }
+        ],
+        "toAccounts": [
+          {
+            "coreAccount": {
+              "accountNumber": "40817810311118101001"
+            },
+            "currentBalance": 15000000
+          }
+        ]
+      }
+
+  AccountWithCurrentBalanceRo:
+    type: object
+    properties:
+      coreAccount:
+        type: object
+        items:
+          $ref: '#/definitions/CoreAccountRo'
+      currentBalance:
+        type: number
+        format: double
+        description: Текущий баланс (BigDecimal)
+    required:
+    - coreAccount
+    - currentBalance
+    example:
+      {
+        "coreAccount": {
+          "accountNumber": "40817810311118101001"
+        },
+        "currentBalance": 15000000
+      }
+
+  CoreAccountRo:
+    type: object
+    properties:
+      branchId:
+        type: string
+        description: Идентификатор бранча
+      ccAccountNumber:
+        type: string
+        description: Номер учетной записи
+      openDate:
+        type: integer
+        format: date
+        description: Дата открытия
+      accountContract:
+        type: string
+        description: учетная запись Контракт
+      accountStatementPeriod:
+        type: string
+        description: выписка со счета за Период
+      accountStatementDistributionType:
+        type: string
+        description: Тип Распределения выписки по счету
+      lastAccountStatementNumber:
+        type: integer
+        description: последнее Число Выписки со счета
+      termDeposit:
+        type: object
+        items:
+          $ref: '#/definitions/TermDepositRo'
+      holdAmount:
+        type: object
+        items:
+          $ref: '#/definitions/HoldAmountRo'
+      accountInterestRate:
+        type: object
+        items:
+          $ref: '#/definitions/AccountInterestRateRo'
+      balances:
+        type: array
+        items:
+          $ref: '#/definitions/BalanceRo'
+    example:
+      {
+        "accountNumber": "40817810311118101001",
+      }
+
+  TermDepositRo:
+    type: object
+    properties:
+      rolloverType:
+        type: string
+        description: rolloverType
+      linkedAccount:
+        type: object
+        items:
+          $ref: '#/definitions/CoreAccountOverviewRo'
+      tdType:
+        type: integer
+        format: date
+        description: tdType
+      tenor:
+        type: string
+        description: tenor
+      lastRolloverDate:
+        type: integer
+        format: date
+        description: lastRolloverDate
+      nextRolloverDate:
+        type: integer
+        format: date
+        description: nextRolloverDate
+
+  CoreAccountOverviewRo:
+    type: object
+    properties:
+      accountNumber:
+        type: string
+        description: accountNumber
+      accountType:
+        type: string
+        description: accountType
+      accountName:
+        type: string
+        description: accountName
+      accountCurrency:
+        type: string
+        description: accountCurrency
+      iban:
+        type: string
+        description: iban
+
+  HoldAmountRo:
+    type: object
+    properties:
+      holdTotalAmount:
+        type: number
+        format: double
+        description: holdTotalAmount (BigDecimal)
+      holdAmount:
+        type: number
+        format: double
+        description: holdAmount (BigDecimal)
+      holdId:
+        type: string
+        description: holdId
+
+  AccountInterestRateRo:
+    type: object
+    properties:
+      rateCode:
+        type: string
+        description: rateCode
+      currencyCode:
+        type: string
+        description: currencyCode
+      effectiveDateFrom:
+        type: integer
+        format: date
+        description: effectiveDateFrom
+      rate:
+        type: number
+        format: double
+        description: rate (BigDecimal)
+
+  BalanceRo:
+    type: object
+    properties:
+      balance:
+        type: number
+        format: double
+        description: balance (BigDecimal)
+      balanceType:
+        type: string
+        description: balanceType
+      valueDate:
+        type: integer
+        format: date
+        description: valueDate
+      issueDate:
+        type: integer
+        format: date
+        description: issueDate
+      previousBalance:
+        type: number
+        format: double
+        description: previousBalance (BigDecimal)
+      previousIssueDate:
+        type: integer
+        format: date
+        description: previousIssueDate
+    required:
+    - balance
+    - balanceType
+    - valueDate
+    - issueDate
+    - previousIssueDate
+
+  BlockCardRequestRo:
+    type: object
+    properties:
+      cardNumber:
+        type: string
+        description: Номер карты
+      block:
+        type: boolean
+        description: Блокировка
+    required:
+    - cardNumber
+    - block
+    example:
+      {
+        "cardNumber":"5549604369478934", //карта активна
+        "block":"true" //блокируем карту
+      }
+
+  BlockCardResponseRo:
+    type: object
+    properties:
+      transactionId:
+        type: integer
+        format: long
+        description: Идентификатор транзакции
+    required:
+    - transactionId
+    example:
+      {
+        "transactionId": 14165211
+      }
+
+  ChangeCreditCardStatusRequestRo:
+    type: object
+    properties:
+      cardNumber:
+        type: string
+        description: Номер карты
+      status:
+        type: string
+        description: Статус
+    required:
+    - cardNumber
+    - status
+    example:
+      {
+        "cardNumber":"7810222228103004", //карта заблокирована
+        "status":"a" //разблокировка карты, соответственно статус b - блокировка
+      }
+
+  GetPaymentHistoryResponseRo:
+    type: object
+    properties:
+      payments:
+        type: array
+        description: возвращает либо List<InternalPaymentDataRo>, либо  List<PaymentHistoryItemRo>
+        items:
+          $ref: '#/definitions/AbstractRo'
+    required:
+    -  payments
+    example:
+      {
+        "payments": [
+          {
+            "businessObjectType": "4.31.01.16",
+            "data": {
+              "accountFrom": "40817810911118101016",
+              "accountTo": "40817810311118101001",
+              "currencyCode": "RUR",
+              "paymentDate": 1488534659159,
+              "amount": 50
+            },
+            "transaction": {
+              "id": "14189209",
+              "status": "F",
+              "date": 1488534659159
+            },
+            "fee": {
+              "chargeAmount": 555.25,
+              "totalAmount": 345
+            }
+          }
+        ]
+      }
+
+  PaymentHistoryItemRo:
+    type: object
+    properties:
+      businessObjectType:
+        type: string
+        description: businessObjectType
+      data:
+        type: object
+        items:
+          $ref: '#/definitions/PaymentDataRo'
+      transaction:
+        type: object
+        items:
+          $ref: '#/definitions/PaymentResultRo'
+      fee:
+        type: object
+        items:
+          $ref: '#/definitions/PaymentFeeRo'
+      templateName:
+        type: string
+        description: templateName
+      picUrl:
+        type: string
+        description: picUrl
+    required:
+    - businessObjectType
+    - data
+    - transaction
+    - fee
+    - templateName
+
+  PaymentResultRo:
+    type: object
+    properties:
+      id:
+        type: string
+        description: id
+      status:
+        type: string
+        description: status
+      date:
+        type: integer
+        format: date
+        description: date
+    required:
+    - id
+    - status
+    - date
+
+  PaymentFeeRo:
+    type: object
+    properties:
+      chargeAmount:
+        type: number
+        format: double
+        description: chargeAmount (BigDecimal)
+      totalAmount:
+        type: number
+        format: double
+        description: totalAmount (BigDecimal)
+    required:
+    - chargeAmount
+    - totalAmount
+
+  PaymentDataRo:
+    type: object
+    discriminator: businessObjectType
+    properties:
+      businessObjectType:
+        type: string
+    required:
+    - businessObjectType
+
+  CardDpoPaymentDataRo:
+    description: CardDpoPaymentDataRo
+    allOf:
+    - $ref: '#/definitions/PaymentDataRo'
+    type: object
+    properties:
+      accountFrom:
+        type: string
+        description: accountFrom
+      targetCardNumber:
+        type: string
+        description: targetCardNumber
+      currencyCode:
+        type: string
+        description: currencyCode
+      paymentDate:
+        type: integer
+        format: date
+        description: paymentDate
+      amount:
+        type: number
+        format: double
+        description: amount (BigDecimal)
+    required:
+    - accountFrom
+    - targetCardNumber
+    - currencyCode
+    - paymentDate
+    - amount
+
+  DomesticPaymentDataRo:
+    description: DomesticPaymentDataRo
+    allOf:
+    - $ref: '#/definitions/PaymentDataRo'
+    type: object
+    properties:
+      amount:
+        type: number
+        format: double
+        description: amount (BigDecimal)
+      currencyCode:
+        type: string
+        description: currencyCode
+      accountFrom:
+        type: string
+        description: accountFrom
+      accountTo:
+        type: string
+        description: accountTo
+      beneficiaryBank:
+        type: object
+        items:
+          $ref: '#/definitions/BeneficiaryBankRo'
+      beneficiaryName:
+        type: string
+        description: beneficiaryName
+      beneficiaryInn:
+        type: string
+        description: beneficiaryInn
+      description:
+        type: string
+        description: description
+      taxAmount:
+        type: number
+        format: double
+        description: Сумма налога (BigDecimal)
+      budgetPayment:
+        type: object
+        items:
+          $ref: '#/definitions/BudgetPaymentDetailRo'
+      uip383P:
+        type: string
+        description: uip383P
+      params:
+        type: object
+        additionalProperties:
+          type: string
+    required:
+    - amount
+    - currencyCode
+    - accountFrom
+    - accountTo
+    - beneficiaryInn
+
+  InternalPaymentDataRo:
+    description: InternalPaymentDataRo
+    allOf:
+    - $ref: '#/definitions/PaymentDataRo'
+    type: object
+    properties:
+      accountFrom:
+        type: string
+        description: accountFrom
+      accountTo:
+        type: string
+        description: accountTo
+      currencyCode:
+        type: string
+        description: currencyCode
+      paymentDate:
+        type: integer
+        format: date
+        description: paymentDate
+      amount:
+        type: number
+        format: double
+        description: amount (BigDecimal)
+    required:
+    - accountFrom
+    - accountTo
+    - currencyCode
+    - paymentDate
+    - amount
+
+  BeneficiaryBankRo:
+    type: object
+    properties:
+      bic:
+        type: string
+        description: bic
+      name:
+        type: string
+        description: name
+      city:
+        type: string
+        description: city
+      correspondAccount:
+        type: string
+        description: correspondAccount
+    required:
+    - bic
+    - name
+    - city
+    - correspondAccount
+    example:
+      {
+        "bic": "044525593",
+        "name": "MINEBANK",
+        "city": "ЧЕЛЯБИНСК",
+        "correspondAccount": "30101810200000000843"
+      }
+
+  BudgetPaymentDetailRo:
+    type: object
+    properties:
+      kpp:
+        type: string
+        description: kpp
+      payerName:
+        type: string
+        description: payerName
+      payerInn:
+        type: string
+        description: payerInn
+      okato:
+        type: string
+        description: okato
+      kbk:
+        type: string
+        description: kbk
+      taxPaymentBase:
+        type: string
+        description: taxPaymentBase
+      taxPaymentType:
+        type: string
+        description: taxPaymentType
+      periodTaxPeriod:
+        type: string
+        description: periodTaxPeriod
+      periodTaxValue:
+        type: string
+        description: periodTaxValue
+      taxDocumentNumber:
+        type: string
+        description: taxDocumentNumber
+      taxDocumentDate:
+        type: string
+        description: taxDocumentDate
+      paymentCreatorStatus:
+        type: string
+        description: paymentCreatorStatus
+      paymentQueue:
+        type: string
+        description: paymentQueue
+
+  TemplateRo:
+    type: object
+    properties:
+      templateId:
+        type: string
+        description: templateId
+      templateName:
+        type: string
+        description: templateName
+    required:
+    - templateId
+    - templateName
+    example:
+      {
+        "templateId": "22100",
+        "templateName": "40817810311118101001"
+      }
+
+  CardDpoTemplateRo:
+    description: CardDpoTemplateRo
+    allOf:
+    - $ref: '#/definitions/TemplateRo'
+    type: object
+    properties:
+      amount:
+        type: number
+        format: double
+        description: amount (BigDecimal)
+      currency:
+        type: string
+        description: currency
+      fromAccount:
+        type: string
+        description: fromAccount
+      targetCardNumber:
+        type: string
+        description: targetCardNumber
+    required:
+    - currency
+    - fromAccount
+    - targetCardNumber
+    example:
+      {
+        "templateId": "22100",
+        "templateName": "40817810311118101001",
+        "amount": 50,
+        "currency": "RUR",
+        "fromAccount": "40817810911118101016",
+        "toAccount": "40817810311118101001",
+        "targetCardNumber": "7810322228103001"
+      }
+
+  InternalTemplateRo:
+    description: InternalTemplateRo
+    allOf:
+    - $ref: '#/definitions/TemplateRo'
+    type: object
+    properties:
+      amount:
+        type: number
+        format: double
+        description: amount (BigDecimal)
+      currency:
+        type: string
+        description: currency
+      fromAccount:
+        type: string
+        description: fromAccount
+      toAccount:
+        type: string
+        description: toAccount
+    required:
+    - currency
+    - fromAccount
+    - toAccount
+    example:
+      {
+        "templateId": "22100",
+        "templateName": "40817810311118101001",
+        "amount": 50,
+        "currency": "RUR",
+        "fromAccount": "40817810911118101016",
+        "toAccount": "40817810311118101001"
+      }
+
+  DomesticTemplateRo:
+    description: DomesticTemplateRo
+    allOf:
+    - $ref: '#/definitions/TemplateRo'
+    type: object
+    properties:
+      amount:
+        type: number
+        format: double
+        description: amount (BigDecimal)
+      fromAccount:
+        type: string
+        description: fromAccount
+      beneficiaryBank:
+        type: object
+        items:
+          $ref: '#/definitions/BeneficiaryBankRo'
+      beneficiaryName:
+        type: string
+        description: beneficiaryName
+      beneficiaryInn:
+        type: string
+        description: beneficiaryInn
+      toAccount:
+        type: string
+        description: toAccount
+      description:
+        type: string
+        description: description
+      taxAmount:
+        type: number
+        format: double
+        description: taxAmount (BigDecimal)
+      budgetPayment:
+        type: object
+        items:
+          $ref: '#/definitions/BudgetPaymentRo'
+      uip383p:
+        type: string
+        description: uip383p
+      picUrl:
+        type: string
+        description: picUrl
+      params:
+        type: object
+        additionalProperties:
+          type: string
+    required:
+    - fromAccount
+    - beneficiaryBank
+    - beneficiaryName
+    - beneficiaryInn
+    - toAccount
+    example:
+      {
+        "templateId": "22033",
+        "templateName": "По реквизитам счета",
+        "amount": 100,
+        "fromAccount": "40817810311118101001",
+        "beneficiaryBank": {
+          "bic": "044525593",
+          "name": "MINEBANK",
+          "city": "ЧЕЛЯБИНСК",
+          "correspondAccount": "30101810200000000843"
+        },
+        "beneficiaryName": "Базанова Мария Константиновна",
+        "beneficiaryInn": "381298314785",
+        "toAccount": "40817810000000000000",
+        "description": "Пользовательское назначение",
+        "taxAmount": 0,
+        "params": {}
+      }
+
+  BudgetPaymentRo:
+    description: BudgetPaymentRo
+    type: object
+    properties:
+      kpp:
+        type: string
+        description: kpp
+      payerName:
+        type: string
+        description: payerName
+      payerInn:
+        type: string
+        description: payerInn
+      okato:
+        type: string
+        description: okato
+      kbk:
+        type: string
+        description: kbk
+      taxPaymentBase:
+        type: string
+        description: taxPaymentBase
+      taxPaymentType:
+        type: string
+        description: taxPaymentType
+      periodTaxPeriod:
+        type: string
+        description: periodTaxPeriod
+      periodTaxValue:
+        type: string
+        description: periodTaxValue
+      taxDocumentNumber:
+        type: string
+        description: taxDocumentNumber
+      taxDocumentDate:
+        type: string
+        description: taxDocumentDate
+      paymentCreatorStatus:
+        type: string
+        description: paymentCreatorStatus
+      paymentQueue:
+        type: string
+        description: paymentQueue
+    required:
+    - kpp
+    - payerName
+    - payerInn
+    - okato
+    - kbk
+
+  ErrorRo:
+    type: object
+    description: сообщение об ошибке
+    properties:
+      errorMessage:
+        type: string
+        description: Описание ошибки
+      fieldCode:
+        type: string
+        description: Поле, в котором возникла ошибка
+    required:
+    - errorMessage
+
+  DebitCardDetailRo:
+    description: DebitCardDetailRo
+    type: object
+    properties:
+      productName:
+        type: string
+        description: productName
+      cardNumber:
+        type: string
+        pattern: \d{13,19}
+        description: cardNumber
+      availableBalance:
+        type: number
+        format: double
+        description: availableBalance (BigDecimal)
+      currency:
+        type: string
+        description: currency
+      cardStatus:
+        type: string
+        description: cardStatus
+      overdraftLimit:
+        type: number
+        format: double
+        description: overdraftLimit (BigDecimal)
+      accountNumber:
+        type: string
+        pattern: \d{20}
+        description: accountNumber
+      contractStatus:
+        type: string
+        description: contractStatus
+      percentValue:
+        type: number
+        format: double
+        description: percentValue (BigDecimal)
+      additional:
+        type: integer
+        description: additional
+      currValueLim:
+        type: string
+        description: currValueLim
+      currValueLimIn:
+        type: string
+        description: currValueLimIn
+      currValueLimOut:
+        type: string
+        description: currValueLimOut
+    required:
+    - productName
+    - cardNumber
+    - availableBalance
+    - currency
+    - cardStatus
+    - overdraftLimit
+    - accountNumber
+    - contractStatus
+    - percentValue
+    - additional
+    example:
+      {
+        "productName": "Debit Card 16 Active RUR",
+        "cardNumber": "5549604369478934",
+        "availableBalance": 99,
+        "currency": "RUR",
+        "cardStatus": "1",
+        "overdraftLimit": 0,
+        "accountNumber": "40817810911118101016",
+        "contractStatus": "Active",
+        "percentValue": 3,
+        "additional": 0
+      }
+
+  DepositDetailRo:
+    description: DepositDetailRo
+    type: object
+    properties:
+      startDate:
+        type: integer
+        format: date
+        description: startDate
+      maturityDate:
+        type: integer
+        format: date
+        description: maturityDate
+      depositType:
+        type: string
+        description: depositType
+      contractStatus:
+        type: number
+        format: int
+        description: contractStatus
+      accountNumber:
+        type: string
+        pattern: \d{20}
+        description: accountNumber
+      depositName:
+        type: string
+        description: depositName
+      interestRate:
+        type: number
+        format: double
+        description: interestRate (BigDecimal)
+      runningBalance:
+        type: number
+        format: double
+        description: runningBalance (BigDecimal)
+      accruedInterest:
+        type: number
+        format: double
+        description: accruedInterest (BigDecimal)
+      contractUniqueId:
+        type: object
+        items:
+          $ref: '#/definitions/ContractUniqueIdRo'
+    required:
+    - startDate
+    - maturityDate
+    - depositType
+    - contractStatus
+    - accountNumber
+    - depositName
+    - runningBalance
+    - contractUniqueId
+    example:
+      {
+        "startDate": 1425859200000,
+        "maturityDate": 1430092800000,
+        "depositType": "Срочный вклад",
+        "contractStatus": 1,
+        "currency": "RUR",
+        "accountNumber": "42301810754448104001",
+        "depositName": "Dep1 TW RUR снятие и пополнение",
+        "interestRate": 10.29,
+        "runningBalance": 10000.19,
+        "accruedInterest": 1.18,
+        "contractUniqueId": {
+          "contractNumber": "810754448104001",
+          "systemCode": "TW",
+          "branchCode": "1"
+        }
+      }
+
+  ContractUniqueIdRo:
+    description: ContractUniqueIdRo
+    type: object
+    properties:
+      contractNumber:
+        type: string
+        description: contractNumber
+      systemCode:
+        type: string
+        description: systemCode
+      branchCode:
+        type: string
+        description: branchCode
+    required:
+    - contractNumber
+    - systemCode
+    - branchCode
+
+  AddHashtagRequestRo:
+    description: AddHashtagRequestRo
+    type: object
+    properties:
+      valueDate:
+        description: Дата и время транзакции. Формат long
+        type: integer
+        format: date
+      hashtagList:
+        type: array
+        items:
+          $ref: '#/definitions/HashtagRo'
+      cuid:
+        type: integer
+        format: int64
+        description: cuid
+      accountNumber:
+        type: string
+        description: accountNumber
+      movementNumber:
+        type: string
+        description: movementNumber
+    required:
+    - hashtagList
+    - cuid
+    - accountNumber
+    example:
+      {
+        "movementNumber": "1000",
+        "valueDate": 1465479748000,
+        "cuid" : 12345,
+        "accountNumber": "42301810754448104001",
+        "hashtagList":[
+          {
+            "hashtag":"tag1"
+          },
+          {
+            "hashtag":"tag2"
+          },
+          {
+            "hashtag":"tag3"
+          }
+        ]
+      }
+
+  DeleteHashtagRequestRo:
+    description: DeleteHashtagRequestRo
+    type: object
+    properties:
+      valueDate:
+        description: Дата и время транзакции. Формат long
+        type: integer
+        format: date
+      hashtagList:
+        type: array
+        items:
+          $ref: '#/definitions/HashtagRo'
+      cuid:
+        type: integer
+        format: int64
+        description: cuid
+      accountNumber:
+        type: string
+        description: accountNumber
+      movementNumber:
+        type: string
+        description: movementNumber
+    required:
+    - hashtagList
+    - cuid
+    - accountNumber
+    example:
+      {
+        "movementNumber": "1000",
+        "valueDate": 1465479748000,
+        "cuid" : 12345,
+        "accountNumber": "42301810754448104001",
+        "hashtagList":[
+          {
+            "hashtag":"tag1"
+          },
+          {
+            "hashtag":"tag2"
+          },
+                  {
+            "hashtag":"tag3"
+          }
+        ]
+      }
+
+  LimitRo:
+    description: LimitRo
+    type: object
+    properties:
+      bot:
+        type: string
+        description: bot
+      value:
+        type: number
+        format: double
+        description: value (BigDecimal)
+      maxValue:
+        type: number
+        format: double
+        description: maxValue (BigDecimal)
+    required:
+    - bot
+    - value
+    example:
+      {
+        "bot": "4.31.03.02",
+        "value": 55
+      }
+
+  AddLimitsRequestRo:
+    description: AddLimitsRequestRo
+    type: object
+    properties:
+      limits:
+        type: array
+        items:
+          $ref: '#/definitions/LimitRo'
+        description: limits
+    required:
+    - limits
+    example:
+      {
+        "limits": [
+          {
+            "bot": "4.31.03.02",
+            "value": 55
+          }
+        ]
+      }
+
+  TemplateSetNameRequestRo:
+    description: запрос на переименование шаблона
+    type: object
+    properties:
+      templateId:
+        type: integer
+        format: int64
+        description: id шаблона
+      templateName:
+        type: string
+        description: новое имя шаблона
+    required:
+    - templateId
+    - templateName
+    example:
+      {
+        "templateId" : 21976,
+        "templateName":"Между своими счетами из МК"
+      }
+
+  DeleteTemplateRequestRo:
+    description: запрос на удаление шаблона
+    type: object
+    properties:
+      templateId:
+        type: integer
+        format: int64
+        description: id шаблона
+    required:
+    - templateId
+    example:
+      {
+        "templateId":22013
+      }
+
+  SendOtpRo:
+    description: запрос на повторную отправку ОТП
+    type: object
+    properties:
+      transactionId:
+        type: integer
+        format: int64
+        description: id транзакции
+    required:
+    - transactionId
+    example:
+      {
+        "transactionId": 12345
+      }
